@@ -1,0 +1,10 @@
+section,item_id,title,description,contact,link,is_active
+layanan,hki-merek,📜 Pendaftaran HKI Merek,"Fasilitasi pendaftaran Hak Kekayaan Intelektual untuk merek dagang IKM. Dengan syarat: 1. KTP, 2. NIB, 3. Materai 10.000 (1 lembar), 4. Etiket / Logo yang ingin didaftarkan merek",Hubungi: 0351-123456,https://dgip.go.id,true
+layanan,sertifikat-halal,✅ Pendaftaran Sertifikat Halal,Bantuan pengurusan sertifikat halal untuk produk makanan dan minuman,Hubungi: 0351-123456,https://halal.go.id,true
+layanan,tkdn-ik,🇮🇩 Pendaftaran TKDN IK,Sertifikasi Tingkat Komponen Dalam Negeri untuk Industri Kecil,Hubungi: 0351-123456,https://kemenperin.go.id,true
+layanan,siinas,💾 Pendaftaran dan Pendampingan SIINas,Registrasi dan pendampingan Sistem Informasi Industri Nasional,Hubungi: 0351-123456,https://siinas.kemenperin.go.id,true
+layanan,uji-nilai-gizi,🧪 Pendaftaran Uji Nilai Gizi,Fasilitasi pengujian nilai gizi produk makanan dan minuman,Hubungi: 0351-123456,https://pom.go.id,true
+layanan,kurasi-produk,🏆 Kurasi Produk,Penilaian dan kurasi produk IKM untuk peningkatan kualitas,Hubungi: 0351-123456,#,true
+pelatihan,default-pelatihan,📚 Program pelatihan akan segera diumumkan,Pantau terus website ini untuk informasi program pelatihan terbaru,Hubungi: 0351-123456,#,true
+pelatihan,pelatihan-digital-marketing,👩🏻‍💻 Workshop Digital Marketing,Pelatihan digital marketing untuk IKM,WhatsApp: 081234567890,https://example.com/workshop,true
+pelatihan,pelatihan-branding-2026,Pelatihan Digital Marketing dan Branding 2026,Pendaftaran HKI Merek tahun 2026,085655480223,https://drive.google.com/drive/folders/1pS93hMbUcrjKEfD5fZDeXXNE_35QrkBw,true
