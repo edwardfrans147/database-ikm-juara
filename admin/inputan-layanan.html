@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inputan Layanan IKM - Database IKM JUARA</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+        
+        .layanan-form {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-full {
+            grid-column: 1 / -1;
+        }
+        
+        .selected-ikm {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .selected-ikm h4 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-industry" style="font-size: 24px;"></i>
+            <h3 style="margin-top: 10px;">IKM JUARA</h3>
+            <p style="font-size: 12px; margin-top: 5px;">DisnakerKUKM Kota Madiun</p>
+        </div>
+        
+        <nav>
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            
+            <a href="ikm-binaan.html" class="menu-item">
+                <i class="fas fa-building"></i>
+                IKM Binaan
+            </a>
+            
+            <a href="inputan-layanan.html" class="menu-item active">
+                <i class="fas fa-plus-circle"></i>
+                Inputan Layanan IKM
+            </a>
+            
+            <a href="layanan-ikm.html" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                Layanan IKM Juara
+            </a>
+            
+            <a href="pelatihan.html" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                Pelatihan Pemberdayaan
+            </a>
+            
+            <a href="penelusuran.html" class="menu-item">
+                <i class="fas fa-search"></i>
+                Penelusuran Data
+            </a>
+            
+            <a href="recycle-bin.html" class="menu-item">
+                <i class="fas fa-trash-restore"></i>
+                Recycle Bin
+            </a>
+            
+            <a href="/public" class="menu-item">
+                <i class="fas fa-external-link-alt"></i>
+                Website Publik
+            </a>
+            
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Inputan Layanan IKM Juara</h1>
+            <div class="user-info">
+                <span id="user-name">Admin</span>
+                <i class="fas fa-user-circle" style="margin-left: 10px; font-size: 24px;"></i>
+            </div>
+        </div>
+
+        <!-- Search IKM Section -->
+        <div class="search-section">
+            <h3><i class="fas fa-search"></i> Cari Data IKM Binaan</h3>
+            <div class="search-form">
+                <div class="form-group">
+                    <label>No. NIB (13 Digit)</label>
+                    <input type="text" id="search-nib" class="form-control" maxlength="13" placeholder="1234567890123">
+                </div>
+                <div class="form-group">
+                    <label>No. NIK (16 Digit)</label>
+                    <input type="text" id="search-nik" class="form-control" maxlength="16" placeholder="3518012345678901">
+                </div>
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="search-nama" class="form-control" placeholder="Ahmad Rizki">
+                </div>
+                <button class="btn btn-primary" onclick="searchIKM()">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+            
+            <div id="search-result" style="margin-top: 20px; display: none;">
+                <!-- Search result will appear here -->
+            </div>
+        </div>
+
+        <!-- Layanan Form Section -->
+        <div id="layanan-form-section" class="layanan-form">
+            <h3><i class="fas fa-plus-circle"></i> Tambah Layanan IKM</h3>
+            
+            <div id="selected-ikm-info" class="selected-ikm">
+                <!-- Selected IKM info will appear here -->
+            </div>
+            
+            <form id="layanan-form">
+                <input type="hidden" id="ikm-binaan-id" name="ikmBinaanId">
+                <input type="hidden" id="ikm-nib" name="nib">
+                <input type="hidden" id="ikm-nik" name="nik">
+                <input type="hidden" id="ikm-nama" name="namaLengkap">
+                
+                <div class="form-group">
+                    <label>Pilih Layanan IKM Juara *</label>
+                    <select id="jenis-layanan" name="jenisLayanan" class="form-control" required onchange="showLayananFields()">
+                        <option value="">-- Pilih Layanan --</option>
+                        <option value="hki-merek">Pendaftaran HKI Merek</option>
+                        <option value="sertifikat-halal">Pendaftaran Sertifikat Halal</option>
+                        <option value="tkdn-ik">Pendaftaran TKDN IK</option>
+                        <option value="siinas">Pendaftaran dan Pendampingan SIINas</option>
+                        <option value="uji-nilai-gizi">Pendaftaran Uji Nilai Gizi</option>
+                        <option value="kurasi-produk">Pendaftaran Kurasi Produk</option>
+                    </select>
+                </div>
+                
+                <!-- HKI Merek Fields -->
+                <div id="hki-merek-fields" class="layanan-fields" style="display: none;">
+                    <h4><i class="fas fa-certificate"></i> Data HKI Merek</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nomor Pendaftaran HKI Merek *</label>
+                            <input type="text" name="nomorPendaftaranHKI" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Tahun Fasilitasi *</label>
+                            <input type="number" name="tahunFasilitasi" class="form-control" min="2020" max="2030">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Link Bukti Daftar HKI (Google Drive)</label>
+                            <input type="url" name="linkBuktiDaftar" class="form-control" placeholder="https://drive.google.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label>Status Sertifikat Merek *</label>
+                            <select name="statusSertifikat" class="form-control">
+                                <option value="">Pilih Status</option>
+                                <option value="Telah Didaftar">Telah Didaftar</option>
+                                <option value="Proses">Proses</option>
+                                <option value="Ditolak">Ditolak</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-full">
+                        <label>Link Sertifikat HKI Merek (Google Drive)</label>
+                        <input type="url" name="linkSertifikatHKI" class="form-control" placeholder="https://drive.google.com/...">
+                    </div>
+                </div>
+                
+                <!-- Sertifikat Halal Fields -->
+                <div id="sertifikat-halal-fields" class="layanan-fields" style="display: none;">
+                    <h4><i class="fas fa-check-circle"></i> Data Sertifikat Halal</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nomor Sertifikat Halal *</label>
+                            <input type="text" name="nomorSertifikatHalal" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Tahun Fasilitasi *</label>
+                            <input type="number" name="tahunFasilitasi" class="form-control" min="2020" max="2030">
+                        </div>
+                    </div>
+                    <div class="form-group form-full">
+                        <label>Link Sertifikat Halal dan Logo Halal (Google Drive)</label>
+                        <input type="url" name="linkSertifikatHalal" class="form-control" placeholder="https://drive.google.com/...">
+                    </div>
+                </div>
+                
+                <!-- TKDN IK Fields -->
+                <div id="tkdn-ik-fields" class="layanan-fields" style="display: none;">
+                    <h4><i class="fas fa-flag"></i> Data TKDN IK</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nomor Sertifikat TKDN IK *</label>
+                            <input type="text" name="nomorSertifikatTKDN" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Tahun Terbit Sertifikat *</label>
+                            <input type="number" name="tahunTerbitSertifikat" class="form-control" min="2020" max="2030">
+                        </div>
+                    </div>
+                    <div class="form-group form-full">
+                        <label>Link Sertifikat TKDN IK (Google Drive)</label>
+                        <input type="url" name="linkSertifikatTKDN" class="form-control" placeholder="https://drive.google.com/...">
+                    </div>
+                </div>
+                
+                <!-- SIINas Fields -->
+                <div id="siinas-fields" class="layanan-fields" style="display: none;">
+                    <h4><i class="fas fa-database"></i> Data SIINas</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nomor Bukti Kepemilikan Akun SIINas *</label>
+                            <input type="text" name="nomorBuktiKepemilikan" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Tahun Registrasi SIINas *</label>
+                            <input type="number" name="tahunRegistrasi" class="form-control" min="2020" max="2030">
+                        </div>
+                    </div>
+                    <div class="form-group form-full">
+                        <label>Link Bukti Kepemilikan Akun SIINas (Google Drive)</label>
+                        <input type="url" name="linkBuktiKepemilikan" class="form-control" placeholder="https://drive.google.com/...">
+                    </div>
+                </div>
+                
+                <!-- Uji Nilai Gizi Fields -->
+                <div id="uji-nilai-gizi-fields" class="layanan-fields" style="display: none;">
+                    <h4><i class="fas fa-flask"></i> Data Uji Nilai Gizi</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nomor LHU Nilai Gizi *</label>
+                            <input type="text" name="nomorLHU" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Tanggal Hasil Uji Nilai Gizi *</label>
+                            <input type="date" name="tanggalHasilUji" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tahun Fasilitasi *</label>
+                            <input type="number" name="tahunFasilitasi" class="form-control" min="2020" max="2030">
+                        </div>
+                        <div class="form-group">
+                            <label>Link LHU Nilai Gizi (Google Drive)</label>
+                            <input type="url" name="linkLHU" class="form-control" placeholder="https://drive.google.com/...">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Kurasi Produk Fields -->
+                <div id="kurasi-produk-fields" class="layanan-fields" style="display: none;">
+                    <h4><i class="fas fa-award"></i> Data Kurasi Produk</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nomor Sertifikat Kurasi *</label>
+                            <input type="text" name="nomorSertifikatKurasi" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Tahun Kurasi *</label>
+                            <input type="number" name="tahunKurasi" class="form-control" min="2020" max="2030">
+                        </div>
+                    </div>
+                    <div class="form-group form-full">
+                        <label>Link Sertifikat Kurasi (Google Drive)</label>
+                        <input type="url" name="linkSertifikatKurasi" class="form-control" placeholder="https://drive.google.com/...">
+                    </div>
+                </div>
+                
+                <div style="text-align: right; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()" style="margin-right: 10px;">Reset</button>
+                    <button type="submit" class="btn btn-primary" id="submit-btn">
+                        <i class="fas fa-save"></i> Simpan Data
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+    <script>
+        let selectedIKM = null;
+
+        // Check authentication
+        const adminUser = localStorage.getItem('admin_user');
+        if (!adminUser) {
+            window.location.href = 'login.html';
+        } else {
+            const user = JSON.parse(adminUser);
+            document.getElementById('user-name').textContent = user.nama;
+        }
+
+        // Search IKM function
+        const searchIKM = async () => {
+            const nib = document.getElementById('search-nib').value.trim();
+            const nik = document.getElementById('search-nik').value.trim();
+            const nama = document.getElementById('search-nama').value.trim();
+            
+            if (!nib && !nik && !nama) {
+                showAlert('Masukkan minimal satu kriteria pencarian', 'warning');
+                return;
+            }
+            
+            const query = nib || nik || nama;
+            
+            try {
+                const response = await fetch('/api/search-ikm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                
+                const result = await response.json();
+                const resultDiv = document.getElementById('search-result');
+                
+                if (result.found) {
+                    const ikm = result.data.ikmBinaan;
+                    resultDiv.innerHTML = `
+                        <div style="background: #e8f5e8; border: 1px solid #27ae60; border-radius: 8px; padding: 15px;">
+                            <h4 style="color: #27ae60; margin-bottom: 10px;">
+                                <i class="fas fa-check-circle"></i> Data IKM Ditemukan
+                            </h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                                <p><strong>NIB:</strong> ${ikm.nib}</p>
+                                <p><strong>NIK:</strong> ${ikm.nik}</p>
+                                <p><strong>Nama:</strong> ${ikm.namaLengkap}</p>
+                                <p><strong>Usaha:</strong> ${ikm.namaUsaha}</p>
+                            </div>
+                            <button class="btn btn-success" onclick="useIKMData(${JSON.stringify(ikm).replace(/"/g, '&quot;')})" style="margin-top: 15px;">
+                                <i class="fas fa-check"></i> Gunakan Data Ini
+                            </button>
+                        </div>
+                    `;
+                    resultDiv.style.display = 'block';
+                } else {
+                    resultDiv.innerHTML = `
+                        <div style="background: #fee; border: 1px solid #e74c3c; border-radius: 8px; padding: 15px;">
+                            <p style="color: #c0392b; margin: 0;">
+                                <i class="fas fa-exclamation-triangle"></i> Data IKM tidak ditemukan. 
+                                Pastikan NIB, NIK, atau Nama yang dimasukkan benar.
+                            </p>
+                        </div>
+                    `;
+                    resultDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                showAlert('Terjadi kesalahan saat mencari data', 'error');
+            }
+        };
+
+        // Use IKM data
+        const useIKMData = (ikm) => {
+            selectedIKM = ikm;
+            
+            // Fill hidden fields
+            document.getElementById('ikm-binaan-id').value = ikm.id;
+            document.getElementById('ikm-nib').value = ikm.nib;
+            document.getElementById('ikm-nik').value = ikm.nik;
+            document.getElementById('ikm-nama').value = ikm.namaLengkap;
+            
+            // Show selected IKM info
+            document.getElementById('selected-ikm-info').innerHTML = `
+                <h4><i class="fas fa-building"></i> IKM Terpilih</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                    <p><strong>NIB:</strong> ${ikm.nib}</p>
+                    <p><strong>NIK:</strong> ${ikm.nik}</p>
+                    <p><strong>Nama:</strong> ${ikm.namaLengkap}</p>
+                    <p><strong>Usaha:</strong> ${ikm.namaUsaha}</p>
+                </div>
+            `;
+            
+            // Show layanan form
+            document.getElementById('layanan-form-section').style.display = 'block';
+            
+            // Scroll to form
+            document.getElementById('layanan-form-section').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // Show layanan fields based on selection
+        const showLayananFields = () => {
+            const jenisLayanan = document.getElementById('jenis-layanan').value;
+            
+            // Hide all layanan fields
+            document.querySelectorAll('.layanan-fields').forEach(field => {
+                field.style.display = 'none';
+            });
+            
+            // Show selected layanan fields
+            if (jenisLayanan) {
+                const fieldsDiv = document.getElementById(jenisLayanan + '-fields');
+                if (fieldsDiv) {
+                    fieldsDiv.style.display = 'block';
+                }
+            }
+        };
+
+        // Reset form
+        const resetForm = () => {
+            document.getElementById('layanan-form').reset();
+            document.querySelectorAll('.layanan-fields').forEach(field => {
+                field.style.display = 'none';
+            });
+            document.getElementById('layanan-form-section').style.display = 'none';
+            document.getElementById('search-result').style.display = 'none';
+            selectedIKM = null;
+        };
+
+        // Handle form submission
+        document.getElementById('layanan-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            const jenisLayanan = data.jenisLayanan;
+            
+            if (!jenisLayanan) {
+                showAlert('Pilih jenis layanan terlebih dahulu', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            
+            try {
+                // Remove jenisLayanan from data as it's not needed in the API
+                delete data.jenisLayanan;
+                
+                await createData(jenisLayanan, data);
+                showAlert('Data layanan berhasil ditambahkan', 'success');
+                resetForm();
+            } catch (error) {
+                console.error('Failed to save layanan data:', error);
+                showAlert('Gagal menyimpan data layanan', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Data';
+            }
+        });
+
+        // Logout function
+        const logout = () => {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                localStorage.removeItem('admin_user');
+                window.location.href = 'login.html';
+            }
+        };
+
+        // Enter key search
+        ['search-nib', 'search-nik', 'search-nama'].forEach(id => {
+            document.getElementById(id).addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchIKM();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

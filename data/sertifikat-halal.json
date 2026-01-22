@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "ikmBinaanId": 1,
+    "nib": "1234567890123",
+    "nik": "3518012345678901",
+    "namaLengkap": "Ahmad Rizki Pratama",
+    "nomorSertifikatHalal": "HALAL-2024-001",
+    "linkSertifikatHalal": "https://drive.google.com/file/d/1234567893/view",
+    "tahunFasilitasi": "2024",
+    "createdAt": "2024-01-20T10:00:00.000Z",
+    "updatedAt": "2024-01-20T10:00:00.000Z"
+  }
+]

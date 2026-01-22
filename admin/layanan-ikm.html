@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layanan IKM Juara - Database IKM JUARA</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .layanan-tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 0;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #7f8c8d;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-button:first-child {
+            border-radius: 8px 0 0 0;
+        }
+        
+        .tab-button:last-child {
+            border-radius: 0 8px 0 0;
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: #27ae60;
+            border-bottom-color: #27ae60;
+        }
+        
+        .tab-content {
+            background: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0;
+        }
+        
+        .tab-pane {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .link-button {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        
+        .link-button:hover {
+            background: #2980b9;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-industry" style="font-size: 24px;"></i>
+            <h3 style="margin-top: 10px;">IKM JUARA</h3>
+            <p style="font-size: 12px; margin-top: 5px;">DisnakerKUKM Kota Madiun</p>
+        </div>
+        
+        <nav>
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            
+            <a href="ikm-binaan.html" class="menu-item">
+                <i class="fas fa-building"></i>
+                IKM Binaan
+            </a>
+            
+            <a href="inputan-layanan.html" class="menu-item">
+                <i class="fas fa-plus-circle"></i>
+                Inputan Layanan IKM
+            </a>
+            
+            <a href="layanan-ikm.html" class="menu-item active">
+                <i class="fas fa-clipboard-list"></i>
+                Layanan IKM Juara
+            </a>
+            
+            <a href="pelatihan.html" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                Pelatihan Pemberdayaan
+            </a>
+            
+            <a href="penelusuran.html" class="menu-item">
+                <i class="fas fa-search"></i>
+                Penelusuran Data
+            </a>
+            
+            <a href="recycle-bin.html" class="menu-item">
+                <i class="fas fa-trash-restore"></i>
+                Recycle Bin
+            </a>
+            
+            <a href="/public" class="menu-item">
+                <i class="fas fa-external-link-alt"></i>
+                Website Publik
+            </a>
+            
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Layanan IKM Juara</h1>
+            <div class="user-info">
+                <span id="user-name">Admin</span>
+                <i class="fas fa-user-circle" style="margin-left: 10px; font-size: 24px;"></i>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="layanan-tabs">
+            <button class="tab-button active" onclick="showTab('hki-merek')">
+                <i class="fas fa-certificate"></i> HKI Merek
+            </button>
+            <button class="tab-button" onclick="showTab('sertifikat-halal')">
+                <i class="fas fa-check-circle"></i> Sertifikat Halal
+            </button>
+            <button class="tab-button" onclick="showTab('tkdn-ik')">
+                <i class="fas fa-flag"></i> TKDN IK
+            </button>
+            <button class="tab-button" onclick="showTab('siinas')">
+                <i class="fas fa-database"></i> SIINas
+            </button>
+            <button class="tab-button" onclick="showTab('uji-nilai-gizi')">
+                <i class="fas fa-flask"></i> Uji Nilai Gizi
+            </button>
+            <button class="tab-button" onclick="showTab('kurasi-produk')">
+                <i class="fas fa-award"></i> Kurasi Produk
+            </button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- HKI Merek Tab -->
+            <div id="hki-merek-tab" class="tab-pane active">
+                <div class="table-header">
+                    <h3><i class="fas fa-certificate"></i> Data HKI Merek</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="exportLayananData('hki-merek', 'excel')">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                        <button class="btn btn-warning" onclick="exportLayananData('hki-merek', 'pdf')">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                    </div>
+                </div>
+                <div id="hki-merek-table">
+                    <!-- Table will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Sertifikat Halal Tab -->
+            <div id="sertifikat-halal-tab" class="tab-pane">
+                <div class="table-header">
+                    <h3><i class="fas fa-check-circle"></i> Data Sertifikat Halal</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="exportLayananData('sertifikat-halal', 'excel')">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                        <button class="btn btn-warning" onclick="exportLayananData('sertifikat-halal', 'pdf')">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                    </div>
+                </div>
+                <div id="sertifikat-halal-table">
+                    <!-- Table will be loaded here -->
+                </div>
+            </div>
+
+            <!-- TKDN IK Tab -->
+            <div id="tkdn-ik-tab" class="tab-pane">
+                <div class="table-header">
+                    <h3><i class="fas fa-flag"></i> Data TKDN IK</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="exportLayananData('tkdn-ik', 'excel')">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                        <button class="btn btn-warning" onclick="exportLayananData('tkdn-ik', 'pdf')">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                    </div>
+                </div>
+                <div id="tkdn-ik-table">
+                    <!-- Table will be loaded here -->
+                </div>
+            </div>
+
+            <!-- SIINas Tab -->
+            <div id="siinas-tab" class="tab-pane">
+                <div class="table-header">
+                    <h3><i class="fas fa-database"></i> Data SIINas</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="exportLayananData('siinas', 'excel')">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                        <button class="btn btn-warning" onclick="exportLayananData('siinas', 'pdf')">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                    </div>
+                </div>
+                <div id="siinas-table">
+                    <!-- Table will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Uji Nilai Gizi Tab -->
+            <div id="uji-nilai-gizi-tab" class="tab-pane">
+                <div class="table-header">
+                    <h3><i class="fas fa-flask"></i> Data Uji Nilai Gizi</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="exportLayananData('uji-nilai-gizi', 'excel')">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                        <button class="btn btn-warning" onclick="exportLayananData('uji-nilai-gizi', 'pdf')">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                    </div>
+                </div>
+                <div id="uji-nilai-gizi-table">
+                    <!-- Table will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Kurasi Produk Tab -->
+            <div id="kurasi-produk-tab" class="tab-pane">
+                <div class="table-header">
+                    <h3><i class="fas fa-award"></i> Data Kurasi Produk</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn-info" onclick="exportLayananData('kurasi-produk', 'excel')">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                        <button class="btn btn-warning" onclick="exportLayananData('kurasi-produk', 'pdf')">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                    </div>
+                </div>
+                <div id="kurasi-produk-table">
+                    <!-- Table will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div id="edit-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
+                <h3 id="edit-title">Edit Data</h3>
+                <form id="edit-form">
+                    <input type="hidden" id="edit-id">
+                    <input type="hidden" id="edit-type">
+                    
+                    <div id="edit-fields">
+                        <!-- Dynamic fields will be inserted here -->
+                    </div>
+                    
+                    <div style="text-align: right; margin-top: 20px;">
+                        <button type="button" class="btn btn-secondary" onclick="hideEditModal()" style="margin-right: 10px;">Batal</button>
+                        <button type="submit" class="btn btn-primary" id="edit-submit-btn">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+    <script>
+        // Check authentication
+        const adminUser = localStorage.getItem('admin_user');
+        if (!adminUser) {
+            window.location.href = 'login.html';
+        } else {
+            const user = JSON.parse(adminUser);
+            document.getElementById('user-name').textContent = user.nama;
+        }
+
+        // Tab functionality
+        const showTab = (tabName) => {
+            // Hide all tab panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab pane
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Load data for the selected tab
+            loadLayananData(tabName);
+        };
+
+        // Load layanan data
+        const loadLayananData = async (layananType) => {
+            try {
+                const data = await getData(layananType);
+                let columns = [];
+                let actions = [
+                    { text: 'Edit', class: 'warning', onclick: `edit${toPascalCase(layananType)}` },
+                    { text: 'Hapus', class: 'danger', onclick: `delete${toPascalCase(layananType)}` }
+                ];
+
+                // Define columns based on layanan type
+                switch (layananType) {
+                    case 'hki-merek':
+                        columns = [
+                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nib', title: 'NIB' },
+                            { field: 'nomorPendaftaranHKI', title: 'No. Pendaftaran' },
+                            { field: 'statusSertifikat', title: 'Status' },
+                            { field: 'tahunFasilitasi', title: 'Tahun' },
+                            { 
+                                field: 'linkBuktiDaftar', 
+                                title: 'Link Bukti',
+                                format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
+                            },
+                            { 
+                                field: 'linkSertifikatHKI', 
+                                title: 'Link Sertifikat',
+                                format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
+                            }
+                        ];
+                        break;
+                    case 'sertifikat-halal':
+                        columns = [
+                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nib', title: 'NIB' },
+                            { field: 'nomorSertifikatHalal', title: 'No. Sertifikat' },
+                            { field: 'tahunFasilitasi', title: 'Tahun' },
+                            { 
+                                field: 'linkSertifikatHalal', 
+                                title: 'Link Sertifikat',
+                                format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
+                            }
+                        ];
+                        break;
+                    case 'tkdn-ik':
+                        columns = [
+                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nib', title: 'NIB' },
+                            { field: 'nomorSertifikatTKDN', title: 'No. Sertifikat' },
+                            { field: 'tahunTerbitSertifikat', title: 'Tahun Terbit' },
+                            { 
+                                field: 'linkSertifikatTKDN', 
+                                title: 'Link Sertifikat',
+                                format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
+                            }
+                        ];
+                        break;
+                    case 'siinas':
+                        columns = [
+                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nib', title: 'NIB' },
+                            { field: 'nomorBuktiKepemilikan', title: 'No. Bukti' },
+                            { field: 'tahunRegistrasi', title: 'Tahun Registrasi' },
+                            { 
+                                field: 'linkBuktiKepemilikan', 
+                                title: 'Link Bukti',
+                                format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
+                            }
+                        ];
+                        break;
+                    case 'uji-nilai-gizi':
+                        columns = [
+                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nib', title: 'NIB' },
+                            { field: 'nomorLHU', title: 'No. LHU' },
+                            { 
+                                field: 'tanggalHasilUji', 
+                                title: 'Tanggal Uji',
+                                format: (date) => new Date(date).toLocaleDateString('id-ID')
+                            },
+                            { field: 'tahunFasilitasi', title: 'Tahun' },
+                            { 
+                                field: 'linkLHU', 
+                                title: 'Link LHU',
+                                format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
+                            }
+                        ];
+                        break;
+                    case 'kurasi-produk':
+                        columns = [
+                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nib', title: 'NIB' },
+                            { field: 'nomorSertifikatKurasi', title: 'No. Sertifikat' },
+                            { field: 'tahunKurasi', title: 'Tahun Kurasi' },
+                            { 
+                                field: 'linkSertifikatKurasi', 
+                                title: 'Link Sertifikat',
+                                format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
+                            }
+                        ];
+                        break;
+                }
+
+                const tableHtml = createTable(data, columns, actions);
+                document.getElementById(layananType + '-table').innerHTML = tableHtml;
+            } catch (error) {
+                console.error(`Failed to load ${layananType} data:`, error);
+            }
+        };
+
+        // Helper function to convert kebab-case to PascalCase
+        const toPascalCase = (str) => {
+            return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+        };
+
+        // Generic edit function
+        const editLayanan = async (layananType, id) => {
+            try {
+                const data = await getDataById(layananType, id);
+                showEditModal(layananType, data);
+            } catch (error) {
+                console.error('Failed to load data for edit:', error);
+                showAlert('Gagal memuat data untuk diedit', 'error');
+            }
+        };
+
+        // Show edit modal
+        const showEditModal = (layananType, data) => {
+            document.getElementById('edit-id').value = data.id;
+            document.getElementById('edit-type').value = layananType;
+            
+            const titles = {
+                'hki-merek': 'Edit Data HKI Merek',
+                'sertifikat-halal': 'Edit Data Sertifikat Halal',
+                'tkdn-ik': 'Edit Data TKDN IK',
+                'siinas': 'Edit Data SIINas',
+                'uji-nilai-gizi': 'Edit Data Uji Nilai Gizi',
+                'kurasi-produk': 'Edit Data Kurasi Produk'
+            };
+            
+            document.getElementById('edit-title').textContent = titles[layananType] || 'Edit Data';
+            
+            let fieldsHtml = '';
+            
+            // Basic IKM info (read-only)
+            fieldsHtml += `
+                <div class="form-group">
+                    <label>Nama IKM</label>
+                    <input type="text" value="${data.namaLengkap}" class="form-control" readonly style="background: #f8f9fa;">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>NIB</label>
+                        <input type="text" value="${data.nib}" class="form-control" readonly style="background: #f8f9fa;">
+                    </div>
+                    <div class="form-group">
+                        <label>NIK</label>
+                        <input type="text" value="${data.nik}" class="form-control" readonly style="background: #f8f9fa;">
+                    </div>
+                </div>
+            `;
+            
+            // Specific fields based on layanan type
+            switch (layananType) {
+                case 'hki-merek':
+                    fieldsHtml += `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Nomor Pendaftaran HKI Merek *</label>
+                                <input type="text" name="nomorPendaftaranHKI" value="${data.nomorPendaftaranHKI || ''}" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tahun Fasilitasi *</label>
+                                <input type="number" name="tahunFasilitasi" value="${data.tahunFasilitasi || ''}" class="form-control" min="2020" max="2030" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Link Bukti Daftar HKI</label>
+                            <input type="url" name="linkBuktiDaftar" value="${data.linkBuktiDaftar || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label>Status Sertifikat Merek *</label>
+                            <select name="statusSertifikat" class="form-control" required>
+                                <option value="">Pilih Status</option>
+                                <option value="Telah Didaftar" ${data.statusSertifikat === 'Telah Didaftar' ? 'selected' : ''}>Telah Didaftar</option>
+                                <option value="Proses" ${data.statusSertifikat === 'Proses' ? 'selected' : ''}>Proses</option>
+                                <option value="Ditolak" ${data.statusSertifikat === 'Ditolak' ? 'selected' : ''}>Ditolak</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Link Sertifikat HKI Merek</label>
+                            <input type="url" name="linkSertifikatHKI" value="${data.linkSertifikatHKI || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                        </div>
+                    `;
+                    break;
+                case 'sertifikat-halal':
+                    fieldsHtml += `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Nomor Sertifikat Halal *</label>
+                                <input type="text" name="nomorSertifikatHalal" value="${data.nomorSertifikatHalal || ''}" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tahun Fasilitasi *</label>
+                                <input type="number" name="tahunFasilitasi" value="${data.tahunFasilitasi || ''}" class="form-control" min="2020" max="2030" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Link Sertifikat Halal dan Logo Halal</label>
+                            <input type="url" name="linkSertifikatHalal" value="${data.linkSertifikatHalal || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                        </div>
+                    `;
+                    break;
+                case 'tkdn-ik':
+                    fieldsHtml += `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Nomor Sertifikat TKDN IK *</label>
+                                <input type="text" name="nomorSertifikatTKDN" value="${data.nomorSertifikatTKDN || ''}" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tahun Terbit Sertifikat *</label>
+                                <input type="number" name="tahunTerbitSertifikat" value="${data.tahunTerbitSertifikat || ''}" class="form-control" min="2020" max="2030" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Link Sertifikat TKDN IK</label>
+                            <input type="url" name="linkSertifikatTKDN" value="${data.linkSertifikatTKDN || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                        </div>
+                    `;
+                    break;
+                case 'siinas':
+                    fieldsHtml += `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Nomor Bukti Kepemilikan Akun SIINas *</label>
+                                <input type="text" name="nomorBuktiKepemilikan" value="${data.nomorBuktiKepemilikan || ''}" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tahun Registrasi SIINas *</label>
+                                <input type="number" name="tahunRegistrasi" value="${data.tahunRegistrasi || ''}" class="form-control" min="2020" max="2030" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Link Bukti Kepemilikan Akun SIINas</label>
+                            <input type="url" name="linkBuktiKepemilikan" value="${data.linkBuktiKepemilikan || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                        </div>
+                    `;
+                    break;
+                case 'uji-nilai-gizi':
+                    fieldsHtml += `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Nomor LHU Nilai Gizi *</label>
+                                <input type="text" name="nomorLHU" value="${data.nomorLHU || ''}" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tanggal Hasil Uji Nilai Gizi *</label>
+                                <input type="date" name="tanggalHasilUji" value="${data.tanggalHasilUji || ''}" class="form-control" required>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Tahun Fasilitasi *</label>
+                                <input type="number" name="tahunFasilitasi" value="${data.tahunFasilitasi || ''}" class="form-control" min="2020" max="2030" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Link LHU Nilai Gizi</label>
+                                <input type="url" name="linkLHU" value="${data.linkLHU || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'kurasi-produk':
+                    fieldsHtml += `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Nomor Sertifikat Kurasi *</label>
+                                <input type="text" name="nomorSertifikatKurasi" value="${data.nomorSertifikatKurasi || ''}" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Tahun Kurasi *</label>
+                                <input type="number" name="tahunKurasi" value="${data.tahunKurasi || ''}" class="form-control" min="2020" max="2030" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Link Sertifikat Kurasi</label>
+                            <input type="url" name="linkSertifikatKurasi" value="${data.linkSertifikatKurasi || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                        </div>
+                    `;
+                    break;
+            }
+            
+            document.getElementById('edit-fields').innerHTML = fieldsHtml;
+            document.getElementById('edit-modal').style.display = 'block';
+        };
+
+        // Hide edit modal
+        const hideEditModal = () => {
+            document.getElementById('edit-modal').style.display = 'none';
+        };
+
+        // Handle edit form submission
+        document.getElementById('edit-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            const id = document.getElementById('edit-id').value;
+            const layananType = document.getElementById('edit-type').value;
+            
+            const submitBtn = document.getElementById('edit-submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Menyimpan...';
+            
+            try {
+                await updateData(layananType, id, data);
+                showAlert('Data berhasil diperbarui', 'success');
+                hideEditModal();
+                loadLayananData(layananType);
+            } catch (error) {
+                console.error('Failed to update data:', error);
+                showAlert('Gagal memperbarui data', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Simpan Perubahan';
+            }
+        });
+
+        // Generic delete function
+        const deleteLayanan = async (layananType, id) => {
+            if (confirm(`Apakah Anda yakin ingin menghapus data ${layananType} ini? Data akan dipindahkan ke Recycle Bin.`)) {
+                try {
+                    // Get the data first
+                    const data = await getDataById(layananType, id);
+                    
+                    // Move to recycle bin
+                    const recycleData = {
+                        originalId: id,
+                        dataType: layananType,
+                        data: data,
+                        deletedAt: new Date().toISOString(),
+                        deletedBy: 'admin',
+                        autoDeleteAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+                    };
+                    
+                    await createData('recycle-bin', recycleData);
+                    
+                    // Delete from main table
+                    await deleteData(layananType, id);
+                    
+                    showAlert('Data berhasil dihapus dan dipindahkan ke Recycle Bin', 'success');
+                    loadLayananData(layananType);
+                } catch (error) {
+                    console.error('Failed to delete data:', error);
+                    showAlert('Gagal menghapus data', 'error');
+                }
+            }
+        };
+
+        // Create specific delete functions for each layanan type
+        const editHkiMerek = (id) => editLayanan('hki-merek', id);
+        const deleteHkiMerek = (id) => deleteLayanan('hki-merek', id);
+        const editSertifikatHalal = (id) => editLayanan('sertifikat-halal', id);
+        const deleteSertifikatHalal = (id) => deleteLayanan('sertifikat-halal', id);
+        const editTkdnIk = (id) => editLayanan('tkdn-ik', id);
+        const deleteTkdnIk = (id) => deleteLayanan('tkdn-ik', id);
+        const editSiinas = (id) => editLayanan('siinas', id);
+        const deleteSiinas = (id) => deleteLayanan('siinas', id);
+        const editUjiNilaiGizi = (id) => editLayanan('uji-nilai-gizi', id);
+        const deleteUjiNilaiGizi = (id) => deleteLayanan('uji-nilai-gizi', id);
+        const editKurasiProduk = (id) => editLayanan('kurasi-produk', id);
+        const deleteKurasiProduk = (id) => deleteLayanan('kurasi-produk', id);
+
+        // Export layanan data function
+        const exportLayananData = (layananType, format) => {
+            const url = `/api/export/${layananType}/${format}`;
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${layananType.replace('-', '_')}_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Logout function
+        const logout = () => {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                localStorage.removeItem('admin_user');
+                window.location.href = 'login.html';
+            }
+        };
+
+        // Load initial data
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLayananData('hki-merek');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+[
+  {
+    "id": 1,
+    "nib": "1234567890123",
+    "nik": "3518012345678901",
+    "namaLengkap": "Ahmad Rizki Pratama",
+    "alamatLengkap": "Jl. Merdeka No. 123, Kelurahan Madiun Lor, Kecamatan Manguharjo, Kota Madiun",
+    "namaUsaha": "Keripik Singkong Rizki",
+    "nomorHP": "081234567891",
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2026-01-21T16:28:47.392Z"
+  },
+  {
+    "id": 2,
+    "nib": "2345678901234",
+    "nik": "3518012345678902",
+    "namaLengkap": "Siti Nurhaliza Dewi",
+    "alamatLengkap": "Jl. Sudirman No. 456, Kelurahan Oro-oro Ombo, Kecamatan Kartoharjo, Kota Madiun",
+    "namaUsaha": "Batik Tulis Siti",
+    "nomorHP": "081234567891",
+    "createdAt": "2024-01-15T10:35:00.000Z",
+    "updatedAt": "2024-01-15T10:35:00.000Z"
+  },
+  {
+    "id": 3,
+    "nib": "3456789012345",
+    "nik": "3518012345678903",
+    "namaLengkap": "Budi Santoso",
+    "alamatLengkap": "Jl. Gatot Subroto No. 789, Kelurahan Taman, Kecamatan Taman, Kota Madiun",
+    "namaUsaha": "Furniture Kayu Budi",
+    "nomorHP": "081234567892",
+    "createdAt": "2024-01-15T10:40:00.000Z",
+    "updatedAt": "2024-01-15T10:40:00.000Z"
+  },
+  {
+    "id": 5,
+    "nib": "8765432109876",
+    "nik": "3518018765432109",
+    "namaLengkap": "Test User Baru 2",
+    "alamatLengkap": "Jl. Test Baru No. 2, Kelurahan Test, Kecamatan Test, Kota Madiun",
+    "namaUsaha": "Usaha Test Baru 2",
+    "nomorHP": "081999888666",
+    "createdAt": "2026-01-21T16:13:37.417Z"
+  },
+  {
+    "id": 7,
+    "nib": "1234567890444",
+    "nik": "3518012345678940",
+    "namaLengkap": "Yanuar P",
+    "alamatLengkap": "Jl. Merdeka 3, Kelurahan Madiun Lor, Kecamatan Manguharjo, Kota Madiun",
+    "namaUsaha": "Keripik Pisang",
+    "nomorHP": "081234567444",
+    "createdAt": "2026-01-21T16:13:57.283Z"
+  },
+  {
+    "id": 8,
+    "nib": "2345678901221",
+    "nik": "3518012345678910",
+    "namaLengkap": "Dewi Nurlaili",
+    "alamatLengkap": "Jl. Sudirmanto 77 Kecamatan Kartoharjo, Kota Madiun",
+    "namaUsaha": "Siti Rhayau",
+    "nomorHP": "081234567591",
+    "createdAt": "2026-01-21T16:13:57.283Z"
+  },
+  {
+    "id": 9,
+    "nib": "7654321098765",
+    "nik": "3518017654321098",
+    "namaLengkap": "Test User Baru 3",
+    "alamatLengkap": "Jl. Test Baru No. 3, Kelurahan Test, Kecamatan Test, Kota Madiun",
+    "namaUsaha": "Usaha Test Baru 3",
+    "nomorHP": "081999888333",
+    "createdAt": "2026-01-21T16:53:39.706Z"
+  }
+]

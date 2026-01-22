@@ -1,0 +1,69 @@
+{
+  "name": "database-ikm-juara",
+  "version": "2.0.0",
+  "description": "Sistem Database IKM JUARA - Platform terintegrasi untuk mengelola data Industri Kecil Menengah (IKM) Binaan di Kota Madiun",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "dev": "nodemon server/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"No build process needed for this project\"",
+    "lint": "echo \"No linting configured\"",
+    "vercel-build": "echo \"Build completed\""
+  },
+  "keywords": [
+    "ikm",
+    "industri-kecil-menengah",
+    "database",
+    "nodejs",
+    "express",
+    "madiun",
+    "disnakerkukm",
+    "web-application",
+    "data-management"
+  ],
+  "author": {
+    "name": "Kiro AI Assistant",
+    "email": "support@ikmjuara.com"
+  },
+  "contributors": [
+    {
+      "name": "BidIndustri08#",
+      "role": "Project Manager"
+    },
+    {
+      "name": "Dinas Tenaga Kerja dan KUKM Kota Madiun",
+      "role": "Client"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/database-ikm-juara.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/database-ikm-juara/issues"
+  },
+  "homepage": "https://github.com/yourusername/database-ikm-juara#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.18.2",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "optionalDependencies": {},
+  "peerDependencies": {},
+  "bundledDependencies": [],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  }
+}

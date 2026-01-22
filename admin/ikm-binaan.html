@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKM Binaan - Database IKM JUARA</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .validation-warning {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .validation-warning.show {
+            display: block;
+        }
+        
+        .input-warning {
+            border-color: #e74c3c !important;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .action-buttons .btn {
+            white-space: nowrap;
+        }
+        
+        /* Import result modal styles */
+        #import-result-modal table {
+            font-size: 12px;
+        }
+        
+        #import-result-modal th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            text-align: left;
+        }
+        
+        #import-result-modal td {
+            border-bottom: 1px solid #eee;
+        }
+        
+        #import-result-modal .table-container {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-industry" style="font-size: 24px;"></i>
+            <h3 style="margin-top: 10px;">IKM JUARA</h3>
+            <p style="font-size: 12px; margin-top: 5px;">DisnakerKUKM Kota Madiun</p>
+        </div>
+        
+        <nav>
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            
+            <a href="ikm-binaan.html" class="menu-item active">
+                <i class="fas fa-building"></i>
+                IKM Binaan
+            </a>
+            
+            <a href="inputan-layanan.html" class="menu-item">
+                <i class="fas fa-plus-circle"></i>
+                Inputan Layanan IKM
+            </a>
+            
+            <a href="layanan-ikm.html" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                Layanan IKM Juara
+            </a>
+            
+            <a href="pelatihan.html" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                Pelatihan Pemberdayaan
+            </a>
+            
+            <a href="penelusuran.html" class="menu-item">
+                <i class="fas fa-search"></i>
+                Penelusuran Data
+            </a>
+            
+            <a href="recycle-bin.html" class="menu-item">
+                <i class="fas fa-trash-restore"></i>
+                Recycle Bin
+            </a>
+            
+            <a href="/public" class="menu-item">
+                <i class="fas fa-external-link-alt"></i>
+                Website Publik
+            </a>
+            
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Data IKM Binaan</h1>
+            <div class="user-info">
+                <span id="user-name">Admin</span>
+                <i class="fas fa-user-circle" style="margin-left: 10px; font-size: 24px;"></i>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3>Daftar IKM Binaan</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="downloadTemplate()">
+                        <i class="fas fa-download"></i> Download Template
+                    </button>
+                    <button class="btn btn-success" onclick="showImportModal()">
+                        <i class="fas fa-upload"></i> Import Excel
+                    </button>
+                    <button class="btn btn-info" onclick="exportData('excel')">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </button>
+                    <button class="btn btn-warning" onclick="exportData('pdf')">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </button>
+                    <button class="btn btn-primary" onclick="showAddForm()">
+                        <i class="fas fa-plus"></i> Tambah IKM Binaan
+                    </button>
+                </div>
+            </div>
+            
+            <div id="ikm-table">
+                <!-- Table will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Add/Edit Form Modal -->
+        <div id="form-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
+                <h3 id="form-title">Tambah IKM Binaan</h3>
+                <form id="ikm-form">
+                    <div class="form-group">
+                        <label>No. NIB (13 Digit) *</label>
+                        <input type="text" name="nib" class="form-control" required maxlength="13" pattern="[0-9]{13}">
+                        <div class="validation-warning" id="nib-warning">
+                            <i class="fas fa-exclamation-triangle"></i> NIB sudah terdaftar!
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>No. NIK (16 Digit) *</label>
+                        <input type="text" name="nik" class="form-control" required maxlength="16" pattern="[0-9]{16}">
+                        <div class="validation-warning" id="nik-warning">
+                            <i class="fas fa-exclamation-triangle"></i> NIK sudah terdaftar!
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nama Lengkap *</label>
+                        <input type="text" name="namaLengkap" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Alamat Lengkap *</label>
+                        <textarea name="alamatLengkap" class="form-control" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nama Usaha *</label>
+                        <input type="text" name="namaUsaha" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nomor HP *</label>
+                        <input type="tel" name="nomorHP" class="form-control" required>
+                    </div>
+                    
+                    <div style="text-align: right; margin-top: 20px;">
+                        <button type="button" class="btn btn-secondary" onclick="hideForm()" style="margin-right: 10px;">Batal</button>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Import Modal -->
+        <div id="import-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 500px;">
+                <h3>Import Data IKM Binaan</h3>
+                <div style="margin: 20px 0;">
+                    <p>Upload file Excel (.xlsx) dengan format yang sesuai template:</p>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                        <p style="margin: 0; font-weight: bold; color: #495057;">
+                            <i class="fas fa-info-circle"></i> Belum punya template? 
+                            <button class="btn btn-sm btn-secondary" onclick="downloadTemplate()" style="margin-left: 10px;">
+                                <i class="fas fa-download"></i> Download Template Excel
+                            </button>
+                        </p>
+                    </div>
+                    <ul style="font-size: 14px; color: #666;">
+                        <li>Kolom A: No. NIB (13 digit)</li>
+                        <li>Kolom B: No. NIK (16 digit)</li>
+                        <li>Kolom C: Nama Lengkap</li>
+                        <li>Kolom D: Alamat Lengkap</li>
+                        <li>Kolom E: Nama Usaha</li>
+                        <li>Kolom F: Nomor HP</li>
+                    </ul>
+                    <p style="font-size: 12px; color: #e74c3c;">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        Data dimulai dari baris ke-10 (setelah header dan petunjuk)
+                    </p>
+                </div>
+                
+                <form id="import-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Pilih File Excel (.xlsx)</label>
+                        <input type="file" name="file" class="form-control" accept=".xlsx" required>
+                    </div>
+                    
+                    <div style="text-align: right; margin-top: 20px;">
+                        <button type="button" class="btn btn-secondary" onclick="hideImportModal()" style="margin-right: 10px;">Batal</button>
+                        <button type="submit" class="btn btn-primary" id="import-btn">
+                            <i class="fas fa-upload"></i> Import
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="import-progress" style="display: none; margin-top: 20px;">
+                    <div style="background: #f0f0f0; border-radius: 4px; padding: 10px;">
+                        <div style="background: #007bff; height: 20px; border-radius: 4px; width: 0%; transition: width 0.3s;" id="progress-bar"></div>
+                    </div>
+                    <p style="text-align: center; margin-top: 10px;" id="progress-text">Mengimpor data...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Import Result Modal -->
+        <div id="import-result-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto;">
+                <h3 id="result-title">Hasil Import Data</h3>
+                
+                <div id="import-summary" style="margin: 20px 0; padding: 15px; border-radius: 5px;">
+                    <!-- Summary will be populated here -->
+                </div>
+                
+                <div id="imported-data-section" style="display: none; margin: 20px 0;">
+                    <h4 style="color: #27ae60; margin-bottom: 15px;">
+                        <i class="fas fa-check-circle"></i> Data Berhasil Diimpor
+                    </h4>
+                    <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;">
+                        <table id="imported-data-table" style="width: 100%; border-collapse: collapse;">
+                            <thead style="background: #f8f9fa; position: sticky; top: 0;">
+                                <tr>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">No</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">NIB</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">NIK</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">Nama Lengkap</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">Nama Usaha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="imported-data-body">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="duplicate-data-section" style="display: none; margin: 20px 0;">
+                    <h4 style="color: #e74c3c; margin-bottom: 15px;">
+                        <i class="fas fa-exclamation-triangle"></i> Data Duplikat (Tidak Diimpor)
+                    </h4>
+                    <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;">
+                        <table id="duplicate-data-table" style="width: 100%; border-collapse: collapse;">
+                            <thead style="background: #f8f9fa; position: sticky; top: 0;">
+                                <tr>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">Baris</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">NIB</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">NIK</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">Nama Lengkap</th>
+                                    <th style="padding: 8px; border-bottom: 1px solid #ddd; font-size: 12px;">Alasan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="duplicate-data-body">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div style="text-align: right; margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" onclick="hideImportResultModal()">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+    <script>
+        let editingId = null;
+
+        // Check authentication
+        const adminUser = localStorage.getItem('admin_user');
+        if (!adminUser) {
+            window.location.href = 'login.html';
+        } else {
+            const user = JSON.parse(adminUser);
+            document.getElementById('user-name').textContent = user.nama;
+        }
+
+        // Validation functions
+        const validateNIBNIK = async (nib, nik) => {
+            try {
+                const response = await fetch('/api/validate-nib-nik', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nib, nik, excludeId: editingId })
+                });
+                
+                const result = await response.json();
+                
+                // NIB validation
+                const nibInput = document.querySelector('input[name="nib"]');
+                const nibWarning = document.getElementById('nib-warning');
+                if (result.nibExists) {
+                    nibInput.classList.add('input-warning');
+                    nibWarning.classList.add('show');
+                } else {
+                    nibInput.classList.remove('input-warning');
+                    nibWarning.classList.remove('show');
+                }
+                
+                // NIK validation
+                const nikInput = document.querySelector('input[name="nik"]');
+                const nikWarning = document.getElementById('nik-warning');
+                if (result.nikExists) {
+                    nikInput.classList.add('input-warning');
+                    nikWarning.classList.add('show');
+                } else {
+                    nikInput.classList.remove('input-warning');
+                    nikWarning.classList.remove('show');
+                }
+                
+                return !result.nibExists && !result.nikExists;
+            } catch (error) {
+                console.error('Validation error:', error);
+                return true;
+            }
+        };
+
+        // Load IKM Binaan data
+        const loadIKMBinaan = async () => {
+            try {
+                const data = await getData('ikm-binaan');
+                const columns = [
+                    { field: 'nib', title: 'No. NIB' },
+                    { field: 'nik', title: 'No. NIK' },
+                    { field: 'namaLengkap', title: 'Nama Lengkap' },
+                    { field: 'alamatLengkap', title: 'Alamat Lengkap' },
+                    { field: 'namaUsaha', title: 'Nama Usaha' },
+                    { field: 'nomorHP', title: 'No. HP' }
+                ];
+                
+                const actions = [
+                    { text: 'Edit', class: 'warning', onclick: 'editIKM' },
+                    { text: 'Hapus', class: 'danger', onclick: 'deleteIKM' }
+                ];
+                
+                document.getElementById('ikm-table').innerHTML = createTable(data, columns, actions);
+                
+                // Update data count indicator
+                updateDataCount('ikm-binaan', data.length);
+            } catch (error) {
+                console.error('Failed to load IKM Binaan data:', error);
+            }
+        };
+
+        // Export data function
+        const exportData = (format) => {
+            const url = `/api/export/ikm-binaan/${format}`;
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `IKM_Binaan_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Download template function
+        const downloadTemplate = () => {
+            const url = '/api/template/ikm-binaan';
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Template_Import_IKM_Binaan.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Show import modal
+        const showImportModal = () => {
+            document.getElementById('import-modal').style.display = 'block';
+        };
+
+        // Hide import modal
+        const hideImportModal = () => {
+            document.getElementById('import-modal').style.display = 'none';
+            document.getElementById('import-form').reset();
+            document.getElementById('import-progress').style.display = 'none';
+        };
+
+        // Show import result modal
+        const showImportResultModal = (result) => {
+            const modal = document.getElementById('import-result-modal');
+            const summary = document.getElementById('import-summary');
+            const importedSection = document.getElementById('imported-data-section');
+            const duplicateSection = document.getElementById('duplicate-data-section');
+            
+            // Update summary
+            let summaryHtml = '';
+            if (result.imported > 0 && result.duplicates > 0) {
+                summaryHtml = `
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 4px;">
+                        <h5 style="margin: 0 0 10px 0;"><i class="fas fa-info-circle"></i> Import Selesai dengan Peringatan</h5>
+                        <p style="margin: 0;"><strong>${result.imported}</strong> data berhasil diimpor, <strong>${result.duplicates}</strong> data duplikat tidak diimpor.</p>
+                    </div>
+                `;
+            } else if (result.imported > 0) {
+                summaryHtml = `
+                    <div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 4px;">
+                        <h5 style="margin: 0 0 10px 0;"><i class="fas fa-check-circle"></i> Import Berhasil</h5>
+                        <p style="margin: 0;">Semua <strong>${result.imported}</strong> data berhasil diimpor.</p>
+                    </div>
+                `;
+            } else {
+                summaryHtml = `
+                    <div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 4px;">
+                        <h5 style="margin: 0 0 10px 0;"><i class="fas fa-exclamation-triangle"></i> Import Gagal</h5>
+                        <p style="margin: 0;">Tidak ada data yang berhasil diimpor. Semua <strong>${result.duplicates}</strong> data adalah duplikat.</p>
+                    </div>
+                `;
+            }
+            summary.innerHTML = summaryHtml;
+            
+            // Show imported data section
+            if (result.imported > 0 && result.importedData) {
+                importedSection.style.display = 'block';
+                const tbody = document.getElementById('imported-data-body');
+                tbody.innerHTML = result.importedData.map((item, index) => `
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-size: 12px;">${index + 1}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.nib}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.nik}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.namaLengkap}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.namaUsaha}</td>
+                    </tr>
+                `).join('');
+            } else {
+                importedSection.style.display = 'none';
+            }
+            
+            // Show duplicate data section
+            if (result.duplicates > 0 && result.duplicateData) {
+                duplicateSection.style.display = 'block';
+                const tbody = document.getElementById('duplicate-data-body');
+                tbody.innerHTML = result.duplicateData.map(item => `
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 8px; font-size: 12px;">${item.row}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.data.nib}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.data.nik}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.data.namaLengkap}</td>
+                        <td style="padding: 8px; font-size: 12px; color: #e74c3c;">${item.reason}</td>
+                    </tr>
+                `).join('');
+            } else {
+                duplicateSection.style.display = 'none';
+            }
+            
+            modal.style.display = 'block';
+        };
+
+        // Hide import result modal
+        const hideImportResultModal = () => {
+            document.getElementById('import-result-modal').style.display = 'none';
+        };
+
+        // Handle import form submission
+        document.getElementById('import-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const importBtn = document.getElementById('import-btn');
+            const progressDiv = document.getElementById('import-progress');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            importBtn.disabled = true;
+            importBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengimpor...';
+            progressDiv.style.display = 'block';
+            progressBar.style.width = '50%';
+            
+            try {
+                const response = await fetch('/api/import/ikm-binaan', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    progressBar.style.width = '100%';
+                    progressText.textContent = 'Import selesai!';
+                    
+                    setTimeout(() => {
+                        hideImportModal();
+                        showImportResultModal(result);
+                        loadIKMBinaan();
+                    }, 1000);
+                } else {
+                    progressBar.style.width = '0%';
+                    progressDiv.style.display = 'none';
+                    
+                    if (result.errors) {
+                        const errorMessage = result.errors.join('\n');
+                        showAlert(`Import gagal:\n${errorMessage}`, 'error');
+                    } else {
+                        showAlert(result.error || 'Import gagal', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Import error:', error);
+                progressBar.style.width = '0%';
+                progressDiv.style.display = 'none';
+                showAlert('Terjadi kesalahan saat mengimpor data', 'error');
+            } finally {
+                importBtn.disabled = false;
+                importBtn.innerHTML = '<i class="fas fa-upload"></i> Import';
+            }
+        });
+
+        // Show add form
+        const showAddForm = () => {
+            editingId = null;
+            document.getElementById('form-title').textContent = 'Tambah IKM Binaan';
+            document.getElementById('ikm-form').reset();
+            document.getElementById('form-modal').style.display = 'block';
+            
+            // Clear validation warnings
+            document.querySelectorAll('.validation-warning').forEach(w => w.classList.remove('show'));
+            document.querySelectorAll('.input-warning').forEach(i => i.classList.remove('input-warning'));
+        };
+
+        // Edit IKM
+        const editIKM = async (id) => {
+            try {
+                const ikm = await getDataById('ikm-binaan', id);
+                editingId = id;
+                document.getElementById('form-title').textContent = 'Edit IKM Binaan';
+                
+                const form = document.getElementById('ikm-form');
+                form.nib.value = ikm.nib || '';
+                form.nik.value = ikm.nik || '';
+                form.namaLengkap.value = ikm.namaLengkap || '';
+                form.alamatLengkap.value = ikm.alamatLengkap || '';
+                form.namaUsaha.value = ikm.namaUsaha || '';
+                form.nomorHP.value = ikm.nomorHP || '';
+                
+                document.getElementById('form-modal').style.display = 'block';
+            } catch (error) {
+                console.error('Failed to load IKM data:', error);
+            }
+        };
+
+        // Delete IKM
+        const deleteIKM = async (id) => {
+            if (confirm('Apakah Anda yakin ingin menghapus data IKM Binaan ini? Data akan dipindahkan ke Recycle Bin.')) {
+                try {
+                    // Get the data first
+                    const ikm = await getDataById('ikm-binaan', id);
+                    
+                    // Move to recycle bin
+                    const recycleBin = await getData('recycle-bin');
+                    const recycleData = {
+                        originalId: id,
+                        dataType: 'ikm-binaan',
+                        data: ikm,
+                        deletedAt: new Date().toISOString(),
+                        deletedBy: 'admin',
+                        autoDeleteAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
+                    };
+                    
+                    await createData('recycle-bin', recycleData);
+                    
+                    // Delete from main table
+                    await deleteData('ikm-binaan', id);
+                    
+                    showAlert('Data IKM Binaan berhasil dihapus dan dipindahkan ke Recycle Bin', 'success');
+                    loadIKMBinaan();
+                } catch (error) {
+                    console.error('Failed to delete IKM:', error);
+                }
+            }
+        };
+
+        // Hide form
+        const hideForm = () => {
+            document.getElementById('form-modal').style.display = 'none';
+        };
+
+        // Real-time validation
+        document.addEventListener('DOMContentLoaded', () => {
+            const nibInput = document.querySelector('input[name="nib"]');
+            const nikInput = document.querySelector('input[name="nik"]');
+            
+            let validationTimeout;
+            
+            const handleValidation = () => {
+                clearTimeout(validationTimeout);
+                validationTimeout = setTimeout(() => {
+                    const nib = nibInput.value;
+                    const nik = nikInput.value;
+                    
+                    if (nib.length === 13 && nik.length === 16) {
+                        validateNIBNIK(nib, nik);
+                    }
+                }, 500);
+            };
+            
+            nibInput.addEventListener('input', handleValidation);
+            nikInput.addEventListener('input', handleValidation);
+        });
+
+        // Handle form submission
+        document.getElementById('ikm-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Validate NIB and NIK format
+            if (data.nib.length !== 13 || !/^\d{13}$/.test(data.nib)) {
+                showAlert('NIB harus 13 digit angka', 'error');
+                return;
+            }
+            
+            if (data.nik.length !== 16 || !/^\d{16}$/.test(data.nik)) {
+                showAlert('NIK harus 16 digit angka', 'error');
+                return;
+            }
+            
+            // Validate uniqueness
+            const isValid = await validateNIBNIK(data.nib, data.nik);
+            if (!isValid) {
+                showAlert('NIB atau NIK sudah terdaftar', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Menyimpan...';
+            
+            try {
+                if (editingId) {
+                    await updateData('ikm-binaan', editingId, data);
+                    showAlert('Data IKM Binaan berhasil diperbarui', 'success');
+                } else {
+                    await createData('ikm-binaan', data);
+                    showAlert('Data IKM Binaan berhasil ditambahkan', 'success');
+                }
+                
+                hideForm();
+                loadIKMBinaan();
+            } catch (error) {
+                console.error('Failed to save IKM data:', error);
+                showAlert('Gagal menyimpan data', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Simpan';
+            }
+        });
+
+        // Logout function
+        const logout = () => {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                localStorage.removeItem('admin_user');
+                window.location.href = 'login.html';
+            }
+        };
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadIKMBinaan);
+    </script>
+</body>
+</html>

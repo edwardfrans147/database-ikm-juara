@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penelusuran Data - Database IKM JUARA</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+        
+        .search-result {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .result-card h4 {
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .result-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ecf0f1;
+        }
+        
+        .result-item strong {
+            color: #2c3e50;
+        }
+        
+        .link-button {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .link-button:hover {
+            background: #2980b9;
+            color: white;
+        }
+        
+        .no-result {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+        
+        .no-result i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-industry" style="font-size: 24px;"></i>
+            <h3 style="margin-top: 10px;">IKM JUARA</h3>
+            <p style="font-size: 12px; margin-top: 5px;">DisnakerKUKM Kota Madiun</p>
+        </div>
+        
+        <nav>
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            
+            <a href="ikm-binaan.html" class="menu-item">
+                <i class="fas fa-building"></i>
+                IKM Binaan
+            </a>
+            
+            <a href="inputan-layanan.html" class="menu-item">
+                <i class="fas fa-plus-circle"></i>
+                Inputan Layanan IKM
+            </a>
+            
+            <a href="layanan-ikm.html" class="menu-item">
+                <i class="fas fa-clipboard-list"></i>
+                Layanan IKM Juara
+            </a>
+            
+            <a href="pelatihan.html" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                Pelatihan Pemberdayaan
+            </a>
+            
+            <a href="penelusuran.html" class="menu-item active">
+                <i class="fas fa-search"></i>
+                Penelusuran Data
+            </a>
+            
+            <a href="recycle-bin.html" class="menu-item">
+                <i class="fas fa-trash-restore"></i>
+                Recycle Bin
+            </a>
+            
+            <a href="/public" class="menu-item">
+                <i class="fas fa-external-link-alt"></i>
+                Website Publik
+            </a>
+            
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Penelusuran Data IKM Binaan</h1>
+            <div class="user-info">
+                <span id="user-name">Admin</span>
+                <i class="fas fa-user-circle" style="margin-left: 10px; font-size: 24px;"></i>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <h3><i class="fas fa-search"></i> Cari Data IKM Binaan</h3>
+            <p>Masukkan NIB (13 digit), NIK (16 digit), atau Nama Lengkap untuk mencari data lengkap IKM Binaan beserta semua layanan yang pernah diikuti.</p>
+            
+            <div class="search-form">
+                <div class="form-group">
+                    <label>No. NIB (13 Digit)</label>
+                    <input type="text" id="search-nib" class="form-control" maxlength="13" placeholder="1234567890123">
+                </div>
+                <div class="form-group">
+                    <label>No. NIK (16 Digit)</label>
+                    <input type="text" id="search-nik" class="form-control" maxlength="16" placeholder="3518012345678901">
+                </div>
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="search-nama" class="form-control" placeholder="Ahmad Rizki">
+                </div>
+                <button class="btn btn-primary" onclick="searchIKM()" id="search-btn">
+                    <i class="fas fa-search"></i> Cari Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Result Section -->
+        <div id="search-result" class="search-result">
+            <!-- Search results will appear here -->
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+    <script>
+        // Check authentication
+        const adminUser = localStorage.getItem('admin_user');
+        if (!adminUser) {
+            window.location.href = 'login.html';
+        } else {
+            const user = JSON.parse(adminUser);
+            document.getElementById('user-name').textContent = user.nama;
+        }
+
+        // Search IKM function
+        const searchIKM = async () => {
+            const nib = document.getElementById('search-nib').value.trim();
+            const nik = document.getElementById('search-nik').value.trim();
+            const nama = document.getElementById('search-nama').value.trim();
+            
+            if (!nib && !nik && !nama) {
+                showAlert('Masukkan minimal satu kriteria pencarian', 'warning');
+                return;
+            }
+            
+            const query = nib || nik || nama;
+            const searchBtn = document.getElementById('search-btn');
+            const resultDiv = document.getElementById('search-result');
+            
+            searchBtn.disabled = true;
+            searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari...';
+            
+            try {
+                const response = await fetch('/api/search-ikm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                
+                const result = await response.json();
+                
+                if (result.found) {
+                    // Store search result for export
+                    currentSearchResult = result.data;
+                    
+                    const data = result.data;
+                    let html = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3><i class="fas fa-check-circle" style="color: #27ae60;"></i> Hasil Penelusuran Data</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn btn-success" onclick="exportSearchResult('excel')" id="export-excel-btn">
+                                    <i class="fas fa-file-excel"></i> Export Excel
+                                </button>
+                                <button class="btn btn-warning" onclick="exportSearchResult('pdf')" id="export-pdf-btn">
+                                    <i class="fas fa-file-pdf"></i> Export PDF
+                                </button>
+                                <button class="btn btn-primary" onclick="startNewSearch()">
+                                    <i class="fas fa-search-plus"></i> Cari Data Lainnya
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Basic IKM Info
+                    html += `
+                        <div class="result-card">
+                            <h4><i class="fas fa-building"></i> Data Dasar IKM Binaan</h4>
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <strong>No. NIB:</strong><br>
+                                    ${data.ikmBinaan.nib}
+                                </div>
+                                <div class="result-item">
+                                    <strong>No. NIK:</strong><br>
+                                    ${data.ikmBinaan.nik}
+                                </div>
+                                <div class="result-item">
+                                    <strong>Nama Lengkap:</strong><br>
+                                    ${data.ikmBinaan.namaLengkap}
+                                </div>
+                                <div class="result-item">
+                                    <strong>Nama Usaha:</strong><br>
+                                    ${data.ikmBinaan.namaUsaha}
+                                </div>
+                                <div class="result-item">
+                                    <strong>Alamat Lengkap:</strong><br>
+                                    ${data.ikmBinaan.alamatLengkap}
+                                </div>
+                                <div class="result-item">
+                                    <strong>No. HP:</strong><br>
+                                    ${data.ikmBinaan.nomorHP}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // HKI Merek
+                    if (data.hkiMerek.length > 0) {
+                        html += '<div class="result-card"><h4><i class="fas fa-certificate"></i> Pendaftaran HKI Merek</h4>';
+                        data.hkiMerek.forEach((hki, index) => {
+                            html += `
+                                <div class="result-grid" style="margin-bottom: ${index < data.hkiMerek.length - 1 ? '20px' : '0'};">
+                                    <div class="result-item">
+                                        <strong>No. Pendaftaran:</strong><br>
+                                        ${hki.nomorPendaftaranHKI}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Status Sertifikat:</strong><br>
+                                        <span style="color: ${hki.statusSertifikat === 'Telah Didaftar' ? '#27ae60' : hki.statusSertifikat === 'Proses' ? '#f39c12' : '#e74c3c'};">
+                                            ${hki.statusSertifikat}
+                                        </span>
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Tahun Fasilitasi:</strong><br>
+                                        ${hki.tahunFasilitasi}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Link Dokumen:</strong><br>
+                                        ${hki.linkBuktiDaftar ? `<a href="${hki.linkBuktiDaftar}" target="_blank" class="link-button"><i class="fas fa-file-alt"></i> Bukti Daftar</a>` : ''}
+                                        ${hki.linkSertifikatHKI ? `<a href="${hki.linkSertifikatHKI}" target="_blank" class="link-button"><i class="fas fa-certificate"></i> Sertifikat</a>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    // Sertifikat Halal
+                    if (data.sertifikatHalal.length > 0) {
+                        html += '<div class="result-card"><h4><i class="fas fa-check-circle"></i> Pendaftaran Sertifikat Halal</h4>';
+                        data.sertifikatHalal.forEach((halal, index) => {
+                            html += `
+                                <div class="result-grid" style="margin-bottom: ${index < data.sertifikatHalal.length - 1 ? '20px' : '0'};">
+                                    <div class="result-item">
+                                        <strong>No. Sertifikat:</strong><br>
+                                        ${halal.nomorSertifikatHalal}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Tahun Fasilitasi:</strong><br>
+                                        ${halal.tahunFasilitasi}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Link Sertifikat:</strong><br>
+                                        ${halal.linkSertifikatHalal ? `<a href="${halal.linkSertifikatHalal}" target="_blank" class="link-button"><i class="fas fa-certificate"></i> Lihat Sertifikat</a>` : 'Tidak tersedia'}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    // TKDN IK
+                    if (data.tkdnIk.length > 0) {
+                        html += '<div class="result-card"><h4><i class="fas fa-flag"></i> Pendaftaran TKDN IK</h4>';
+                        data.tkdnIk.forEach((tkdn, index) => {
+                            html += `
+                                <div class="result-grid" style="margin-bottom: ${index < data.tkdnIk.length - 1 ? '20px' : '0'};">
+                                    <div class="result-item">
+                                        <strong>No. Sertifikat:</strong><br>
+                                        ${tkdn.nomorSertifikatTKDN}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Tahun Terbit:</strong><br>
+                                        ${tkdn.tahunTerbitSertifikat}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Link Sertifikat:</strong><br>
+                                        ${tkdn.linkSertifikatTKDN ? `<a href="${tkdn.linkSertifikatTKDN}" target="_blank" class="link-button"><i class="fas fa-certificate"></i> Lihat Sertifikat</a>` : 'Tidak tersedia'}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    // SIINas
+                    if (data.siinas.length > 0) {
+                        html += '<div class="result-card"><h4><i class="fas fa-database"></i> Pendaftaran dan Pendampingan SIINas</h4>';
+                        data.siinas.forEach((siinas, index) => {
+                            html += `
+                                <div class="result-grid" style="margin-bottom: ${index < data.siinas.length - 1 ? '20px' : '0'};">
+                                    <div class="result-item">
+                                        <strong>No. Bukti Kepemilikan:</strong><br>
+                                        ${siinas.nomorBuktiKepemilikan}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Tahun Registrasi:</strong><br>
+                                        ${siinas.tahunRegistrasi}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Link Bukti:</strong><br>
+                                        ${siinas.linkBuktiKepemilikan ? `<a href="${siinas.linkBuktiKepemilikan}" target="_blank" class="link-button"><i class="fas fa-file-alt"></i> Lihat Bukti</a>` : 'Tidak tersedia'}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    // Uji Nilai Gizi
+                    if (data.ujiNilaiGizi.length > 0) {
+                        html += '<div class="result-card"><h4><i class="fas fa-flask"></i> Pendaftaran Uji Nilai Gizi</h4>';
+                        data.ujiNilaiGizi.forEach((uji, index) => {
+                            html += `
+                                <div class="result-grid" style="margin-bottom: ${index < data.ujiNilaiGizi.length - 1 ? '20px' : '0'};">
+                                    <div class="result-item">
+                                        <strong>No. LHU:</strong><br>
+                                        ${uji.nomorLHU}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Tanggal Hasil Uji:</strong><br>
+                                        ${new Date(uji.tanggalHasilUji).toLocaleDateString('id-ID')}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Tahun Fasilitasi:</strong><br>
+                                        ${uji.tahunFasilitasi}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Link LHU:</strong><br>
+                                        ${uji.linkLHU ? `<a href="${uji.linkLHU}" target="_blank" class="link-button"><i class="fas fa-file-alt"></i> Lihat LHU</a>` : 'Tidak tersedia'}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    // Kurasi Produk
+                    if (data.kurasiProduk.length > 0) {
+                        html += '<div class="result-card"><h4><i class="fas fa-award"></i> Pendaftaran Kurasi Produk</h4>';
+                        data.kurasiProduk.forEach((kurasi, index) => {
+                            html += `
+                                <div class="result-grid" style="margin-bottom: ${index < data.kurasiProduk.length - 1 ? '20px' : '0'};">
+                                    <div class="result-item">
+                                        <strong>No. Sertifikat:</strong><br>
+                                        ${kurasi.nomorSertifikatKurasi}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Tahun Kurasi:</strong><br>
+                                        ${kurasi.tahunKurasi}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Link Sertifikat:</strong><br>
+                                        ${kurasi.linkSertifikatKurasi ? `<a href="${kurasi.linkSertifikatKurasi}" target="_blank" class="link-button"><i class="fas fa-certificate"></i> Lihat Sertifikat</a>` : 'Tidak tersedia'}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    // Pelatihan Pemberdayaan
+                    if (data.pelatihan && data.pelatihan.length > 0) {
+                        html += '<div class="result-card"><h4><i class="fas fa-graduation-cap"></i> Pelatihan Pemberdayaan yang Pernah Diikuti</h4>';
+                        data.pelatihan.forEach((pelatihan, index) => {
+                            html += `
+                                <div class="result-grid" style="margin-bottom: ${index < data.pelatihan.length - 1 ? '20px' : '0'};">
+                                    <div class="result-item">
+                                        <strong>Judul Pelatihan:</strong><br>
+                                        ${pelatihan.judulPelatihan}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Deskripsi Pelatihan:</strong><br>
+                                        ${pelatihan.deskripsi || 'Tidak ada deskripsi'}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Tanggal Pelatihan:</strong><br>
+                                        ${new Date(pelatihan.tanggalMulai).toLocaleDateString('id-ID')} - ${new Date(pelatihan.tanggalSelesai).toLocaleDateString('id-ID')}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Lokasi:</strong><br>
+                                        ${pelatihan.lokasi}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Instruktur:</strong><br>
+                                        ${pelatihan.instruktur}
+                                    </div>
+                                    <div class="result-item">
+                                        <strong>Status:</strong><br>
+                                        <span style="color: ${pelatihan.status === 'Selesai' ? '#27ae60' : pelatihan.status === 'Aktif' ? '#f39c12' : '#e74c3c'};">
+                                            ${pelatihan.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    // Summary
+                    const totalLayanan = data.hkiMerek.length + data.sertifikatHalal.length + data.tkdnIk.length + 
+                                        data.siinas.length + data.ujiNilaiGizi.length + data.kurasiProduk.length;
+                    const totalPelatihan = data.pelatihan ? data.pelatihan.length : 0;
+                    
+                    html += `
+                        <div class="result-card" style="background: #e8f5e8; border-left-color: #27ae60;">
+                            <h4><i class="fas fa-chart-bar"></i> Ringkasan Layanan dan Pelatihan</h4>
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <strong>Total Layanan Diikuti:</strong><br>
+                                    <span style="font-size: 24px; color: #27ae60; font-weight: bold;">${totalLayanan}</span>
+                                </div>
+                                <div class="result-item">
+                                    <strong>Total Pelatihan Diikuti:</strong><br>
+                                    <span style="font-size: 24px; color: #3498db; font-weight: bold;">${totalPelatihan}</span>
+                                </div>
+                                <div class="result-item">
+                                    <strong>HKI Merek:</strong><br>
+                                    ${data.hkiMerek.length} layanan
+                                </div>
+                                <div class="result-item">
+                                    <strong>Sertifikat Halal:</strong><br>
+                                    ${data.sertifikatHalal.length} layanan
+                                </div>
+                                <div class="result-item">
+                                    <strong>TKDN IK:</strong><br>
+                                    ${data.tkdnIk.length} layanan
+                                </div>
+                                <div class="result-item">
+                                    <strong>SIINas:</strong><br>
+                                    ${data.siinas.length} layanan
+                                </div>
+                                <div class="result-item">
+                                    <strong>Uji Nilai Gizi:</strong><br>
+                                    ${data.ujiNilaiGizi.length} layanan
+                                </div>
+                                <div class="result-item">
+                                    <strong>Kurasi Produk:</strong><br>
+                                    ${data.kurasiProduk.length} layanan
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="no-result">
+                            <i class="fas fa-search"></i>
+                            <h3>Data Tidak Ditemukan</h3>
+                            <p>Data IKM dengan NIB, NIK, atau Nama yang Anda cari tidak ditemukan dalam database.</p>
+                            <p>Pastikan data yang dimasukkan benar atau coba dengan kriteria pencarian lain.</p>
+                        </div>
+                    `;
+                }
+                
+                resultDiv.style.display = 'block';
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error('Search error:', error);
+                showAlert('Terjadi kesalahan saat mencari data', 'error');
+            } finally {
+                searchBtn.disabled = false;
+                searchBtn.innerHTML = '<i class="fas fa-search"></i> Cari Data';
+            }
+        };
+
+        // Global variable to store current search result
+        let currentSearchResult = null;
+
+        // Export search result function
+        const exportSearchResult = async (format) => {
+            if (!currentSearchResult) {
+                showAlert('Tidak ada data untuk diekspor', 'warning');
+                return;
+            }
+
+            const exportBtn = document.getElementById(`export-${format}-btn`);
+            const originalText = exportBtn.innerHTML;
+            
+            exportBtn.disabled = true;
+            exportBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengekspor...`;
+
+            try {
+                const response = await fetch('/api/export-search-result', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        data: currentSearchResult,
+                        format: format
+                    })
+                });
+
+                if (response.ok) {
+                    if (format === 'excel') {
+                        // For Excel, download the file
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `Penelusuran_${currentSearchResult.ikmBinaan.namaLengkap.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.xlsx`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                        showAlert('File Excel berhasil diunduh', 'success');
+                    } else {
+                        // For PDF, open in new window
+                        const htmlContent = await response.text();
+                        const newWindow = window.open('', '_blank');
+                        newWindow.document.write(htmlContent);
+                        newWindow.document.close();
+                    }
+                } else {
+                    const error = await response.json();
+                    showAlert(error.error || 'Gagal mengekspor data', 'error');
+                }
+            } catch (error) {
+                console.error('Export error:', error);
+                showAlert('Terjadi kesalahan saat mengekspor data', 'error');
+            } finally {
+                exportBtn.disabled = false;
+                exportBtn.innerHTML = originalText;
+            }
+        };
+
+        // Start new search function
+        const startNewSearch = () => {
+            // Clear search inputs
+            document.getElementById('search-nib').value = '';
+            document.getElementById('search-nik').value = '';
+            document.getElementById('search-nama').value = '';
+            
+            // Hide search result
+            document.getElementById('search-result').style.display = 'none';
+            
+            // Clear current search result
+            currentSearchResult = null;
+            
+            // Focus on first input
+            document.getElementById('search-nib').focus();
+            
+            // Scroll to search form
+            document.querySelector('.search-section').scrollIntoView({ behavior: 'smooth' });
+            
+            showAlert('Form pencarian telah direset, silakan masukkan kriteria pencarian baru', 'info');
+        };
+
+        // Logout function
+        const logout = () => {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
+                localStorage.removeItem('admin_user');
+                window.location.href = 'login.html';
+            }
+        };
+
+        // Enter key search
+        ['search-nib', 'search-nik', 'search-nama'].forEach(id => {
+            document.getElementById(id).addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchIKM();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

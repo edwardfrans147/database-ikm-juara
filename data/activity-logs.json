@@ -1,0 +1,388 @@
+[
+  {
+    "id": 1,
+    "timestamp": "2026-01-21T16:50:16.344Z",
+    "type": "admin_activity",
+    "action": "login",
+    "user": "koordinator_ikm",
+    "details": {
+      "userId": 5,
+      "userName": "Koordinator IKM",
+      "role": "admin",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0"
+    },
+    "success": true
+  },
+  {
+    "id": 2,
+    "timestamp": "2026-01-21T16:50:33.199Z",
+    "type": "admin_activity",
+    "action": "create",
+    "user": "koordinator_ikm",
+    "details": {
+      "dataType": "recycle-bin",
+      "itemId": 1,
+      "itemData": {
+        "id": 1,
+        "originalId": 6,
+        "dataType": "ikm-binaan",
+        "data": {
+          "id": 6,
+          "nib": "7654321098765",
+          "nik": "3518017654321098",
+          "namaLengkap": "Test User Baru 3",
+          "alamatLengkap": "Jl. Test Baru No. 3, Kelurahan Test, Kecamatan Test, Kota Madiun",
+          "namaUsaha": "Usaha Test Baru 3",
+          "nomorHP": "081999888333",
+          "createdAt": "2026-01-21T16:13:37.417Z"
+        },
+        "deletedAt": "2026-01-21T16:50:33.194Z",
+        "deletedBy": "admin",
+        "autoDeleteAt": "2026-01-28T16:50:33.197Z",
+        "createdAt": "2026-01-21T16:50:33.198Z"
+      },
+      "ip": "::1"
+    },
+    "success": true
+  },
+  {
+    "id": 3,
+    "timestamp": "2026-01-21T16:50:33.204Z",
+    "type": "admin_activity",
+    "action": "delete",
+    "user": "koordinator_ikm",
+    "details": {
+      "dataType": "ikm-binaan",
+      "itemId": 6,
+      "deletedData": {
+        "id": 6,
+        "nib": "7654321098765",
+        "nik": "3518017654321098",
+        "namaLengkap": "Test User Baru 3",
+        "alamatLengkap": "Jl. Test Baru No. 3, Kelurahan Test, Kecamatan Test, Kota Madiun",
+        "namaUsaha": "Usaha Test Baru 3",
+        "nomorHP": "081999888333",
+        "createdAt": "2026-01-21T16:13:37.417Z"
+      },
+      "ip": "::1"
+    },
+    "success": true
+  },
+  {
+    "id": 4,
+    "timestamp": "2026-01-21T16:53:39.707Z",
+    "type": "admin_activity",
+    "action": "create",
+    "user": "BidIndustri08#",
+    "details": {
+      "dataType": "ikm-binaan",
+      "itemId": 9,
+      "itemData": {
+        "id": 9,
+        "nib": "7654321098765",
+        "nik": "3518017654321098",
+        "namaLengkap": "Test User Baru 3",
+        "alamatLengkap": "Jl. Test Baru No. 3, Kelurahan Test, Kecamatan Test, Kota Madiun",
+        "namaUsaha": "Usaha Test Baru 3",
+        "nomorHP": "081999888333",
+        "createdAt": "2026-01-21T16:53:39.706Z"
+      },
+      "ip": "::1"
+    },
+    "success": true
+  },
+  {
+    "id": 5,
+    "timestamp": "2026-01-21T16:53:39.714Z",
+    "type": "admin_activity",
+    "action": "delete",
+    "user": "BidIndustri08#",
+    "details": {
+      "dataType": "recycle-bin",
+      "itemId": 1,
+      "deletedData": {
+        "id": 1,
+        "originalId": 6,
+        "dataType": "ikm-binaan",
+        "data": {
+          "id": 6,
+          "nib": "7654321098765",
+          "nik": "3518017654321098",
+          "namaLengkap": "Test User Baru 3",
+          "alamatLengkap": "Jl. Test Baru No. 3, Kelurahan Test, Kecamatan Test, Kota Madiun",
+          "namaUsaha": "Usaha Test Baru 3",
+          "nomorHP": "081999888333",
+          "createdAt": "2026-01-21T16:13:37.417Z"
+        },
+        "deletedAt": "2026-01-21T16:50:33.194Z",
+        "deletedBy": "admin",
+        "autoDeleteAt": "2026-01-28T16:50:33.197Z",
+        "createdAt": "2026-01-21T16:50:33.198Z"
+      },
+      "ip": "::1"
+    },
+    "success": true
+  },
+  {
+    "id": 6,
+    "timestamp": "2026-01-21T17:19:57.290Z",
+    "type": "admin_activity",
+    "action": "login_failed",
+    "user": "admin",
+    "details": {
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "reason": "Invalid credentials"
+    },
+    "success": false
+  },
+  {
+    "id": 7,
+    "timestamp": "2026-01-21T17:20:14.610Z",
+    "type": "admin_activity",
+    "action": "login",
+    "user": "koordinator_ikm",
+    "details": {
+      "userId": 5,
+      "userName": "Koordinator IKM",
+      "role": "admin",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 8,
+    "timestamp": "2026-01-21T17:20:24.514Z",
+    "type": "public_search",
+    "action": "search_ikm",
+    "user": "public_user",
+    "details": {
+      "query": "1234567890123",
+      "found": true,
+      "resultId": 1,
+      "resultName": "Ahmad Rizki Pratama",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 9,
+    "timestamp": "2026-01-21T17:37:09.597Z",
+    "type": "public_search",
+    "action": "search_ikm",
+    "user": "public_user",
+    "details": {
+      "query": "1234567890123",
+      "found": true,
+      "resultId": 1,
+      "resultName": "Ahmad Rizki Pratama",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 10,
+    "timestamp": "2026-01-22T05:31:50.337Z",
+    "type": "public_search",
+    "action": "search_ikm",
+    "user": "public_user",
+    "details": {
+      "query": "1234567890123",
+      "found": true,
+      "resultId": 1,
+      "resultName": "Ahmad Rizki Pratama",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 11,
+    "timestamp": "2026-01-22T05:34:38.852Z",
+    "type": "admin_activity",
+    "action": "login_failed",
+    "user": "admin",
+    "details": {
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "reason": "Invalid credentials"
+    },
+    "success": false
+  },
+  {
+    "id": 12,
+    "timestamp": "2026-01-22T05:35:14.032Z",
+    "type": "admin_activity",
+    "action": "login",
+    "user": "BidIndustri08#",
+    "details": {
+      "userId": 1,
+      "userName": "Admin DisnakerKUKM",
+      "role": "super_admin",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 13,
+    "timestamp": "2026-01-22T05:36:37.589Z",
+    "type": "admin_activity",
+    "action": "update_website_content",
+    "user": "Unknown",
+    "details": {
+      "method": "PUT",
+      "url": "/api/website-content",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 14,
+    "timestamp": "2026-01-22T05:44:39.525Z",
+    "type": "public_search",
+    "action": "search_ikm",
+    "user": "public_user",
+    "details": {
+      "query": "1234567890123",
+      "found": true,
+      "resultId": 1,
+      "resultName": "Ahmad Rizki Pratama",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 15,
+    "timestamp": "2026-01-22T06:33:24.805Z",
+    "type": "admin_activity",
+    "action": "update_website_content",
+    "user": "Unknown",
+    "details": {
+      "method": "PUT",
+      "url": "/api/website-content",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 16,
+    "timestamp": "2026-01-22T06:34:42.142Z",
+    "type": "admin_activity",
+    "action": "update_website_content",
+    "user": "Unknown",
+    "details": {
+      "method": "PUT",
+      "url": "/api/website-content",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 17,
+    "timestamp": "2026-01-22T06:37:56.294Z",
+    "type": "admin_activity",
+    "action": "update_website_content",
+    "user": "Unknown",
+    "details": {
+      "method": "PUT",
+      "url": "/api/website-content",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 18,
+    "timestamp": "2026-01-22T06:38:40.644Z",
+    "type": "admin_activity",
+    "action": "delete_website_content",
+    "user": "Unknown",
+    "details": {
+      "method": "DELETE",
+      "url": "/api/website-content",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 19,
+    "timestamp": "2026-01-22T06:40:05.565Z",
+    "type": "public_search",
+    "action": "search_ikm",
+    "user": "public_user",
+    "details": {
+      "query": "1234567890123",
+      "found": true,
+      "resultId": 1,
+      "resultName": "Ahmad Rizki Pratama",
+      "ip": "::1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+    },
+    "success": true
+  },
+  {
+    "id": 20,
+    "timestamp": "2026-01-22T06:44:14.039Z",
+    "type": "admin_activity",
+    "action": "create",
+    "user": "BidIndustri08#",
+    "details": {
+      "dataType": "recycle-bin",
+      "itemId": 1,
+      "itemData": {
+        "id": 1,
+        "originalId": 4,
+        "dataType": "ikm-binaan",
+        "data": {
+          "id": 4,
+          "nib": "9876543210987",
+          "nik": "3518019876543210",
+          "namaLengkap": "Test User Baru 1",
+          "alamatLengkap": "Jl. Test Baru No. 1, Kelurahan Test, Kecamatan Test, Kota Madiun",
+          "namaUsaha": "Usaha Test Baru 1",
+          "nomorHP": "081999888777",
+          "createdAt": "2026-01-21T16:13:37.417Z"
+        },
+        "deletedAt": "2026-01-22T06:44:14.033Z",
+        "deletedBy": "admin",
+        "autoDeleteAt": "2026-01-29T06:44:14.036Z",
+        "createdAt": "2026-01-22T06:44:14.038Z"
+      },
+      "ip": "::1"
+    },
+    "success": true
+  },
+  {
+    "id": 21,
+    "timestamp": "2026-01-22T06:44:14.047Z",
+    "type": "admin_activity",
+    "action": "delete",
+    "user": "BidIndustri08#",
+    "details": {
+      "dataType": "ikm-binaan",
+      "itemId": 4,
+      "deletedData": {
+        "id": 4,
+        "nib": "9876543210987",
+        "nik": "3518019876543210",
+        "namaLengkap": "Test User Baru 1",
+        "alamatLengkap": "Jl. Test Baru No. 1, Kelurahan Test, Kecamatan Test, Kota Madiun",
+        "namaUsaha": "Usaha Test Baru 1",
+        "nomorHP": "081999888777",
+        "createdAt": "2026-01-21T16:13:37.417Z"
+      },
+      "ip": "::1"
+    },
+    "success": true
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "ikmBinaanId": 3,
+    "nib": "3456789012345",
+    "nik": "3518012345678903",
+    "namaLengkap": "Budi Santoso",
+    "nomorSertifikatTKDN": "TKDN-2024-001",
+    "linkSertifikatTKDN": "https://drive.google.com/file/d/1234567894/view",
+    "tahunTerbitSertifikat": "2024",
+    "createdAt": "2024-01-20T11:00:00.000Z",
+    "updatedAt": "2024-01-20T11:00:00.000Z"
+  }
+]

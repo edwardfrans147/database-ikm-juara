@@ -1,0 +1,101 @@
+[
+  {
+    "id": 1,
+    "judulPelatihan": "Pelatihan Digital Marketing untuk IKM",
+    "deskripsi": "Pelatihan untuk meningkatkan kemampuan pemasaran digital bagi pelaku IKM",
+    "tanggalMulai": "2024-02-01",
+    "tanggalSelesai": "2024-02-03",
+    "lokasi": "Balai Pelatihan DisnakerKUKM Kota Madiun",
+    "instruktur": "Dr. Marketing Digital",
+    "kuota": "30",
+    "status": "Selesai",
+    "createdAt": "2024-01-20T15:00:00.000Z",
+    "updatedAt": "2026-01-21T16:29:35.066Z",
+    "peserta": [
+      {
+        "ikmBinaanId": 2,
+        "nib": "2345678901234",
+        "nik": "3518012345678902",
+        "namaLengkap": "Siti Nurhaliza Dewi",
+        "namaUsaha": "Batik Tulis Siti",
+        "nomorHP": "081234567891",
+        "tanggalDaftar": "2026-01-21T15:49:27.631Z"
+      },
+      {
+        "ikmBinaanId": 3,
+        "nib": "3456789012345",
+        "nik": "3518012345678903",
+        "namaLengkap": "Budi Santoso",
+        "namaUsaha": "Furniture Kayu Budi",
+        "nomorHP": "081234567892",
+        "tanggalDaftar": "2026-01-21T15:49:44.959Z"
+      },
+      {
+        "ikmBinaanId": 1,
+        "nib": "1234567890123",
+        "nik": "3518012345678901",
+        "namaLengkap": "Ahmad Rizki Pratama",
+        "namaUsaha": "Keripik Singkong Rizki",
+        "nomorHP": "081234567891",
+        "tanggalDaftar": "2026-01-21T16:29:20.816Z"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "judulPelatihan": "Workshop Packaging dan Branding Produk",
+    "deskripsi": "Workshop untuk meningkatkan kemampuan packaging dan branding produk IKM",
+    "tanggalMulai": "2024-02-15",
+    "tanggalSelesai": "2024-02-17",
+    "lokasi": "Balai Pelatihan DisnakerKUKM Kota Madiun",
+    "instruktur": "Ahli Branding Produk",
+    "kuota": 25,
+    "status": "Aktif",
+    "createdAt": "2024-01-20T15:30:00.000Z",
+    "updatedAt": "2026-01-21T16:14:43.745Z",
+    "peserta": [
+      {
+        "ikmBinaanId": 3,
+        "nib": "3456789012345",
+        "nik": "3518012345678903",
+        "namaLengkap": "Budi Santoso",
+        "namaUsaha": "Furniture Kayu Budi",
+        "nomorHP": "081234567892",
+        "tanggalDaftar": "2026-01-21T15:51:12.464Z"
+      },
+      {
+        "ikmBinaanId": 7,
+        "nib": "1234567890444",
+        "nik": "3518012345678940",
+        "namaLengkap": "Yanuar P",
+        "namaUsaha": "Keripik Pisang",
+        "nomorHP": "081234567444",
+        "tanggalDaftar": "2026-01-21T16:14:43.745Z"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "judulPelatihan": "Branding Merek",
+    "deskripsi": "Meendaftarkan merek",
+    "tanggalMulai": "2026-01-12",
+    "tanggalSelesai": "2026-01-13",
+    "lokasi": "Madiun",
+    "instruktur": "Yogya Developer",
+    "kuota": "5",
+    "status": "Selesai",
+    "createdAt": "2026-01-21T16:15:36.851Z",
+    "peserta": [
+      {
+        "ikmBinaanId": 7,
+        "nib": "1234567890444",
+        "nik": "3518012345678940",
+        "namaLengkap": "Yanuar P",
+        "namaUsaha": "Keripik Pisang",
+        "nomorHP": "081234567444",
+        "tanggalDaftar": "2026-01-21T16:15:43.544Z"
+      }
+    ],
+    "updatedAt": "2026-01-21T16:15:43.544Z"
+  }
+]

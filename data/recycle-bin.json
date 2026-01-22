@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "originalId": 4,
+    "dataType": "ikm-binaan",
+    "data": {
+      "id": 4,
+      "nib": "9876543210987",
+      "nik": "3518019876543210",
+      "namaLengkap": "Test User Baru 1",
+      "alamatLengkap": "Jl. Test Baru No. 1, Kelurahan Test, Kecamatan Test, Kota Madiun",
+      "namaUsaha": "Usaha Test Baru 1",
+      "nomorHP": "081999888777",
+      "createdAt": "2026-01-21T16:13:37.417Z"
+    },
+    "deletedAt": "2026-01-22T06:44:14.033Z",
+    "deletedBy": "admin",
+    "autoDeleteAt": "2026-01-29T06:44:14.036Z",
+    "createdAt": "2026-01-22T06:44:14.038Z"
+  }
+]
