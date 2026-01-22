@@ -285,3 +285,89 @@ Untuk bantuan dan support:
 ---
 
 **Database IKM JUARA** - Memajukan Industri Kecil Menengah Indonesia 🇮🇩
+
+## 🌐 DUAL WEBSITE DEPLOYMENT
+
+### **🔐 Admin Website (Master Admin)**
+- **URL Production**: `https://ikm-juara-admin.vercel.app`
+- **Target User**: Master Admin (BidIndustri08#)
+- **Login**: 
+  - Username: `BidIndustri08#`
+  - Password: `DisnakerKUKM2024!`
+- **Features**: 
+  - Dashboard real-time
+  - CRUD semua data
+  - Import/Export Excel
+  - Activity logs
+  - Edit redaksi website
+  - Recycle bin
+
+### **👥 Public Website (Masyarakat Umum)**
+- **URL Production**: `https://ikm-juara-public.vercel.app`
+- **Target User**: Masyarakat umum
+- **Login**: Guest login dengan nama dan NIK (16 digit)
+- **Features**:
+  - Penelusuran data IKM
+  - Informasi layanan
+  - Program pelatihan
+  - Export hasil penelusuran
+
+### **🚀 Deployment Commands**
+
+#### Deploy Both Websites:
+```powershell
+.\deploy-dual.ps1
+```
+
+#### Deploy Admin Only:
+```bash
+cp vercel-admin.json vercel.json
+vercel --prod --name ikm-juara-admin
+```
+
+#### Deploy Public Only:
+```bash
+cp vercel-public.json vercel.json
+vercel --prod --name ikm-juara-public
+```
+
+### **🔧 Development URLs**
+- **Admin Local**: `http://localhost:3000/admin/login.html`
+- **Public Local**: `http://localhost:3000/public/login.html`
+
+---
+
+## 📊 WEBSITE COMPARISON
+
+| Feature | Admin Website | Public Website |
+|---------|---------------|----------------|
+| **Authentication** | Username/Password | Guest (Nama/NIK) |
+| **Data Access** | Full CRUD | Read-only |
+| **Dashboard** | Real-time stats | Public stats only |
+| **Export** | Excel/PDF | Limited export |
+| **Import** | Excel import | No import |
+| **Management** | Full management | View only |
+| **Security** | High security | Public access |
+| **Performance** | Full features | Optimized for speed |
+
+---
+
+## 🎯 BENEFITS OF SEPARATION
+
+### **Performance Benefits:**
+- ⚡ Faster loading (smaller bundles)
+- ⚡ Targeted optimization
+- ⚡ Independent scaling
+- ⚡ Better caching strategies
+
+### **Security Benefits:**
+- 🔒 Isolated admin access
+- 🔒 Reduced attack surface
+- 🔒 Separate authentication
+- 🔒 Independent monitoring
+
+### **Maintenance Benefits:**
+- 🛠️ Independent deployments
+- 🛠️ Easier updates
+- 🛠️ Separate error tracking
+- 🛠️ Targeted optimizations

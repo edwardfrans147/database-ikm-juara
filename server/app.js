@@ -12,10 +12,38 @@ const PORT = 3000;
 // Configure multer for file uploads
 const upload = multer({ dest: 'uploads/' });
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+// Middleware dengan optimisasi performa
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' ? 
+        ['https://database-ikm-juara.vercel.app', 'https://*.vercel.app'] : 
+        ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    credentials: true,
+    optionsSuccessStatus: 200
+}));
+
+// Optimisasi body parser dengan compression
+app.use(bodyParser.json({ 
+    limit: '10mb',
+    verify: (req, res, buf) => {
+        req.rawBody = buf;
+    }
+}));
+app.use(bodyParser.urlencoded({ 
+    extended: true, 
+    limit: '10mb',
+    parameterLimit: 1000
+}));
+
+// Compression middleware untuk response
+const compression = require('compression');
+app.use(compression({
+    level: 6,
+    threshold: 1024,
+    filter: (req, res) => {
+        if (req.headers['x-no-compression']) return false;
+        return compression.filter(req, res);
+    }
+}));
 
 // Debug middleware - log all requests
 app.use((req, res, next) => {
@@ -108,23 +136,91 @@ app.get('/admin', (req, res) => {
     res.redirect('/admin/login.html');
 });
 
-// Helper function to read JSON data
+// Cache untuk optimisasi performa
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 menit
+
+const getCachedData = (key) => {
+    const cached = cache.get(key);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return cached.data;
+    }
+    cache.delete(key);
+    return null;
+};
+
+const setCachedData = (key, data) => {
+    cache.set(key, {
+        data: data,
+        timestamp: Date.now()
+    });
+    
+    // Cleanup old cache entries
+    if (cache.size > 100) {
+        const oldestKey = cache.keys().next().value;
+        cache.delete(oldestKey);
+    }
+};
+
+// Optimisasi fungsi readData dengan caching
 const readData = (filename) => {
+    const cacheKey = `file_${filename}`;
+    const cached = getCachedData(cacheKey);
+    if (cached) return cached;
+    
     try {
-        const data = fs.readFileSync(path.join(__dirname, '../data', filename), 'utf8');
-        return JSON.parse(data);
+        const filePath = path.join(__dirname, '..', 'data', filename);
+        if (!fs.existsSync(filePath)) {
+            const emptyData = [];
+            writeData(filename, emptyData);
+            return emptyData;
+        }
+        
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        setCachedData(cacheKey, data);
+        return data;
     } catch (error) {
+        console.error(`Error reading ${filename}:`, error);
         return [];
     }
 };
 
-// Helper function to write JSON data
+// Optimisasi fungsi writeData dengan cache invalidation
 const writeData = (filename, data) => {
-    fs.writeFileSync(path.join(__dirname, '../data', filename), JSON.stringify(data, null, 2));
+    try {
+        const filePath = path.join(__dirname, '..', 'data', filename);
+        const dir = path.dirname(filePath);
+        
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        
+        // Write dengan atomic operation
+        const tempPath = filePath + '.tmp';
+        fs.writeFileSync(tempPath, JSON.stringify(data, null, 2));
+        fs.renameSync(tempPath, filePath);
+        
+        // Invalidate cache
+        const cacheKey = `file_${filename}`;
+        cache.delete(cacheKey);
+        
+        console.log(`Data written to ${filename} successfully`);
+        return true;
+    } catch (error) {
+        console.error(`Error writing ${filename}:`, error);
+        return false;
+    }
 };
 
-// API Routes
+// Optimisasi dashboard dengan caching
 app.get('/api/dashboard', (req, res) => {
+    const cacheKey = 'dashboard_stats';
+    const cached = getCachedData(cacheKey);
+    
+    if (cached) {
+        return res.json(cached);
+    }
+    
     const ikmBinaan = readData('ikm-binaan.json');
     const hkiMerek = readData('hki-merek.json');
     const sertifikatHalal = readData('sertifikat-halal.json');
@@ -142,7 +238,7 @@ app.get('/api/dashboard', (req, res) => {
         }
     });
 
-    res.json({
+    const dashboardData = {
         ikmBinaan: ikmBinaan.length,
         hkiMerek: hkiMerek.length,
         sertifikatHalal: sertifikatHalal.length,
@@ -151,8 +247,13 @@ app.get('/api/dashboard', (req, res) => {
         ujiNilaiGizi: ujiNilaiGizi.length,
         kurasiProduk: kurasiProduk.length,
         pelatihanPemberdayaan: pelatihanPemberdayaan.length,
-        totalPesertaPelatihan: totalPesertaPelatihan
-    });
+        totalPesertaPelatihan: totalPesertaPelatihan,
+        lastUpdated: new Date().toISOString()
+    };
+    
+    // Cache untuk 2 menit
+    setCachedData(cacheKey, dashboardData);
+    res.json(dashboardData);
 });
 
 // Login API

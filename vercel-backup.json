@@ -1,0 +1,101 @@
+{
+  "version": 2,
+  "name": "ikm-juara-admin",
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "maxLambdaSize": "50mb",
+        "memory": 1024,
+        "maxDuration": 30
+      }
+    },
+    {
+      "src": "admin/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "shared/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "data/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.js",
+      "headers": {
+        "Cache-Control": "s-maxage=300, stale-while-revalidate=60"
+      }
+    },
+    {
+      "src": "/shared/(.*)",
+      "dest": "/shared/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=86400"
+      }
+    },
+    {
+      "src": "/data/(.*)",
+      "dest": "/data/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=300"
+      }
+    },
+    {
+      "src": "/login.html",
+      "dest": "/admin/login.html"
+    },
+    {
+      "src": "/index.html",
+      "dest": "/admin/index.html"
+    },
+    {
+      "src": "/(.*\\.html)",
+      "dest": "/admin/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/admin/login.html",
+      "status": 301
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Admin-Site",
+          "value": "true"
+        }
+      ]
+    }
+  ],
+  "functions": {
+    "api/index.js": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
+  "regions": ["sin1"]
+}
