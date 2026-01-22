@@ -2058,8 +2058,14 @@ app.delete('/api/website-content', logAdminActivity('delete_website_content'), (
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server berjalan di http://localhost:${PORT}`);
-    console.log(`Admin: http://localhost:${PORT}/admin`);
-    console.log(`Public: http://localhost:${PORT}/public`);
-});
+// For Vercel deployment
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server berjalan di http://localhost:${PORT}`);
+        console.log(`Admin: http://localhost:${PORT}/admin`);
+        console.log(`Public: http://localhost:${PORT}/public`);
+    });
+}
+
+// Export for Vercel
+module.exports = app;

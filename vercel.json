@@ -1,13 +1,28 @@
 {
   "version": 2,
-  "name": "database-ikm-juara",
   "builds": [
     {
       "src": "server/app.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "admin/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "shared/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/server/app.js"
+    },
     {
       "src": "/admin/(.*)",
       "dest": "/admin/$1"
@@ -21,28 +36,8 @@
       "dest": "/shared/$1"
     },
     {
-      "src": "/api/(.*)",
-      "dest": "/server/app.js"
-    },
-    {
       "src": "/",
       "dest": "/server/app.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/server/app.js"
     }
-  ],
-  "functions": {
-    "server/app.js": {
-      "maxDuration": 30
-    }
-  },
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "regions": ["sin1"],
-  "github": {
-    "silent": true
-  }
+  ]
 }
