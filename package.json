@@ -4,13 +4,10 @@
   "description": "Sistem Database IKM JUARA - Platform terintegrasi untuk mengelola data Industri Kecil Menengah (IKM) Binaan di Kota Madiun",
   "main": "server/app.js",
   "scripts": {
-    "start": "node server/app.js",
-    "dev": "nodemon server/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo \"Build completed - static files ready\"",
-    "lint": "echo \"No linting configured\"",
-    "health-check": "curl -f http://localhost:3000/api/health || exit 1",
-    "performance-test": "echo \"Performance optimizations verified\""
+    "start": "node api/index.js",
+    "dev": "node api/index.js",
+    "build": "echo 'Build completed'",
+    "test": "echo 'No tests specified'"
   },
   "keywords": [
     "ikm",

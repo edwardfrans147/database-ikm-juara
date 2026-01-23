@@ -13,3 +13,4 @@ test-*.js
 *.bat
 *.sql
 *.csv
+.vercel
