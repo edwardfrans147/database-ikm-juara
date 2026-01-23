@@ -2,9 +2,9 @@
   "name": "database-ikm-juara",
   "version": "2.0.0",
   "description": "Database IKM JUARA - DisnakerKUKM Kota Madiun",
-  "main": "api/index.js",
+  "main": "api/simple-api.js",
   "scripts": {
-    "start": "node api/index.js",
+    "start": "node server-supabase.js",
     "build": "echo 'Build completed'"
   },
   "dependencies": {
