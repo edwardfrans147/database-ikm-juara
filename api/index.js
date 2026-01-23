@@ -509,6 +509,70 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Clear cache endpoint (for debugging)
+app.get('/api/clear-cache', (req, res) => {
+    cache.clear();
+    res.json({
+        success: true,
+        message: 'Cache cleared successfully'
+    });
+});
+
+// Debug dashboard endpoint (no cache)
+app.get('/api/dashboard-debug', async (req, res) => {
+    try {
+        console.log('Debug: Fetching dashboard data without cache...');
+        
+        // Get counts from all tables using proper count method
+        const results = {};
+        
+        // Test each table individually
+        const tables = [
+            { name: 'ikm_binaan', key: 'ikmBinaan' },
+            { name: 'hki_merek', key: 'hkiMerek' },
+            { name: 'sertifikat_halal', key: 'sertifikatHalal' },
+            { name: 'tkdn_ik', key: 'tkdnIk' },
+            { name: 'siinas', key: 'siinas' },
+            { name: 'uji_nilai_gizi', key: 'ujiNilaiGizi' },
+            { name: 'kurasi_produk', key: 'kurasiProduk' },
+            { name: 'pelatihan_pemberdayaan', key: 'pelatihanPemberdayaan' },
+            { name: 'peserta_pelatihan', key: 'totalPesertaPelatihan' }
+        ];
+        
+        for (const table of tables) {
+            try {
+                const { count, error } = await supabase
+                    .from(table.name)
+                    .select('*', { count: 'exact', head: true });
+                
+                if (error) {
+                    console.log(`Error counting ${table.name}:`, error.message);
+                    results[table.key] = 0;
+                } else {
+                    console.log(`${table.name}: ${count} records`);
+                    results[table.key] = count || 0;
+                }
+            } catch (e) {
+                console.log(`Exception counting ${table.name}:`, e.message);
+                results[table.key] = 0;
+            }
+        }
+        
+        const dashboardData = {
+            ...results,
+            lastUpdated: new Date().toISOString(),
+            debug: true
+        };
+        
+        console.log('Debug dashboard data:', dashboardData);
+        res.json(dashboardData);
+        
+    } catch (error) {
+        console.error('Debug dashboard error:', error);
+        handleError(res, error, 'Error fetching debug dashboard data');
+    }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({
