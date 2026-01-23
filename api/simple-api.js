@@ -31,6 +31,66 @@ router.get('/test', (req, res) => {
     });
 });
 
+// Admin login endpoint
+router.post('/admin/login', async (req, res) => {
+    try {
+        console.log('Admin login API called');
+        
+        const { username, password } = req.body;
+        
+        if (!username || !password) {
+            return res.status(400).json({
+                success: false,
+                error: 'Username dan password harus diisi'
+            });
+        }
+        
+        // Get admin users from Supabase
+        const { data: adminUser, error } = await supabase
+            .from('admin_users')
+            .select('*')
+            .eq('username', username)
+            .eq('password_hash', password)
+            .single();
+        
+        if (error || !adminUser) {
+            console.log('Login failed for username:', username);
+            return res.status(401).json({
+                success: false,
+                error: 'Username atau password salah'
+            });
+        }
+        
+        // Update last login
+        await supabase
+            .from('admin_users')
+            .update({ 
+                last_login: new Date().toISOString()
+            })
+            .eq('id', adminUser.id);
+        
+        // Return user data (without password)
+        const userData = {
+            id: adminUser.id,
+            username: adminUser.username,
+            nama: adminUser.nama,
+            role: adminUser.role,
+            lastLogin: adminUser.last_login
+        };
+        
+        console.log('Login successful for user:', userData.username);
+        
+        res.json({
+            success: true,
+            message: 'Login berhasil',
+            user: userData
+        });
+        
+    } catch (error) {
+        handleError(res, error, 'Error during login');
+    }
+});
+
 // Dashboard API
 router.get('/dashboard', async (req, res) => {
     try {

@@ -1,18 +1,50 @@
-﻿node_modules
+﻿# Development files
+node_modules/
 .env.local
-*.log
-.DS_Store
-.git
+.env
+
+# Documentation and logs
 *.md
-server/
-uploads/
-data/
-scripts/
-test-*.js
+*.log
+
+# Development scripts
 *.ps1
 *.bat
-*.sql
-*.csv
-.vercel
-CHANGELOG.md
-README.md
+*.sh
+
+# Testing files
+test-*
+*-test.*
+
+# Backup and temporary files
+*-backup.*
+*-temp.*
+*-old.*
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git/
+.gitignore
+
+# Vercel files
+.vercel/
+
+# Only deploy essential files:
+# - api/simple-api.js
+# - admin/*.html
+# - public/*.html
+# - shared/style.css
+# - data/*.json
+# - lib/supabase.js
+# - vercel.json
+# - package.json
