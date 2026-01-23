@@ -3,7 +3,6 @@
 *.log
 .DS_Store
 .git
-README.md
 *.md
 server/
 uploads/
@@ -12,3 +11,5 @@ scripts/
 test-*.js
 *.ps1
 *.bat
+*.sql
+*.csv
