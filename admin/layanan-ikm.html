@@ -332,7 +332,10 @@
         // Load layanan data
         const loadLayananData = async (layananType) => {
             try {
-                const data = await getData(layananType);
+                const response = await getData(layananType);
+                const data = response.data || response; // Handle both response formats
+                
+                console.log(`${layananType} data:`, data); // Debug log
                 let columns = [];
                 let actions = [
                     { text: 'Edit', class: 'warning', onclick: `edit${toPascalCase(layananType)}` },
@@ -343,18 +346,18 @@
                 switch (layananType) {
                     case 'hki-merek':
                         columns = [
-                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nama_lengkap', title: 'Nama IKM' },
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomorPendaftaranHKI', title: 'No. Pendaftaran' },
-                            { field: 'statusSertifikat', title: 'Status' },
-                            { field: 'tahunFasilitasi', title: 'Tahun' },
+                            { field: 'nomor_pendaftaran_hki', title: 'No. Pendaftaran' },
+                            { field: 'status_sertifikat', title: 'Status' },
+                            { field: 'tahun_fasilitasi', title: 'Tahun' },
                             { 
-                                field: 'linkBuktiDaftar', 
+                                field: 'link_bukti_daftar', 
                                 title: 'Link Bukti',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             },
                             { 
-                                field: 'linkSertifikatHKI', 
+                                field: 'link_sertifikat_hki', 
                                 title: 'Link Sertifikat',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -362,12 +365,12 @@
                         break;
                     case 'sertifikat-halal':
                         columns = [
-                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nama_lengkap', title: 'Nama IKM' },
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomorSertifikatHalal', title: 'No. Sertifikat' },
-                            { field: 'tahunFasilitasi', title: 'Tahun' },
+                            { field: 'nomor_sertifikat_halal', title: 'No. Sertifikat' },
+                            { field: 'tahun_fasilitasi', title: 'Tahun' },
                             { 
-                                field: 'linkSertifikatHalal', 
+                                field: 'link_sertifikat_halal', 
                                 title: 'Link Sertifikat',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -375,12 +378,12 @@
                         break;
                     case 'tkdn-ik':
                         columns = [
-                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nama_lengkap', title: 'Nama IKM' },
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomorSertifikatTKDN', title: 'No. Sertifikat' },
-                            { field: 'tahunTerbitSertifikat', title: 'Tahun Terbit' },
+                            { field: 'nomor_sertifikat_tkdn', title: 'No. Sertifikat' },
+                            { field: 'tahun_terbit_sertifikat', title: 'Tahun Terbit' },
                             { 
-                                field: 'linkSertifikatTKDN', 
+                                field: 'link_sertifikat_tkdn', 
                                 title: 'Link Sertifikat',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -388,12 +391,12 @@
                         break;
                     case 'siinas':
                         columns = [
-                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nama_lengkap', title: 'Nama IKM' },
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomorBuktiKepemilikan', title: 'No. Bukti' },
-                            { field: 'tahunRegistrasi', title: 'Tahun Registrasi' },
+                            { field: 'nomor_bukti_kepemilikan', title: 'No. Bukti' },
+                            { field: 'tahun_registrasi', title: 'Tahun Registrasi' },
                             { 
-                                field: 'linkBuktiKepemilikan', 
+                                field: 'link_bukti_kepemilikan', 
                                 title: 'Link Bukti',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -401,17 +404,17 @@
                         break;
                     case 'uji-nilai-gizi':
                         columns = [
-                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nama_lengkap', title: 'Nama IKM' },
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomorLHU', title: 'No. LHU' },
+                            { field: 'nomor_lhu', title: 'No. LHU' },
                             { 
-                                field: 'tanggalHasilUji', 
+                                field: 'tanggal_hasil_uji', 
                                 title: 'Tanggal Uji',
                                 format: (date) => new Date(date).toLocaleDateString('id-ID')
                             },
-                            { field: 'tahunFasilitasi', title: 'Tahun' },
+                            { field: 'tahun_fasilitasi', title: 'Tahun' },
                             { 
-                                field: 'linkLHU', 
+                                field: 'link_lhu', 
                                 title: 'Link LHU',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -419,12 +422,12 @@
                         break;
                     case 'kurasi-produk':
                         columns = [
-                            { field: 'namaLengkap', title: 'Nama IKM' },
+                            { field: 'nama_lengkap', title: 'Nama IKM' },
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomorSertifikatKurasi', title: 'No. Sertifikat' },
-                            { field: 'tahunKurasi', title: 'Tahun Kurasi' },
+                            { field: 'nomor_sertifikat_kurasi', title: 'No. Sertifikat' },
+                            { field: 'tahun_kurasi', title: 'Tahun Kurasi' },
                             { 
-                                field: 'linkSertifikatKurasi', 
+                                field: 'link_sertifikat_kurasi', 
                                 title: 'Link Sertifikat',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -477,7 +480,7 @@
             fieldsHtml += `
                 <div class="form-group">
                     <label>Nama IKM</label>
-                    <input type="text" value="${data.namaLengkap}" class="form-control" readonly style="background: #f8f9fa;">
+                    <input type="text" value="${data.nama_lengkap}" class="form-control" readonly style="background: #f8f9fa;">
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group">
@@ -498,29 +501,29 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="form-group">
                                 <label>Nomor Pendaftaran HKI Merek *</label>
-                                <input type="text" name="nomorPendaftaranHKI" value="${data.nomorPendaftaranHKI || ''}" class="form-control" required>
+                                <input type="text" name="nomorPendaftaranHKI" value="${data.nomor_pendaftaran_hki || ''}" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Tahun Fasilitasi *</label>
-                                <input type="number" name="tahunFasilitasi" value="${data.tahunFasilitasi || ''}" class="form-control" min="2020" max="2030" required>
+                                <input type="number" name="tahunFasilitasi" value="${data.tahun_fasilitasi || ''}" class="form-control" min="2020" max="2030" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Link Bukti Daftar HKI</label>
-                            <input type="url" name="linkBuktiDaftar" value="${data.linkBuktiDaftar || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                            <input type="url" name="linkBuktiDaftar" value="${data.link_bukti_daftar || ''}" class="form-control" placeholder="https://drive.google.com/...">
                         </div>
                         <div class="form-group">
                             <label>Status Sertifikat Merek *</label>
                             <select name="statusSertifikat" class="form-control" required>
                                 <option value="">Pilih Status</option>
-                                <option value="Telah Didaftar" ${data.statusSertifikat === 'Telah Didaftar' ? 'selected' : ''}>Telah Didaftar</option>
-                                <option value="Proses" ${data.statusSertifikat === 'Proses' ? 'selected' : ''}>Proses</option>
-                                <option value="Ditolak" ${data.statusSertifikat === 'Ditolak' ? 'selected' : ''}>Ditolak</option>
+                                <option value="Telah Didaftar" ${data.status_sertifikat === 'Telah Didaftar' ? 'selected' : ''}>Telah Didaftar</option>
+                                <option value="Proses" ${data.status_sertifikat === 'Proses' ? 'selected' : ''}>Proses</option>
+                                <option value="Ditolak" ${data.status_sertifikat === 'Ditolak' ? 'selected' : ''}>Ditolak</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Link Sertifikat HKI Merek</label>
-                            <input type="url" name="linkSertifikatHKI" value="${data.linkSertifikatHKI || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                            <input type="url" name="linkSertifikatHKI" value="${data.link_sertifikat_hki || ''}" class="form-control" placeholder="https://drive.google.com/...">
                         </div>
                     `;
                     break;
@@ -529,16 +532,16 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="form-group">
                                 <label>Nomor Sertifikat Halal *</label>
-                                <input type="text" name="nomorSertifikatHalal" value="${data.nomorSertifikatHalal || ''}" class="form-control" required>
+                                <input type="text" name="nomorSertifikatHalal" value="${data.nomor_sertifikat_halal || ''}" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Tahun Fasilitasi *</label>
-                                <input type="number" name="tahunFasilitasi" value="${data.tahunFasilitasi || ''}" class="form-control" min="2020" max="2030" required>
+                                <input type="number" name="tahunFasilitasi" value="${data.tahun_fasilitasi || ''}" class="form-control" min="2020" max="2030" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Link Sertifikat Halal dan Logo Halal</label>
-                            <input type="url" name="linkSertifikatHalal" value="${data.linkSertifikatHalal || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                            <input type="url" name="linkSertifikatHalal" value="${data.link_sertifikat_halal || ''}" class="form-control" placeholder="https://drive.google.com/...">
                         </div>
                     `;
                     break;
@@ -547,16 +550,16 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="form-group">
                                 <label>Nomor Sertifikat TKDN IK *</label>
-                                <input type="text" name="nomorSertifikatTKDN" value="${data.nomorSertifikatTKDN || ''}" class="form-control" required>
+                                <input type="text" name="nomorSertifikatTKDN" value="${data.nomor_sertifikat_tkdn || ''}" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Tahun Terbit Sertifikat *</label>
-                                <input type="number" name="tahunTerbitSertifikat" value="${data.tahunTerbitSertifikat || ''}" class="form-control" min="2020" max="2030" required>
+                                <input type="number" name="tahunTerbitSertifikat" value="${data.tahun_terbit_sertifikat || ''}" class="form-control" min="2020" max="2030" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Link Sertifikat TKDN IK</label>
-                            <input type="url" name="linkSertifikatTKDN" value="${data.linkSertifikatTKDN || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                            <input type="url" name="linkSertifikatTKDN" value="${data.link_sertifikat_tkdn || ''}" class="form-control" placeholder="https://drive.google.com/...">
                         </div>
                     `;
                     break;
@@ -565,16 +568,16 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="form-group">
                                 <label>Nomor Bukti Kepemilikan Akun SIINas *</label>
-                                <input type="text" name="nomorBuktiKepemilikan" value="${data.nomorBuktiKepemilikan || ''}" class="form-control" required>
+                                <input type="text" name="nomorBuktiKepemilikan" value="${data.nomor_bukti_kepemilikan || ''}" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Tahun Registrasi SIINas *</label>
-                                <input type="number" name="tahunRegistrasi" value="${data.tahunRegistrasi || ''}" class="form-control" min="2020" max="2030" required>
+                                <input type="number" name="tahunRegistrasi" value="${data.tahun_registrasi || ''}" class="form-control" min="2020" max="2030" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Link Bukti Kepemilikan Akun SIINas</label>
-                            <input type="url" name="linkBuktiKepemilikan" value="${data.linkBuktiKepemilikan || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                            <input type="url" name="linkBuktiKepemilikan" value="${data.link_bukti_kepemilikan || ''}" class="form-control" placeholder="https://drive.google.com/...">
                         </div>
                     `;
                     break;
@@ -583,21 +586,21 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="form-group">
                                 <label>Nomor LHU Nilai Gizi *</label>
-                                <input type="text" name="nomorLHU" value="${data.nomorLHU || ''}" class="form-control" required>
+                                <input type="text" name="nomorLHU" value="${data.nomor_lhu || ''}" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Tanggal Hasil Uji Nilai Gizi *</label>
-                                <input type="date" name="tanggalHasilUji" value="${data.tanggalHasilUji || ''}" class="form-control" required>
+                                <input type="date" name="tanggalHasilUji" value="${data.tanggal_hasil_uji || ''}" class="form-control" required>
                             </div>
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="form-group">
                                 <label>Tahun Fasilitasi *</label>
-                                <input type="number" name="tahunFasilitasi" value="${data.tahunFasilitasi || ''}" class="form-control" min="2020" max="2030" required>
+                                <input type="number" name="tahunFasilitasi" value="${data.tahun_fasilitasi || ''}" class="form-control" min="2020" max="2030" required>
                             </div>
                             <div class="form-group">
                                 <label>Link LHU Nilai Gizi</label>
-                                <input type="url" name="linkLHU" value="${data.linkLHU || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                                <input type="url" name="linkLHU" value="${data.link_lhu || ''}" class="form-control" placeholder="https://drive.google.com/...">
                             </div>
                         </div>
                     `;
@@ -607,16 +610,16 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div class="form-group">
                                 <label>Nomor Sertifikat Kurasi *</label>
-                                <input type="text" name="nomorSertifikatKurasi" value="${data.nomorSertifikatKurasi || ''}" class="form-control" required>
+                                <input type="text" name="nomorSertifikatKurasi" value="${data.nomor_sertifikat_kurasi || ''}" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label>Tahun Kurasi *</label>
-                                <input type="number" name="tahunKurasi" value="${data.tahunKurasi || ''}" class="form-control" min="2020" max="2030" required>
+                                <input type="number" name="tahunKurasi" value="${data.tahun_kurasi || ''}" class="form-control" min="2020" max="2030" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Link Sertifikat Kurasi</label>
-                            <input type="url" name="linkSertifikatKurasi" value="${data.linkSertifikatKurasi || ''}" class="form-control" placeholder="https://drive.google.com/...">
+                            <input type="url" name="linkSertifikatKurasi" value="${data.link_sertifikat_kurasi || ''}" class="form-control" placeholder="https://drive.google.com/...">
                         </div>
                     `;
                     break;

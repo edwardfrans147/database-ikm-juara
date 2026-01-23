@@ -366,14 +366,18 @@
         // Load IKM Binaan data
         const loadIKMBinaan = async () => {
             try {
-                const data = await getData('ikm-binaan');
+                const response = await getData('ikm-binaan');
+                const data = response.data || response; // Handle both response formats
+                
+                console.log('IKM Binaan data:', data); // Debug log
+                
                 const columns = [
                     { field: 'nib', title: 'No. NIB' },
                     { field: 'nik', title: 'No. NIK' },
-                    { field: 'namaLengkap', title: 'Nama Lengkap' },
-                    { field: 'alamatLengkap', title: 'Alamat Lengkap' },
-                    { field: 'namaUsaha', title: 'Nama Usaha' },
-                    { field: 'nomorHP', title: 'No. HP' }
+                    { field: 'nama_lengkap', title: 'Nama Lengkap' },
+                    { field: 'alamat_lengkap', title: 'Alamat Lengkap' },
+                    { field: 'nama_usaha', title: 'Nama Usaha' },
+                    { field: 'nomor_hp', title: 'No. HP' }
                 ];
                 
                 const actions = [
@@ -387,6 +391,7 @@
                 updateDataCount('ikm-binaan', data.length);
             } catch (error) {
                 console.error('Failed to load IKM Binaan data:', error);
+                showAlert('Gagal memuat data IKM Binaan', 'error');
             }
         };
 
@@ -466,8 +471,8 @@
                         <td style="padding: 8px; font-size: 12px;">${index + 1}</td>
                         <td style="padding: 8px; font-size: 12px;">${item.nib}</td>
                         <td style="padding: 8px; font-size: 12px;">${item.nik}</td>
-                        <td style="padding: 8px; font-size: 12px;">${item.namaLengkap}</td>
-                        <td style="padding: 8px; font-size: 12px;">${item.namaUsaha}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.nama_lengkap}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.nama_usaha}</td>
                     </tr>
                 `).join('');
             } else {
@@ -483,7 +488,7 @@
                         <td style="padding: 8px; font-size: 12px;">${item.row}</td>
                         <td style="padding: 8px; font-size: 12px;">${item.data.nib}</td>
                         <td style="padding: 8px; font-size: 12px;">${item.data.nik}</td>
-                        <td style="padding: 8px; font-size: 12px;">${item.data.namaLengkap}</td>
+                        <td style="padding: 8px; font-size: 12px;">${item.data.nama_lengkap}</td>
                         <td style="padding: 8px; font-size: 12px; color: #e74c3c;">${item.reason}</td>
                     </tr>
                 `).join('');
@@ -575,10 +580,10 @@
                 const form = document.getElementById('ikm-form');
                 form.nib.value = ikm.nib || '';
                 form.nik.value = ikm.nik || '';
-                form.namaLengkap.value = ikm.namaLengkap || '';
-                form.alamatLengkap.value = ikm.alamatLengkap || '';
-                form.namaUsaha.value = ikm.namaUsaha || '';
-                form.nomorHP.value = ikm.nomorHP || '';
+                form.nama_lengkap.value = ikm.nama_lengkap || '';
+                form.alamat_lengkap.value = ikm.alamat_lengkap || '';
+                form.nama_usaha.value = ikm.nama_usaha || '';
+                form.nomor_hp.value = ikm.nomor_hp || '';
                 
                 document.getElementById('form-modal').style.display = 'block';
             } catch (error) {

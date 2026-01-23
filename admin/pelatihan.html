@@ -233,16 +233,19 @@
         // Load pelatihan data
         const loadPelatihan = async () => {
             try {
-                const data = await getData('pelatihan-pemberdayaan');
+                const response = await getData('pelatihan-pemberdayaan');
+                const data = response.data || response; // Handle both response formats
+                
+                console.log(`${'pelatihan-pemberdayaan'} data:`, data); // Debug log
                 const columns = [
-                    { field: 'judulPelatihan', title: 'Judul Pelatihan' },
+                    { field: 'judul_pelatihan', title: 'Judul Pelatihan' },
                     { 
-                        field: 'tanggalMulai', 
+                        field: 'tanggal_mulai', 
                         title: 'Tanggal Mulai',
                         format: (date) => new Date(date).toLocaleDateString('id-ID')
                     },
                     { 
-                        field: 'tanggalSelesai', 
+                        field: 'tanggal_selesai', 
                         title: 'Tanggal Selesai',
                         format: (date) => new Date(date).toLocaleDateString('id-ID')
                     },
@@ -299,13 +302,13 @@
                 currentTrainingId = id;
                 const training = await getDataById('pelatihan-pemberdayaan', id);
                 
-                document.getElementById('participants-title').textContent = `Kelola Peserta - ${training.judulPelatihan}`;
+                document.getElementById('participants-title').textContent = `Kelola Peserta - ${training.judul_pelatihan}`;
                 
                 // Show training info
                 const trainingInfo = `
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                        <div><strong>Judul:</strong> ${training.judulPelatihan}</div>
-                        <div><strong>Tanggal:</strong> ${new Date(training.tanggalMulai).toLocaleDateString('id-ID')} - ${new Date(training.tanggalSelesai).toLocaleDateString('id-ID')}</div>
+                        <div><strong>Judul:</strong> ${training.judul_pelatihan}</div>
+                        <div><strong>Tanggal:</strong> ${new Date(training.tanggal_mulai).toLocaleDateString('id-ID')} - ${new Date(training.tanggal_selesai).toLocaleDateString('id-ID')}</div>
                         <div><strong>Lokasi:</strong> ${training.lokasi}</div>
                         <div><strong>Kuota:</strong> ${training.kuota}</div>
                         <div><strong>Peserta Terdaftar:</strong> ${training.peserta ? training.peserta.length : 0}</div>
@@ -336,9 +339,9 @@
                 const columns = [
                     { field: 'nib', title: 'NIB' },
                     { field: 'nik', title: 'NIK' },
-                    { field: 'namaLengkap', title: 'Nama Lengkap' },
-                    { field: 'namaUsaha', title: 'Nama Usaha' },
-                    { field: 'nomorHP', title: 'Nomor HP' },
+                    { field: 'nama_lengkap', title: 'Nama Lengkap' },
+                    { field: 'nama_usaha', title: 'Nama Usaha' },
+                    { field: 'nomor_hp', title: 'Nomor HP' },
                     { 
                         field: 'tanggalDaftar', 
                         title: 'Tanggal Daftar',
@@ -480,10 +483,10 @@
                 document.getElementById('form-title').textContent = 'Edit Program Pelatihan';
                 
                 const form = document.getElementById('pelatihan-form');
-                form.judulPelatihan.value = pelatihan.judulPelatihan || '';
+                form.judul_pelatihan.value = pelatihan.judul_pelatihan || '';
                 form.deskripsi.value = pelatihan.deskripsi || '';
-                form.tanggalMulai.value = pelatihan.tanggalMulai || '';
-                form.tanggalSelesai.value = pelatihan.tanggalSelesai || '';
+                form.tanggal_mulai.value = pelatihan.tanggal_mulai || '';
+                form.tanggal_selesai.value = pelatihan.tanggal_selesai || '';
                 form.lokasi.value = pelatihan.lokasi || '';
                 form.instruktur.value = pelatihan.instruktur || '';
                 form.kuota.value = pelatihan.kuota || '';
@@ -538,8 +541,8 @@
             const data = Object.fromEntries(formData.entries());
             
             // Validate dates
-            const startDate = new Date(data.tanggalMulai);
-            const endDate = new Date(data.tanggalSelesai);
+            const startDate = new Date(data.tanggal_mulai);
+            const endDate = new Date(data.tanggal_selesai);
             
             if (endDate <= startDate) {
                 showAlert('Tanggal selesai harus setelah tanggal mulai', 'error');
