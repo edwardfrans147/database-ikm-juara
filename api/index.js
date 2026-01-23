@@ -17,7 +17,7 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 // Cache untuk optimisasi performa
 const cache = new Map();
-const CACHE_TTL = 5 * 60 * 1000; // 5 menit
+const CACHE_TTL = 1 * 60 * 1000; // 1 menit (lebih pendek untuk testing)
 
 const getCachedData = (key) => {
     const cached = cache.get(key);
@@ -70,7 +70,9 @@ app.get('/api/dashboard', async (req, res) => {
             return res.json(cached);
         }
         
-        // Get counts from all tables
+        console.log('Fetching dashboard data from Supabase...');
+        
+        // Get counts from all tables using proper count method
         const [
             ikmBinaan,
             hkiMerek,
@@ -82,16 +84,28 @@ app.get('/api/dashboard', async (req, res) => {
             pelatihan,
             pesertaPelatihan
         ] = await Promise.all([
-            supabase.from('ikm_binaan').select('id', { count: 'exact' }),
-            supabase.from('hki_merek').select('id', { count: 'exact' }),
-            supabase.from('sertifikat_halal').select('id', { count: 'exact' }),
-            supabase.from('tkdn_ik').select('id', { count: 'exact' }),
-            supabase.from('siinas').select('id', { count: 'exact' }),
-            supabase.from('uji_nilai_gizi').select('id', { count: 'exact' }),
-            supabase.from('kurasi_produk').select('id', { count: 'exact' }),
-            supabase.from('pelatihan_pemberdayaan').select('id', { count: 'exact' }),
-            supabase.from('peserta_pelatihan').select('id', { count: 'exact' })
+            supabase.from('ikm_binaan').select('*', { count: 'exact', head: true }),
+            supabase.from('hki_merek').select('*', { count: 'exact', head: true }),
+            supabase.from('sertifikat_halal').select('*', { count: 'exact', head: true }),
+            supabase.from('tkdn_ik').select('*', { count: 'exact', head: true }),
+            supabase.from('siinas').select('*', { count: 'exact', head: true }),
+            supabase.from('uji_nilai_gizi').select('*', { count: 'exact', head: true }),
+            supabase.from('kurasi_produk').select('*', { count: 'exact', head: true }),
+            supabase.from('pelatihan_pemberdayaan').select('*', { count: 'exact', head: true }),
+            supabase.from('peserta_pelatihan').select('*', { count: 'exact', head: true })
         ]);
+
+        console.log('Dashboard counts:', {
+            ikm: ikmBinaan.count,
+            hki: hkiMerek.count,
+            halal: sertifikatHalal.count,
+            tkdn: tkdnIk.count,
+            siinas: siinas.count,
+            uji: ujiNilaiGizi.count,
+            kurasi: kurasiProduk.count,
+            pelatihan: pelatihan.count,
+            peserta: pesertaPelatihan.count
+        });
 
         const dashboardData = {
             ikmBinaan: ikmBinaan.count || 0,
