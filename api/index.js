@@ -422,6 +422,79 @@ app.get('/api/buku-tamu', async (req, res) => {
     }
 });
 
+// Admin Login API
+app.post('/api/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        
+        if (!username || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Username dan password harus diisi'
+            });
+        }
+        
+        // Check admin users from Supabase
+        // Note: Using password field for now (should be password_hash in production)
+        const { data: adminUsers, error } = await supabase
+            .from('admin_users')
+            .select('*')
+            .eq('username', username)
+            .single();
+        
+        if (error || !adminUsers) {
+            return res.status(401).json({
+                success: false,
+                message: 'Username atau password salah'
+            });
+        }
+        
+        // Check password (using both password and password_hash fields for compatibility)
+        const passwordMatch = adminUsers.password === password || 
+                             adminUsers.password_hash === password;
+        
+        if (!passwordMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Username atau password salah'
+            });
+        }
+        
+        // Update last login
+        await supabaseAdmin
+            .from('admin_users')
+            .update({ last_login: new Date().toISOString() })
+            .eq('id', adminUsers.id);
+        
+        // Log login activity
+        await supabaseAdmin.from('activity_logs').insert({
+            type: 'admin_activity',
+            action: 'login',
+            user_name: adminUsers.nama,
+            details: { username: username },
+            success: true
+        });
+        
+        res.json({
+            success: true,
+            message: 'Login berhasil',
+            user: {
+                id: adminUsers.id,
+                username: adminUsers.username,
+                nama: adminUsers.nama,
+                role: adminUsers.role
+            }
+        });
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Terjadi kesalahan saat login'
+        });
+    }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({
