@@ -6,6 +6,25 @@
     <title>Database IKM JUARA - DisnakerKUKM Kota Madiun</title>
     <link rel="stylesheet" href="shared/style.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        .redirect-notice {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .redirect-notice h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        .countdown {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1976d2;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -17,6 +36,12 @@
         </header>
 
         <main class="main-content">
+            <div class="redirect-notice">
+                <h3>🔄 Mengalihkan ke Halaman Login Admin</h3>
+                <p>Anda akan dialihkan ke halaman login admin dalam <span class="countdown" id="countdown">3</span> detik...</p>
+                <p><a href="admin/login.html" class="btn">Klik di sini jika tidak dialihkan otomatis</a></p>
+            </div>
+
             <div class="welcome-section">
                 <h2>Selamat Datang di Database IKM JUARA</h2>
                 <p>Platform terintegrasi untuk mengelola data Industri Kecil Menengah (IKM) Binaan di Kota Madiun</p>
@@ -32,7 +57,7 @@
                 <div class="service-card">
                     <h3>📊 Dashboard Admin</h3>
                     <p>Kelola data IKM, layanan, dan pelatihan pemberdayaan</p>
-                    <a href="admin/" class="btn">Login Admin</a>
+                    <a href="admin/login.html" class="btn">Login Admin</a>
                 </div>
 
                 <div class="service-card">
@@ -54,6 +79,22 @@
         </footer>
     </div>
 
-    <script src="shared/script.js"></script>
+    <script>
+        // Auto redirect to admin login after 3 seconds
+        let countdown = 3;
+        const countdownElement = document.getElementById('countdown');
+        
+        const timer = setInterval(() => {
+            countdown--;
+            countdownElement.textContent = countdown;
+            
+            if (countdown <= 0) {
+                clearInterval(timer);
+                window.location.href = 'admin/login.html';
+            }
+        }, 1000);
+        
+        console.log('✅ Database IKM JUARA - Ready for deployment');
+    </script>
 </body>
 </html>
