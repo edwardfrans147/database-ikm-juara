@@ -56,6 +56,30 @@ module.exports = async (req, res) => {
             return await handleAdminLogin(req, res);
         }
         
+        // IKM Binaan endpoints
+        if (path === '/ikm-binaan') {
+            if (method === 'GET') {
+                return await handleGetIkmBinaan(req, res);
+            } else if (method === 'POST') {
+                return await handleCreateIkmBinaan(req, res);
+            }
+        }
+        
+        if (path.startsWith('/ikm-binaan/') && method === 'GET') {
+            const id = path.split('/')[2];
+            return await handleGetIkmBinaanById(req, res, id);
+        }
+        
+        if (path.startsWith('/ikm-binaan/') && method === 'PUT') {
+            const id = path.split('/')[2];
+            return await handleUpdateIkmBinaan(req, res, id);
+        }
+        
+        if (path.startsWith('/ikm-binaan/') && method === 'DELETE') {
+            const id = path.split('/')[2];
+            return await handleDeleteIkmBinaan(req, res, id);
+        }
+        
         // 404 for unmatched routes
         res.status(404).json({
             success: false,
@@ -182,5 +206,139 @@ async function handleAdminLogin(req, res) {
     } catch (error) {
         console.error('Error during login:', error);
         handleError(res, error, 'Error during login');
+    }
+}
+
+// Get IKM Binaan data
+async function handleGetIkmBinaan(req, res) {
+    try {
+        const { data, error } = await supabase
+            .from('ikm_binaan')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            data: data || []
+        });
+        
+    } catch (error) {
+        handleError(res, error, 'Error fetching IKM Binaan data');
+    }
+}
+
+// Get IKM Binaan by ID
+async function handleGetIkmBinaanById(req, res, id) {
+    try {
+        const { data, error } = await supabase
+            .from('ikm_binaan')
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            data: data
+        });
+        
+    } catch (error) {
+        handleError(res, error, 'Error fetching IKM Binaan by ID');
+    }
+}
+
+// Create IKM Binaan
+async function handleCreateIkmBinaan(req, res) {
+    try {
+        const data = req.body;
+        
+        const { data: insertedData, error } = await supabase
+            .from('ikm_binaan')
+            .insert(data)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            message: 'IKM Binaan berhasil ditambahkan',
+            data: insertedData
+        });
+        
+    } catch (error) {
+        handleError(res, error, 'Error creating IKM Binaan');
+    }
+}
+
+// Update IKM Binaan
+async function handleUpdateIkmBinaan(req, res, id) {
+    try {
+        const data = req.body;
+        delete data.id; // Remove ID from update data
+        
+        const { data: updatedData, error } = await supabase
+            .from('ikm_binaan')
+            .update(data)
+            .eq('id', id)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            message: 'IKM Binaan berhasil diupdate',
+            data: updatedData
+        });
+        
+    } catch (error) {
+        handleError(res, error, 'Error updating IKM Binaan');
+    }
+}
+
+// Delete IKM Binaan
+async function handleDeleteIkmBinaan(req, res, id) {
+    try {
+        // Get data before deletion for recycle bin
+        const { data: existingData } = await supabase
+            .from('ikm_binaan')
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        // Move to recycle bin (if table exists)
+        if (existingData) {
+            try {
+                await supabase.from('recycle_bin').insert({
+                    table_name: 'ikm_binaan',
+                    record_id: id,
+                    data: existingData,
+                    deleted_by: req.headers['x-user'] || 'Unknown',
+                    deleted_at: new Date().toISOString()
+                });
+            } catch (recycleError) {
+                console.log('Recycle bin not available:', recycleError.message);
+            }
+        }
+        
+        // Delete from main table
+        const { error } = await supabase
+            .from('ikm_binaan')
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            message: 'IKM Binaan berhasil dihapus'
+        });
+        
+    } catch (error) {
+        handleError(res, error, 'Error deleting IKM Binaan');
     }
 }

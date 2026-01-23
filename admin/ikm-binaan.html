@@ -314,6 +314,107 @@
     <script>
         let editingId = null;
 
+        // API Base URL
+        const API_BASE_URL = '/api';
+
+        // Utility functions
+        const showAlert = (message, type = 'danger') => {
+            const alertContainer = document.getElementById('alert-container') || document.body;
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                ${message}
+            `;
+            
+            alertContainer.appendChild(alertDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        };
+
+        // API functions
+        const getData = async (endpoint) => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${endpoint}`);
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to fetch data');
+                }
+                
+                return result.data;
+            } catch (error) {
+                console.error(`Error fetching ${endpoint}:`, error);
+                showAlert(`Gagal memuat data ${endpoint}: ${error.message}`);
+                return [];
+            }
+        };
+
+        const getDataById = async (endpoint, id) => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${endpoint}/${id}`);
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to fetch data');
+                }
+                
+                return result.data;
+            } catch (error) {
+                console.error(`Error fetching ${endpoint} by ID:`, error);
+                showAlert(`Gagal memuat data: ${error.message}`);
+                return null;
+            }
+        };
+
+        const saveData = async (endpoint, data, method = 'POST', id = null) => {
+            try {
+                const url = id ? `${API_BASE_URL}/${endpoint}/${id}` : `${API_BASE_URL}/${endpoint}`;
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to save data');
+                }
+                
+                return result;
+            } catch (error) {
+                console.error(`Error saving ${endpoint}:`, error);
+                showAlert(`Gagal menyimpan data: ${error.message}`);
+                throw error;
+            }
+        };
+
+        const deleteData = async (endpoint, id) => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${endpoint}/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to delete data');
+                }
+                
+                return result;
+            } catch (error) {
+                console.error(`Error deleting ${endpoint}:`, error);
+                showAlert(`Gagal menghapus data: ${error.message}`);
+                throw error;
+            }
+        };
+
         // Check authentication
         const adminUser = localStorage.getItem('admin_user');
         if (!adminUser) {
