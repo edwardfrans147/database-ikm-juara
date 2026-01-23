@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penelusuran Data - Database IKM JUARA</title>
-    <link rel="stylesheet" href="/shared/style.css">
+    <link rel="stylesheet" href="../shared/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .search-section {
@@ -187,7 +187,7 @@
         </div>
     </div>
 
-    <script src="/shared/script.js"></script>
+    
     <script>
         // Check authentication
         const adminUser = localStorage.getItem('admin_user');
@@ -640,5 +640,20 @@
             });
         });
     </script>
+
+    
+    
+    <script src="../shared/ultimate-admin-fix.js"></script>
+
+<script>
+// Prevent multiple page initializations
+if (window.pageInitialized) {
+    console.log('⚠️ Page already initialized, preventing duplicate');
+} else {
+    window.pageInitialized = true;
+    console.log('🚀 Page initializing...');
+}
+</script>
+
 </body>
 </html>

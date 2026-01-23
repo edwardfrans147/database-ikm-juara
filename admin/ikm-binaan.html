@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IKM Binaan - Database IKM JUARA</title>
-    <link rel="stylesheet" href="/shared/style.css">
+    <link rel="stylesheet" href="../shared/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .validation-warning {
@@ -310,7 +310,7 @@
         </div>
     </div>
 
-    <script src="/shared/script.js"></script>
+    
     <script>
         let editingId = null;
 
@@ -364,20 +364,61 @@
         };
 
         // Load IKM Binaan data
+        // Load IKM Binaan data - FIXED VERSION
         const loadIKMBinaan = async () => {
             try {
-                const response = await getData('ikm-binaan');
-                const data = response.data || response; // Handle both response formats
+                console.log('🔄 Loading IKM Binaan data...');
                 
-                console.log('IKM Binaan data:', data); // Debug log
+                // Show loading state
+                document.getElementById('ikm-table').innerHTML = '<div style="text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Memuat data...</div>';
+                
+                const response = await getData('ikm-binaan');
+                console.log('📡 Raw API Response:', response);
+                
+                // Handle different response formats
+                let data = [];
+                if (response && response.success && Array.isArray(response.data)) {
+                    data = response.data;
+                } else if (Array.isArray(response)) {
+                    data = response;
+                } else if (response && Array.isArray(response.data)) {
+                    data = response.data;
+                } else {
+                    console.warn('⚠️ Unexpected response format:', response);
+                    data = [];
+                }
+                
+                console.log('📊 Processed data:', data);
+                console.log('📈 Data count:', data.length);
+                
+                if (!Array.isArray(data)) {
+                    console.error('❌ Data is not an array:', typeof data, data);
+                    throw new Error('Data format tidak valid');
+                }
+                
+                if (data.length === 0) {
+                    document.getElementById('ikm-table').innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 15px; opacity: 0.5;"></i>
+                            <h4>Belum Ada Data IKM Binaan</h4>
+                            <p>Klik tombol "Tambah IKM Binaan" untuk menambah data pertama</p>
+                        </div>
+                    `;
+                    return;
+                }
                 
                 const columns = [
                     { field: 'nib', title: 'No. NIB' },
                     { field: 'nik', title: 'No. NIK' },
-                    { field: 'nama_lengkap', title: 'Nama Lengkap' },
-                    { field: 'alamat_lengkap', title: 'Alamat Lengkap' },
-                    { field: 'nama_usaha', title: 'Nama Usaha' },
-                    { field: 'nomor_hp', title: 'No. HP' }
+                    { field: 'namaLengkap', title: 'Nama Lengkap' },  // ✅ Fixed: camelCase
+                    { field: 'alamatLengkap', title: 'Alamat Lengkap' }, // ✅ Fixed: camelCase
+                    { field: 'namaUsaha', title: 'Nama Usaha' },  // ✅ Fixed: camelCase
+                    { field: 'nomorHP', title: 'No. HP' },  // ✅ Fixed: camelCase
+                    { 
+                        field: 'createdAt', 
+                        title: 'Tanggal Daftar',
+                        format: (date) => new Date(date).toLocaleDateString('id-ID')
+                    }
                 ];
                 
                 const actions = [
@@ -385,13 +426,32 @@
                     { text: 'Hapus', class: 'danger', onclick: 'deleteIKM' }
                 ];
                 
-                document.getElementById('ikm-table').innerHTML = createTable(data, columns, actions);
+                console.log('🏗️ Creating table with', data.length, 'rows');
+                const tableHtml = createTable(data, columns, actions);
+                console.log('📋 Table HTML length:', tableHtml.length);
                 
-                // Update data count indicator
-                updateDataCount('ikm-binaan', data.length);
+                document.getElementById('ikm-table').innerHTML = tableHtml;
+                
+                // Update data count indicator if function exists
+                if (typeof updateDataCount === 'function') {
+                    updateDataCount('ikm-binaan', data.length);
+                }
+                
+                console.log('✅ IKM Binaan data loaded successfully');
+                
             } catch (error) {
-                console.error('Failed to load IKM Binaan data:', error);
-                showAlert('Gagal memuat data IKM Binaan', 'error');
+                console.error('❌ Failed to load IKM Binaan data:', error);
+                document.getElementById('ikm-table').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #e74c3c;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h4>Gagal Memuat Data</h4>
+                        <p>${error.message}</p>
+                        <button class="btn btn-primary" onclick="loadIKMBinaan()">
+                            <i class="fas fa-refresh"></i> Coba Lagi
+                        </button>
+                    </div>
+                `;
+                showAlert('Gagal memuat data IKM Binaan: ' + error.message, 'error');
             }
         };
 
@@ -710,5 +770,20 @@
         // Load data on page load
         document.addEventListener('DOMContentLoaded', loadIKMBinaan);
     </script>
+
+    
+    
+    <script src="../shared/ultimate-admin-fix.js"></script>
+
+<script>
+// Prevent multiple page initializations
+if (window.pageInitialized) {
+    console.log('⚠️ Page already initialized, preventing duplicate');
+} else {
+    window.pageInitialized = true;
+    console.log('🚀 Page initializing...');
+}
+</script>
+
 </body>
 </html>

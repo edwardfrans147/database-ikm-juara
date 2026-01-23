@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layanan IKM Juara - Database IKM JUARA</title>
-    <link rel="stylesheet" href="/shared/style.css">
+    <link rel="stylesheet" href="../shared/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .layanan-tabs {
@@ -296,7 +296,7 @@
         </div>
     </div>
 
-    <script src="/shared/script.js"></script>
+    
     <script>
         // Check authentication
         const adminUser = localStorage.getItem('admin_user');
@@ -332,32 +332,51 @@
         // Load layanan data
         const loadLayananData = async (layananType) => {
             try {
+                console.log(`🔍 Loading ${layananType} data...`);
+                
                 const response = await getData(layananType);
                 const data = response.data || response; // Handle both response formats
                 
-                console.log(`${layananType} data:`, data); // Debug log
+                console.log(`✅ ${layananType} data loaded:`, data); // Debug log
+                
+                // Check if NIB is present
+                if (data && data.length > 0) {
+                    const firstItem = data[0];
+                    console.log(`📊 First ${layananType} record:`, {
+                        id: firstItem.id,
+                        nib: firstItem.nib || 'KOSONG',
+                        nama: firstItem.nama_lengkap || 'KOSONG'
+                    });
+                    
+                    if (firstItem.nib) {
+                        console.log('✅ NIB found in data - API Supabase working!');
+                    } else {
+                        console.log('❌ NIB missing - check API connection');
+                    }
+                }
+                
                 let columns = [];
                 let actions = [
                     { text: 'Edit', class: 'warning', onclick: `edit${toPascalCase(layananType)}` },
                     { text: 'Hapus', class: 'danger', onclick: `delete${toPascalCase(layananType)}` }
                 ];
 
-                // Define columns based on layanan type
+                // Define columns based on layanan type with CORRECT field names (camelCase)
                 switch (layananType) {
                     case 'hki-merek':
                         columns = [
-                            { field: 'nama_lengkap', title: 'Nama IKM' },
+                            { field: 'namaLengkap', title: 'Nama IKM' },  // ✅ Fixed
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomor_pendaftaran_hki', title: 'No. Pendaftaran' },
-                            { field: 'status_sertifikat', title: 'Status' },
-                            { field: 'tahun_fasilitasi', title: 'Tahun' },
+                            { field: 'nomorPendaftaranHki', title: 'No. Pendaftaran' },  // ✅ Fixed
+                            { field: 'statusSertifikat', title: 'Status' },  // ✅ Fixed
+                            { field: 'tahunFasilitasi', title: 'Tahun' },  // ✅ Fixed
                             { 
-                                field: 'link_bukti_daftar', 
+                                field: 'linkBuktiDaftar', 
                                 title: 'Link Bukti',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             },
                             { 
-                                field: 'link_sertifikat_hki', 
+                                field: 'linkSertifikatHki', 
                                 title: 'Link Sertifikat',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -365,12 +384,12 @@
                         break;
                     case 'sertifikat-halal':
                         columns = [
-                            { field: 'nama_lengkap', title: 'Nama IKM' },
+                            { field: 'namaLengkap', title: 'Nama IKM' },  // ✅ Fixed
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomor_sertifikat_halal', title: 'No. Sertifikat' },
-                            { field: 'tahun_fasilitasi', title: 'Tahun' },
+                            { field: 'nomorSertifikatHalal', title: 'No. Sertifikat' },  // ✅ Fixed
+                            { field: 'tahunFasilitasi', title: 'Tahun' },  // ✅ Fixed
                             { 
-                                field: 'link_sertifikat_halal', 
+                                field: 'linkSertifikatHalal', 
                                 title: 'Link Sertifikat',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -378,12 +397,12 @@
                         break;
                     case 'tkdn-ik':
                         columns = [
-                            { field: 'nama_lengkap', title: 'Nama IKM' },
+                            { field: 'namaLengkap', title: 'Nama IKM' },  // ✅ Fixed
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomor_sertifikat_tkdn', title: 'No. Sertifikat' },
-                            { field: 'tahun_terbit_sertifikat', title: 'Tahun Terbit' },
+                            { field: 'nomorSertifikatTkdn', title: 'No. Sertifikat' },  // ✅ Fixed
+                            { field: 'tahunTerbitSertifikat', title: 'Tahun Terbit' },  // ✅ Fixed
                             { 
-                                field: 'link_sertifikat_tkdn', 
+                                field: 'linkSertifikatTkdn', 
                                 title: 'Link Sertifikat',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -391,12 +410,12 @@
                         break;
                     case 'siinas':
                         columns = [
-                            { field: 'nama_lengkap', title: 'Nama IKM' },
+                            { field: 'namaLengkap', title: 'Nama IKM' },  // ✅ Fixed
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomor_bukti_kepemilikan', title: 'No. Bukti' },
-                            { field: 'tahun_registrasi', title: 'Tahun Registrasi' },
+                            { field: 'nomorBuktiKepemilikan', title: 'No. Bukti' },  // ✅ Fixed
+                            { field: 'tahunRegistrasi', title: 'Tahun Registrasi' },  // ✅ Fixed
                             { 
-                                field: 'link_bukti_kepemilikan', 
+                                field: 'linkBuktiKepemilikan', 
                                 title: 'Link Bukti',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -404,17 +423,17 @@
                         break;
                     case 'uji-nilai-gizi':
                         columns = [
-                            { field: 'nama_lengkap', title: 'Nama IKM' },
+                            { field: 'namaLengkap', title: 'Nama IKM' },  // ✅ Fixed
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomor_lhu', title: 'No. LHU' },
+                            { field: 'nomorLhu', title: 'No. LHU' },  // ✅ Fixed
                             { 
-                                field: 'tanggal_hasil_uji', 
+                                field: 'tanggalHasilUji', 
                                 title: 'Tanggal Uji',
                                 format: (date) => new Date(date).toLocaleDateString('id-ID')
                             },
-                            { field: 'tahun_fasilitasi', title: 'Tahun' },
+                            { field: 'tahunFasilitasi', title: 'Tahun' },  // ✅ Fixed
                             { 
-                                field: 'link_lhu', 
+                                field: 'linkLhu', 
                                 title: 'Link LHU',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -422,12 +441,12 @@
                         break;
                     case 'kurasi-produk':
                         columns = [
-                            { field: 'nama_lengkap', title: 'Nama IKM' },
+                            { field: 'namaLengkap', title: 'Nama IKM' },  // ✅ Fixed
                             { field: 'nib', title: 'NIB' },
-                            { field: 'nomor_sertifikat_kurasi', title: 'No. Sertifikat' },
-                            { field: 'tahun_kurasi', title: 'Tahun Kurasi' },
+                            { field: 'nomorSertifikatKurasi', title: 'No. Sertifikat' },  // ✅ Fixed
+                            { field: 'tahunKurasi', title: 'Tahun Kurasi' },  // ✅ Fixed
                             { 
-                                field: 'link_sertifikat_kurasi', 
+                                field: 'linkSertifikatKurasi', 
                                 title: 'Link Sertifikat',
                                 format: (link) => link ? `<a href="${link}" target="_blank" class="link-button"><i class="fas fa-external-link-alt"></i> Lihat</a>` : '-'
                             }
@@ -730,5 +749,20 @@
             loadLayananData('hki-merek');
         });
     </script>
+
+    
+    
+    <script src="../shared/ultimate-admin-fix.js"></script>
+
+<script>
+// Prevent multiple page initializations
+if (window.pageInitialized) {
+    console.log('⚠️ Page already initialized, preventing duplicate');
+} else {
+    window.pageInitialized = true;
+    console.log('🚀 Page initializing...');
+}
+</script>
+
 </body>
 </html>

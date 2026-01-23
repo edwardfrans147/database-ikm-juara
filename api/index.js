@@ -1,54 +1,20 @@
-// Supabase API endpoint untuk menggantikan JSON files
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+// ===== IKM JUARA API - FIXED VERSION FOR VERCEL =====
+// Versi: 3.0 - Complete Data Display Fix
+// Tanggal: 23 Januari 2026
+
 const { createClient } = require('@supabase/supabase-js');
 
-const app = express();
+// Supabase configuration - use environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://krylvwwguczwwoyqghlc.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyeWx2d3dndWN6d3dveXFnaGxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwNTg4NDEsImV4cCI6MjA4NDYzNDg0MX0.ikuvFZB4zjChsh-cM2MMMYYmWYTfC-P67gQZPBvCZqA';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyeWx2d3dndWN6d3dveXFnaGxjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTA1ODg0MSwiZXhwIjoyMDg0NjM0ODQxfQ.ysubAuDeIPshMww709q092yI37j1wZUIwK5vQttUsmE';
 
-// Supabase configuration
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+console.log('🔧 Vercel API Fixed - Supabase URL:', supabaseUrl);
+console.log('🔧 Vercel API Fixed - Service Key exists:', !!supabaseServiceKey);
 
 // Create Supabase clients
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-
-// Cache untuk optimisasi performa
-const cache = new Map();
-const CACHE_TTL = 1 * 60 * 1000; // 1 menit (lebih pendek untuk testing)
-
-const getCachedData = (key) => {
-    const cached = cache.get(key);
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-        return cached.data;
-    }
-    cache.delete(key);
-    return null;
-};
-
-const setCachedData = (key, data) => {
-    cache.set(key, {
-        data: data,
-        timestamp: Date.now()
-    });
-};
-
-// Middleware
-const compression = require('compression');
-app.use(compression());
-app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 
-        ['https://database-ikm-juara.vercel.app', 'https://*.vercel.app'] : 
-        ['http://localhost:3000', 'http://127.0.0.1:3000'],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
-
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 // Helper function untuk error handling
 const handleError = (res, error, message = 'Internal server error') => {
@@ -60,522 +26,410 @@ const handleError = (res, error, message = 'Internal server error') => {
     });
 };
 
-// Dashboard API dengan Supabase
-app.get('/api/dashboard', async (req, res) => {
+// Data mapping untuk table names
+const tableMapping = {
+    'ikm-binaan': 'ikm_binaan',
+    'hki-merek': 'hki_merek',
+    'sertifikat-halal': 'sertifikat_halal',
+    'tkdn-ik': 'tkdn_ik',
+    'siinas': 'siinas',
+    'uji-nilai-gizi': 'uji_nilai_gizi',
+    'kurasi-produk': 'kurasi_produk',
+    'pelatihan-pemberdayaan': 'pelatihan_pemberdayaan',
+    'activity-logs': 'activity_logs',
+    'admin-users': 'admin_users',
+    'buku-tamu': 'buku_tamu',
+    'recycle-bin': 'recycle_bin',
+    'website-content': 'website_content'
+};
+
+// Field mapping untuk camelCase conversion
+const convertSnakeToCamel = (obj) => {
+    if (Array.isArray(obj)) {
+        return obj.map(convertSnakeToCamel);
+    } else if (obj !== null && typeof obj === 'object') {
+        const converted = {};
+        for (const [key, value] of Object.entries(obj)) {
+            const camelKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+            converted[camelKey] = convertSnakeToCamel(value);
+        }
+        return converted;
+    }
+    return obj;
+};
+
+const convertCamelToSnake = (obj) => {
+    if (Array.isArray(obj)) {
+        return obj.map(convertCamelToSnake);
+    } else if (obj !== null && typeof obj === 'object') {
+        const converted = {};
+        for (const [key, value] of Object.entries(obj)) {
+            const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+            converted[snakeKey] = convertCamelToSnake(value);
+        }
+        return converted;
+    }
+    return obj;
+};
+
+// Dashboard handler
+const handleDashboard = async (req, res) => {
     try {
-        const cacheKey = 'dashboard_stats';
-        const cached = getCachedData(cacheKey);
+        console.log('📊 Loading dashboard data from Supabase...');
         
-        if (cached) {
-            return res.json(cached);
+        const tables = Object.values(tableMapping);
+        const counts = {};
+        
+        // Get counts for each table
+        for (const table of tables) {
+            try {
+                const { count, error } = await supabaseAdmin
+                    .from(table)
+                    .select('*', { count: 'exact', head: true });
+                
+                if (error) {
+                    console.warn(`Warning: Could not get count for ${table}:`, error.message);
+                    counts[table] = 0;
+                } else {
+                    counts[table] = count || 0;
+                }
+            } catch (err) {
+                console.warn(`Warning: Error counting ${table}:`, err.message);
+                counts[table] = 0;
+            }
         }
         
-        console.log('Fetching dashboard data from Supabase...');
+        // Calculate total participants from pelatihan
+        let totalPesertaPelatihan = 0;
+        try {
+            const { data: pelatihanData, error } = await supabaseAdmin
+                .from('pelatihan_pemberdayaan')
+                .select('peserta');
+            
+            if (!error && pelatihanData) {
+                pelatihanData.forEach(pelatihan => {
+                    if (pelatihan.peserta && Array.isArray(pelatihan.peserta)) {
+                        totalPesertaPelatihan += pelatihan.peserta.length;
+                    }
+                });
+            }
+        } catch (err) {
+            console.warn('Warning: Could not calculate total participants:', err.message);
+        }
         
-        // Use service role for dashboard to bypass RLS
-        const { count: ikmCount } = await supabaseAdmin.from('ikm_binaan').select('*', { count: 'exact', head: true });
-        const { count: hkiCount } = await supabaseAdmin.from('hki_merek').select('*', { count: 'exact', head: true });
-        const { count: halalCount } = await supabaseAdmin.from('sertifikat_halal').select('*', { count: 'exact', head: true });
-        const { count: tkdnCount } = await supabaseAdmin.from('tkdn_ik').select('*', { count: 'exact', head: true });
-        const { count: siinasCount } = await supabaseAdmin.from('siinas').select('*', { count: 'exact', head: true });
-        const { count: ujiCount } = await supabaseAdmin.from('uji_nilai_gizi').select('*', { count: 'exact', head: true });
-        const { count: kurasiCount } = await supabaseAdmin.from('kurasi_produk').select('*', { count: 'exact', head: true });
-        const { count: pelatihanCount } = await supabaseAdmin.from('pelatihan_pemberdayaan').select('*', { count: 'exact', head: true });
-        const { count: pesertaCount } = await supabaseAdmin.from('peserta_pelatihan').select('*', { count: 'exact', head: true });
-
         const dashboardData = {
-            ikmBinaan: ikmCount || 0,
-            hkiMerek: hkiCount || 0,
-            sertifikatHalal: halalCount || 0,
-            tkdnIk: tkdnCount || 0,
-            siinas: siinasCount || 0,
-            ujiNilaiGizi: ujiCount || 0,
-            kurasiProduk: kurasiCount || 0,
-            pelatihanPemberdayaan: pelatihanCount || 0,
-            totalPesertaPelatihan: pesertaCount || 0,
-            lastUpdated: new Date().toISOString(),
-            cached: false
+            ikmBinaan: counts.ikm_binaan || 0,
+            hkiMerek: counts.hki_merek || 0,
+            sertifikatHalal: counts.sertifikat_halal || 0,
+            tkdnIk: counts.tkdn_ik || 0,
+            siinas: counts.siinas || 0,
+            ujiNilaiGizi: counts.uji_nilai_gizi || 0,
+            kurasiProduk: counts.kurasi_produk || 0,
+            pelatihanPemberdayaan: counts.pelatihan_pemberdayaan || 0,
+            totalPesertaPelatihan: totalPesertaPelatihan,
+            lastUpdated: new Date().toISOString()
         };
         
-        console.log('Dashboard data:', dashboardData);
-        setCachedData(cacheKey, { ...dashboardData, cached: true });
+        console.log('✅ Dashboard data loaded:', dashboardData);
         res.json(dashboardData);
-        
     } catch (error) {
-        handleError(res, error, 'Error fetching dashboard data');
+        console.error('❌ Dashboard error:', error);
+        handleError(res, error, 'Failed to load dashboard data');
     }
-});
+};
 
-// Get IKM Binaan data
-app.get('/api/ikm-binaan', async (req, res) => {
-    try {
-        const { data, error } = await supabaseAdmin
-            .from('ikm_binaan')
-            .select('*')
-            .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        res.json({
-            success: true,
-            data: data || []
+// Generic data handler
+const handleDataEndpoint = async (req, res, endpoint) => {
+    const tableName = tableMapping[endpoint];
+    
+    if (!tableName) {
+        return res.status(404).json({
+            success: false,
+            error: `Endpoint ${endpoint} not found`
         });
-        
-    } catch (error) {
-        handleError(res, error, 'Error fetching IKM Binaan data');
     }
-});
-
-// Search IKM Binaan
-app.get('/api/search', async (req, res) => {
+    
     try {
-        const { query } = req.query;
-        
-        if (!query) {
-            return res.json({
+        if (req.method === 'GET') {
+            console.log(`📊 Loading ${endpoint} data from Supabase...`);
+            
+            const { data, error } = await supabaseAdmin
+                .from(tableName)
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                throw error;
+            }
+            
+            // Convert snake_case to camelCase for frontend compatibility
+            const convertedData = convertSnakeToCamel(data || []);
+            
+            console.log(`✅ ${endpoint} data loaded: ${convertedData.length} records`);
+            
+            res.json({
                 success: true,
-                data: []
+                data: convertedData,
+                count: convertedData.length,
+                timestamp: new Date().toISOString()
+            });
+            
+        } else if (req.method === 'POST') {
+            console.log(`📝 Creating new ${endpoint} record...`);
+            
+            // Convert camelCase to snake_case for database
+            const convertedBody = convertCamelToSnake(req.body);
+            
+            const { data, error } = await supabaseAdmin
+                .from(tableName)
+                .insert([{
+                    ...convertedBody,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }])
+                .select()
+                .single();
+            
+            if (error) {
+                throw error;
+            }
+            
+            // Convert back to camelCase
+            const convertedData = convertSnakeToCamel(data);
+            
+            console.log(`✅ ${endpoint} record created with ID: ${data.id}`);
+            
+            res.json({
+                success: true,
+                message: `${endpoint} record created successfully`,
+                data: convertedData,
+                id: data.id
+            });
+            
+        } else if (req.method === 'PUT') {
+            const id = req.query.id || req.body.id;
+            
+            if (!id) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'ID is required for update'
+                });
+            }
+            
+            console.log(`📝 Updating ${endpoint} record ID: ${id}...`);
+            
+            // Convert camelCase to snake_case for database
+            const convertedBody = convertCamelToSnake(req.body);
+            delete convertedBody.id; // Don't update ID
+            
+            const { data, error } = await supabaseAdmin
+                .from(tableName)
+                .update({
+                    ...convertedBody,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', id)
+                .select()
+                .single();
+            
+            if (error) {
+                throw error;
+            }
+            
+            // Convert back to camelCase
+            const convertedData = convertSnakeToCamel(data);
+            
+            console.log(`✅ ${endpoint} record updated: ${id}`);
+            
+            res.json({
+                success: true,
+                message: `${endpoint} record updated successfully`,
+                data: convertedData
+            });
+            
+        } else if (req.method === 'DELETE') {
+            const id = req.query.id;
+            
+            if (!id) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'ID is required for delete'
+                });
+            }
+            
+            console.log(`🗑️ Deleting ${endpoint} record ID: ${id}...`);
+            
+            const { data, error } = await supabaseAdmin
+                .from(tableName)
+                .delete()
+                .eq('id', id)
+                .select()
+                .single();
+            
+            if (error) {
+                throw error;
+            }
+            
+            // Convert back to camelCase
+            const convertedData = convertSnakeToCamel(data);
+            
+            console.log(`✅ ${endpoint} record deleted: ${id}`);
+            
+            res.json({
+                success: true,
+                message: `${endpoint} record deleted successfully`,
+                data: convertedData
             });
         }
         
-        const { data, error } = await supabase
-            .from('ikm_binaan')
-            .select('*')
-            .or(`nib.eq.${query},nik.eq.${query},nama_lengkap.ilike.%${query}%,nama_usaha.ilike.%${query}%`);
-        
-        if (error) throw error;
-        
-        res.json({
-            success: true,
-            data: data || []
-        });
-        
     } catch (error) {
-        handleError(res, error, 'Error searching IKM data');
+        console.error(`❌ ${endpoint} ${req.method} error:`, error);
+        handleError(res, error, `Failed to ${req.method.toLowerCase()} ${endpoint} data`);
     }
-});
+};
 
-// Get specific service data
-app.get('/api/:service', async (req, res) => {
-    try {
-        const { service } = req.params;
-        
-        // Map service names to table names
-        const tableMap = {
-            'hki-merek': 'hki_merek',
-            'sertifikat-halal': 'sertifikat_halal',
-            'tkdn-ik': 'tkdn_ik',
-            'siinas': 'siinas',
-            'uji-nilai-gizi': 'uji_nilai_gizi',
-            'kurasi-produk': 'kurasi_produk',
-            'pelatihan-pemberdayaan': 'pelatihan_pemberdayaan'
-        };
-        
-        const tableName = tableMap[service];
-        
-        if (!tableName) {
-            return res.status(404).json({
-                success: false,
-                error: 'Service not found'
-            });
-        }
-        
-        const { data, error } = await supabaseAdmin
-            .from(tableName)
-            .select('*')
-            .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        res.json({
-            success: true,
-            data: data || []
-        });
-        
-    } catch (error) {
-        handleError(res, error, `Error fetching ${req.params.service} data`);
-    }
-});
-
-// Add new IKM Binaan (Admin only)
-app.post('/api/ikm-binaan', async (req, res) => {
-    try {
-        const { data, error } = await supabaseAdmin
-            .from('ikm_binaan')
-            .insert(req.body)
-            .select()
-            .single();
-        
-        if (error) throw error;
-        
-        // Log activity
-        await supabaseAdmin.from('activity_logs').insert({
-            type: 'admin_activity',
-            action: 'create_ikm_binaan',
-            user_name: req.body.admin_user || 'Unknown',
-            details: { ikm_id: data.id, nama: data.nama_lengkap },
-            success: true
-        });
-        
-        res.json({
-            success: true,
-            data: data
-        });
-        
-    } catch (error) {
-        handleError(res, error, 'Error creating IKM Binaan');
-    }
-});
-
-// Update IKM Binaan (Admin only)
-app.put('/api/ikm-binaan/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        
-        const { data, error } = await supabaseAdmin
-            .from('ikm_binaan')
-            .update(req.body)
-            .eq('id', id)
-            .select()
-            .single();
-        
-        if (error) throw error;
-        
-        // Log activity
-        await supabaseAdmin.from('activity_logs').insert({
-            type: 'admin_activity',
-            action: 'update_ikm_binaan',
-            user_name: req.body.admin_user || 'Unknown',
-            details: { ikm_id: id, nama: data.nama_lengkap },
-            success: true
-        });
-        
-        res.json({
-            success: true,
-            data: data
-        });
-        
-    } catch (error) {
-        handleError(res, error, 'Error updating IKM Binaan');
-    }
-});
-
-// Delete IKM Binaan (Admin only)
-app.delete('/api/ikm-binaan/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        
-        // Get data before deletion for recycle bin
-        const { data: existingData } = await supabaseAdmin
-            .from('ikm_binaan')
-            .select('*')
-            .eq('id', id)
-            .single();
-        
-        // Move to recycle bin
-        if (existingData) {
-            await supabaseAdmin.from('recycle_bin').insert({
-                table_name: 'ikm_binaan',
-                record_id: id,
-                data: existingData,
-                deleted_by: req.body.admin_user || 'Unknown'
-            });
-        }
-        
-        // Delete from main table
-        const { error } = await supabaseAdmin
-            .from('ikm_binaan')
-            .delete()
-            .eq('id', id);
-        
-        if (error) throw error;
-        
-        // Log activity
-        await supabaseAdmin.from('activity_logs').insert({
-            type: 'admin_activity',
-            action: 'delete_ikm_binaan',
-            user_name: req.body.admin_user || 'Unknown',
-            details: { ikm_id: id, nama: existingData?.nama_lengkap },
-            success: true
-        });
-        
-        res.json({
-            success: true,
-            message: 'IKM Binaan deleted successfully'
-        });
-        
-    } catch (error) {
-        handleError(res, error, 'Error deleting IKM Binaan');
-    }
-});
-
-// Get website content
-app.get('/api/website-content', async (req, res) => {
-    try {
-        const { data, error } = await supabase
-            .from('website_content')
-            .select('*')
-            .eq('is_active', true)
-            .order('section', { ascending: true });
-        
-        if (error) throw error;
-        
-        res.json({
-            success: true,
-            data: data || []
-        });
-        
-    } catch (error) {
-        handleError(res, error, 'Error fetching website content');
-    }
-});
-
-// Buku Tamu API
-app.post('/api/buku-tamu', async (req, res) => {
-    try {
-        const { nama_lengkap, no_hp_aktif, alamat } = req.body;
-        
-        if (!nama_lengkap || !no_hp_aktif || !alamat) {
-            return res.status(400).json({
-                success: false,
-                error: 'Semua field harus diisi'
-            });
-        }
-        
-        const { data, error } = await supabaseAdmin
-            .from('buku_tamu')
-            .insert([{
-                // New columns
-                nama_lengkap,
-                no_hp_aktif,
-                alamat,
-                tanggal_kunjungan: new Date().toISOString(),
-                // Old columns (for compatibility)
-                nama: nama_lengkap,
-                nik: no_hp_aktif,
-                waktu_akses: new Date().toISOString()
-            }])
-            .select();
-        
-        if (error) {
-            console.error('Supabase error:', error);
-            return res.status(500).json({
-                success: false,
-                error: 'Gagal menyimpan data ke database',
-                details: error.message
-            });
-        }
-        
-        res.json({
-            success: true,
-            message: 'Buku tamu berhasil disimpan',
-            data: data[0]
-        });
-        
-    } catch (error) {
-        console.error('Buku tamu error:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Terjadi kesalahan saat menyimpan buku tamu',
-            details: error.message
-        });
-    }
-});
-
-app.get('/api/buku-tamu', async (req, res) => {
-    try {
-        const { data, error } = await supabase
-            .from('buku_tamu')
-            .select('*')
-            .order('tanggal_kunjungan', { ascending: false });
-        
-        if (error) {
-            console.error('Supabase error:', error);
-            return res.status(500).json({
-                success: false,
-                error: 'Gagal mengambil data',
-                details: error.message
-            });
-        }
-        
-        res.json({
-            success: true,
-            data: data || []
-        });
-        
-    } catch (error) {
-        console.error('Get buku tamu error:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Terjadi kesalahan saat mengambil data',
-            details: error.message
-        });
-    }
-});
-
-// Admin Login API
-app.post('/api/login', async (req, res) => {
+// Admin login handler
+const handleAdminLogin = async (req, res) => {
     try {
         const { username, password } = req.body;
+        console.log(`🔐 Admin login attempt: ${username}`);
         
-        if (!username || !password) {
-            return res.status(400).json({
-                success: false,
-                message: 'Username dan password harus diisi'
-            });
-        }
-        
-        // Check admin users from Supabase
-        // Note: Using password field for now (should be password_hash in production)
-        const { data: adminUsers, error } = await supabase
+        const { data: users, error } = await supabaseAdmin
             .from('admin_users')
             .select('*')
             .eq('username', username)
+            .eq('password', password)
             .single();
         
-        if (error || !adminUsers) {
+        if (error || !users) {
+            console.log(`❌ Admin login failed: ${username}`);
             return res.status(401).json({
                 success: false,
-                message: 'Username atau password salah'
+                error: 'Username atau password salah'
             });
         }
         
-        // Check password (using both password and password_hash fields for compatibility)
-        const passwordMatch = adminUsers.password === password || 
-                             adminUsers.password_hash === password;
+        // Convert to camelCase
+        const user = convertSnakeToCamel(users);
         
-        if (!passwordMatch) {
-            return res.status(401).json({
-                success: false,
-                message: 'Username atau password salah'
-            });
-        }
-        
-        // Update last login
-        await supabaseAdmin
-            .from('admin_users')
-            .update({ last_login: new Date().toISOString() })
-            .eq('id', adminUsers.id);
-        
-        // Log login activity
-        await supabaseAdmin.from('activity_logs').insert({
-            type: 'admin_activity',
-            action: 'login',
-            user_name: adminUsers.nama,
-            details: { username: username },
-            success: true
-        });
-        
+        console.log(`✅ Admin login successful: ${username}`);
         res.json({
             success: true,
             message: 'Login berhasil',
             user: {
-                id: adminUsers.id,
-                username: adminUsers.username,
-                nama: adminUsers.nama,
-                role: adminUsers.role
+                id: user.id,
+                username: user.username,
+                nama: user.nama,
+                role: user.role
             }
         });
         
     } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Terjadi kesalahan saat login'
-        });
+        console.error('❌ Login error:', error);
+        handleError(res, error, 'Login failed');
     }
-});
+};
 
-// Clear cache endpoint (for debugging)
-app.get('/api/clear-cache', (req, res) => {
-    cache.clear();
-    res.json({
-        success: true,
-        message: 'Cache cleared successfully'
-    });
-});
-
-// Debug dashboard endpoint (no cache)
-app.get('/api/dashboard-debug', async (req, res) => {
+// Main handler function for Vercel
+module.exports = async (req, res) => {
+    // Enable CORS
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-User');
+    
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+    
+    const { url, method } = req;
+    const path = url.replace('/api', '');
+    
+    console.log(`🌐 Vercel API Fixed: ${method} ${path}`);
+    
     try {
-        console.log('Debug: Fetching dashboard data without cache...');
+        // Health check
+        if (path === '/health') {
+            return res.json({
+                status: 'OK',
+                timestamp: new Date().toISOString(),
+                version: '3.0.0',
+                supabase: 'Connected'
+            });
+        }
         
-        // Get counts from all tables using proper count method
-        const results = {};
+        // Dashboard endpoint
+        if (path === '/dashboard') {
+            return await handleDashboard(req, res);
+        }
         
-        // Test each table individually
-        const tables = [
-            { name: 'ikm_binaan', key: 'ikmBinaan' },
-            { name: 'hki_merek', key: 'hkiMerek' },
-            { name: 'sertifikat_halal', key: 'sertifikatHalal' },
-            { name: 'tkdn_ik', key: 'tkdnIk' },
-            { name: 'siinas', key: 'siinas' },
-            { name: 'uji_nilai_gizi', key: 'ujiNilaiGizi' },
-            { name: 'kurasi_produk', key: 'kurasiProduk' },
-            { name: 'pelatihan_pemberdayaan', key: 'pelatihanPemberdayaan' },
-            { name: 'peserta_pelatihan', key: 'totalPesertaPelatihan' }
-        ];
+        // Admin login endpoint
+        if (path === '/admin/login' && method === 'POST') {
+            return await handleAdminLogin(req, res);
+        }
         
-        for (const table of tables) {
-            try {
-                const { count, error } = await supabase
-                    .from(table.name)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (error) {
-                    console.log(`Error counting ${table.name}:`, error.message);
-                    results[table.key] = 0;
-                } else {
-                    console.log(`${table.name}: ${count} records`);
-                    results[table.key] = count || 0;
-                }
-            } catch (e) {
-                console.log(`Exception counting ${table.name}:`, e.message);
-                results[table.key] = 0;
+        // Data endpoints
+        const dataEndpoints = Object.keys(tableMapping);
+        for (const endpoint of dataEndpoints) {
+            if (path === `/${endpoint}`) {
+                return await handleDataEndpoint(req, res, endpoint);
             }
         }
         
-        const dashboardData = {
-            ...results,
-            lastUpdated: new Date().toISOString(),
-            debug: true
-        };
+        // Export endpoints (placeholder)
+        if (path.startsWith('/export/')) {
+            const parts = path.split('/');
+            const dataType = parts[2];
+            const format = parts[3];
+            
+            return res.json({
+                success: true,
+                message: `Export ${dataType} to ${format} feature will be implemented`,
+                downloadUrl: `/downloads/${dataType}_${Date.now()}.${format}`
+            });
+        }
         
-        console.log('Debug dashboard data:', dashboardData);
-        res.json(dashboardData);
+        // Template endpoints (placeholder)
+        if (path.startsWith('/template/')) {
+            const dataType = path.split('/')[2];
+            
+            return res.json({
+                success: true,
+                message: `Template ${dataType} download feature will be implemented`,
+                downloadUrl: `/templates/template_${dataType}.xlsx`
+            });
+        }
+        
+        // Import endpoints (placeholder)
+        if (path.startsWith('/import/')) {
+            const dataType = path.split('/')[2];
+            
+            return res.json({
+                success: true,
+                message: `Import ${dataType} feature will be implemented`,
+                imported: 0,
+                skipped: 0,
+                errors: []
+            });
+        }
+        
+        // 404 for unmatched routes
+        res.status(404).json({
+            success: false,
+            error: 'API endpoint not found',
+            method: method,
+            path: path,
+            availableEndpoints: [
+                '/health',
+                '/dashboard',
+                '/admin/login',
+                ...dataEndpoints.map(e => `/${e}`)
+            ]
+        });
         
     } catch (error) {
-        console.error('Debug dashboard error:', error);
-        handleError(res, error, 'Error fetching debug dashboard data');
+        console.error('❌ Vercel API Error:', error);
+        handleError(res, error, 'Internal server error');
     }
-});
-
-// Health check
-app.get('/api/health', (req, res) => {
-    res.json({
-        status: 'OK',
-        timestamp: new Date().toISOString(),
-        database: 'Supabase',
-        version: '2.0.0'
-    });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error('Unhandled error:', err);
-    res.status(500).json({
-        success: false,
-        error: 'Internal server error',
-        details: err.message
-    });
-});
-
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        error: 'Endpoint not found'
-    });
-});
-
-module.exports = app;
+};

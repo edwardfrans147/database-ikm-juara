@@ -3,19 +3,36 @@
     "id": 1,
     "originalId": 4,
     "dataType": "ikm-binaan",
-    "data": {
+    "originalData": {
       "id": 4,
-      "nib": "9876543210987",
-      "nik": "3518019876543210",
-      "namaLengkap": "Test User Baru 1",
-      "alamatLengkap": "Jl. Test Baru No. 1, Kelurahan Test, Kecamatan Test, Kota Madiun",
-      "namaUsaha": "Usaha Test Baru 1",
-      "nomorHP": "081999888777",
-      "createdAt": "2026-01-21T16:13:37.417Z"
+      "nib": "4567890123456",
+      "nik": "3518012345678904",
+      "namaLengkap": "Rina Kartika Sari",
+      "alamatLengkap": "Jl. Ahmad Yani No. 321, Kelurahan Winongo, Kecamatan Manguharjo, Kota Madiun",
+      "namaUsaha": "Tas Rajut Rina",
+      "nomorHP": "081234567893"
     },
-    "deletedAt": "2026-01-22T06:44:14.033Z",
     "deletedBy": "admin",
-    "autoDeleteAt": "2026-01-29T06:44:14.036Z",
-    "createdAt": "2026-01-22T06:44:14.038Z"
+    "deletedReason": "Data duplikat",
+    "deletedAt": "2024-01-20T14:30:00.000Z",
+    "canRestore": true
+  },
+  {
+    "id": 2,
+    "originalId": 6,
+    "dataType": "ikm-binaan",
+    "originalData": {
+      "id": 6,
+      "nib": "5678901234567",
+      "nik": "3518012345678905",
+      "namaLengkap": "Joko Widodo Santoso",
+      "alamatLengkap": "Jl. Pahlawan No. 654, Kelurahan Kejuron, Kecamatan Taman, Kota Madiun",
+      "namaUsaha": "Tempe Joko",
+      "nomorHP": "081234567894"
+    },
+    "deletedBy": "operator",
+    "deletedReason": "Usaha sudah tutup",
+    "deletedAt": "2024-01-22T10:15:00.000Z",
+    "canRestore": false
   }
 ]

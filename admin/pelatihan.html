@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pelatihan Pemberdayaan - Database IKM JUARA</title>
-    <link rel="stylesheet" href="/shared/style.css">
+    <link rel="stylesheet" href="../shared/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .action-buttons {
@@ -217,7 +217,7 @@
         </div>
     </div>
 
-    <script src="/shared/script.js"></script>
+    
     <script>
         let editingId = null;
 
@@ -237,15 +237,16 @@
                 const data = response.data || response; // Handle both response formats
                 
                 console.log(`${'pelatihan-pemberdayaan'} data:`, data); // Debug log
+                // Define columns with CORRECT field names (camelCase)
                 const columns = [
-                    { field: 'judul_pelatihan', title: 'Judul Pelatihan' },
+                    { field: 'judulPelatihan', title: 'Judul Pelatihan' },  // ✅ Fixed
                     { 
-                        field: 'tanggal_mulai', 
+                        field: 'tanggalMulai', 
                         title: 'Tanggal Mulai',
                         format: (date) => new Date(date).toLocaleDateString('id-ID')
                     },
                     { 
-                        field: 'tanggal_selesai', 
+                        field: 'tanggalSelesai', 
                         title: 'Tanggal Selesai',
                         format: (date) => new Date(date).toLocaleDateString('id-ID')
                     },
@@ -483,10 +484,10 @@
                 document.getElementById('form-title').textContent = 'Edit Program Pelatihan';
                 
                 const form = document.getElementById('pelatihan-form');
-                form.judul_pelatihan.value = pelatihan.judul_pelatihan || '';
+                form.judulPelatihan.value = pelatihan.judul_pelatihan || '';
                 form.deskripsi.value = pelatihan.deskripsi || '';
-                form.tanggal_mulai.value = pelatihan.tanggal_mulai || '';
-                form.tanggal_selesai.value = pelatihan.tanggal_selesai || '';
+                form.tanggalMulai.value = pelatihan.tanggal_mulai || '';
+                form.tanggalSelesai.value = pelatihan.tanggal_selesai || '';
                 form.lokasi.value = pelatihan.lokasi || '';
                 form.instruktur.value = pelatihan.instruktur || '';
                 form.kuota.value = pelatihan.kuota || '';
@@ -495,6 +496,7 @@
                 document.getElementById('form-modal').style.display = 'block';
             } catch (error) {
                 console.error('Failed to load pelatihan data:', error);
+                showAlert('Gagal memuat data pelatihan untuk diedit', 'error');
             }
         };
 
@@ -540,9 +542,21 @@
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
             
+            // Convert form field names to database field names
+            const dbData = {
+                judul_pelatihan: data.judulPelatihan,
+                deskripsi: data.deskripsi,
+                tanggal_mulai: data.tanggalMulai,
+                tanggal_selesai: data.tanggalSelesai,
+                lokasi: data.lokasi,
+                instruktur: data.instruktur,
+                kuota: parseInt(data.kuota),
+                status: data.status
+            };
+            
             // Validate dates
-            const startDate = new Date(data.tanggal_mulai);
-            const endDate = new Date(data.tanggal_selesai);
+            const startDate = new Date(dbData.tanggal_mulai);
+            const endDate = new Date(dbData.tanggal_selesai);
             
             if (endDate <= startDate) {
                 showAlert('Tanggal selesai harus setelah tanggal mulai', 'error');
@@ -555,10 +569,10 @@
             
             try {
                 if (editingId) {
-                    await updateData('pelatihan-pemberdayaan', editingId, data);
+                    await updateData('pelatihan-pemberdayaan', editingId, dbData);
                     showAlert('Program pelatihan berhasil diperbarui', 'success');
                 } else {
-                    await createData('pelatihan-pemberdayaan', data);
+                    await createData('pelatihan-pemberdayaan', dbData);
                     showAlert('Program pelatihan berhasil ditambahkan', 'success');
                 }
                 
@@ -584,5 +598,20 @@
         // Load data on page load
         document.addEventListener('DOMContentLoaded', loadPelatihan);
     </script>
+
+    
+    
+    <script src="../shared/ultimate-admin-fix.js"></script>
+
+<script>
+// Prevent multiple page initializations
+if (window.pageInitialized) {
+    console.log('⚠️ Page already initialized, preventing duplicate');
+} else {
+    window.pageInitialized = true;
+    console.log('🚀 Page initializing...');
+}
+</script>
+
 </body>
 </html>

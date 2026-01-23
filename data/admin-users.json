@@ -1,56 +1,35 @@
 [
   {
     "id": 1,
-    "username": "BidIndustri08#",
-    "password": "BidIndustri08#",
-    "nama": "Admin DisnakerKUKM",
-    "role": "super_admin",
-    "lastLogin": "2026-01-22T05:35:14.028Z",
-    "createdAt": "2024-01-01T00:00:00.000Z"
+    "username": "admin",
+    "password": "admin123",
+    "nama": "Administrator Utama",
+    "email": "admin@ikm-juara.com",
+    "role": "admin",
+    "status": "aktif",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 2,
-    "username": "admin_ikm",
-    "password": "IKM2024@Madiun",
-    "nama": "Administrator IKM",
-    "role": "admin",
-    "lastLogin": "2026-01-21T16:27:48.189Z",
-    "createdAt": "2024-01-21T00:00:00.000Z"
+    "username": "operator",
+    "password": "operator123",
+    "nama": "Operator Sistem",
+    "email": "operator@ikm-juara.com",
+    "role": "operator",
+    "status": "aktif",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
   },
   {
     "id": 3,
-    "username": "supervisor_data",
-    "password": "DataSupervisor#123",
-    "nama": "Supervisor Data",
-    "role": "admin",
-    "lastLogin": "2026-01-21T16:28:25.760Z",
-    "createdAt": "2024-01-21T00:00:00.000Z"
-  },
-  {
-    "id": 4,
-    "username": "operator_sistem",
-    "password": "SistemOp@2024",
-    "nama": "Operator Sistem",
-    "role": "admin",
-    "lastLogin": null,
-    "createdAt": "2024-01-21T00:00:00.000Z"
-  },
-  {
-    "id": 5,
-    "username": "koordinator_ikm",
-    "password": "KoordIKM!2024",
-    "nama": "Koordinator IKM",
-    "role": "admin",
-    "lastLogin": "2026-01-21T17:20:14.609Z",
-    "createdAt": "2024-01-21T00:00:00.000Z"
-  },
-  {
-    "id": 6,
-    "username": "manager_data",
-    "password": "DataManager$456",
-    "nama": "Manager Data",
-    "role": "admin",
-    "lastLogin": null,
-    "createdAt": "2024-01-21T00:00:00.000Z"
+    "username": "staff",
+    "password": "staff123",
+    "nama": "Staff Dinas",
+    "email": "staff@ikm-juara.com",
+    "role": "staff",
+    "status": "aktif",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
   }
 ]

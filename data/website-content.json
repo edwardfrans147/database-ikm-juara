@@ -1,72 +1,85 @@
 [
   {
     "id": 1,
-    "section": "layanan-ikm",
-    "title": "Layanan IKM Juara",
-    "content": [
-      {
-        "id": "hki-merek",
-        "title": "📜 Pendaftaran HKI Merek",
-        "description": "Fasilitasi pendaftaran Hak Kekayaan Intelektual untuk merek dagang IKM\nDengan syarat :\n1. KTP\n2. NIB\n3. Materai 10.000 (1 lembar)\n4. Etiket / Logo yang ingin didaftarkan merek"
-      },
-      {
-        "id": "sertifikat-halal",
-        "title": "✅ Pendaftaran Sertifikat Halal",
-        "description": "Bantuan pengurusan sertifikat halal untuk produk makanan dan minuman"
-      },
-      {
-        "id": "tkdn-ik",
-        "title": "🇮🇩 Pendaftaran TKDN IK",
-        "description": "Sertifikasi Tingkat Komponen Dalam Negeri untuk Industri Kecil"
-      },
-      {
-        "id": "siinas",
-        "title": "💾 Pendaftaran dan Pendampingan SIINas",
-        "description": "Registrasi dan pendampingan Sistem Informasi Industri Nasional"
-      },
-      {
-        "id": "uji-nilai-gizi",
-        "title": "🧪 Pendaftaran Uji Nilai Gizi",
-        "description": "Fasilitasi pengujian nilai gizi produk makanan dan minuman"
-      },
-      {
-        "id": "kurasi-produk",
-        "title": "🏆 Kurasi Produk",
-        "description": "Penilaian dan kurasi produk IKM untuk peningkatan kualitas"
-      }
-    ]
+    "section": "hero",
+    "title": "IKM JUARA Kota Madiun",
+    "subtitle": "Sistem Informasi Database IKM Binaan",
+    "description": "Platform digital untuk mengelola data Industri Kecil dan Menengah binaan Dinas Perindustrian dan Perdagangan Kota Madiun",
+    "imageUrl": "/images/hero-ikm.jpg",
+    "buttonText": "Lihat Data IKM",
+    "buttonLink": "/admin/login.html",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-23T00:00:00.000Z"
   },
   {
     "id": 2,
-    "section": "pelatihan",
-    "title": "Program Pelatihan Pemberdayaan Industri",
-    "content": [
+    "section": "about",
+    "title": "Tentang IKM JUARA",
+    "subtitle": "Pemberdayaan IKM Kota Madiun",
+    "description": "IKM JUARA adalah program pemberdayaan Industri Kecil dan Menengah di Kota Madiun yang bertujuan untuk meningkatkan daya saing dan kualitas produk IKM melalui berbagai layanan sertifikasi dan pelatihan.",
+    "content": "Program ini meliputi fasilitasi sertifikasi halal, HKI merek, TKDN IK, SIINAS, uji nilai gizi, dan kurasi produk. Selain itu, kami juga menyelenggarakan berbagai pelatihan pemberdayaan untuk meningkatkan kapasitas IKM binaan.",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-23T00:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "section": "services",
+    "title": "Layanan IKM JUARA",
+    "subtitle": "Berbagai Layanan Sertifikasi dan Pemberdayaan",
+    "services": [
       {
-        "id": "default-pelatihan",
-        "title": "📚 Program pelatihan akan segera diumumkan",
-        "description": "Pantau terus website ini untuk informasi program pelatihan terbaru"
+        "name": "Sertifikasi Halal",
+        "description": "Fasilitasi sertifikasi halal untuk produk makanan dan minuman",
+        "icon": "fas fa-check-circle"
       },
       {
-        "id": "pelatihan-1769063063626",
-        "title": "👩🏻‍💻 Test Pelatihan",
-        "description": "Deskripsi test pelatihan",
-        "contact": "081234567890",
-        "link": "https://example.com"
+        "name": "HKI Merek",
+        "description": "Pendaftaran dan perlindungan merek dagang",
+        "icon": "fas fa-certificate"
       },
       {
-        "id": "pelatihan-1769063239258",
-        "title": "Workshop Digital Marketing",
-        "description": "Pelatihan digital marketing untuk IKM",
-        "contact": "WhatsApp: 081234567890",
-        "link": "https://example.com/workshop"
+        "name": "TKDN IK",
+        "description": "Sertifikasi Tingkat Komponen Dalam Negeri",
+        "icon": "fas fa-flag"
       },
       {
-        "id": "pelatihan-1769063512541",
-        "title": "Pelatihan Digital Marketing dan Branding 2026",
-        "description": "Pendaftaran HKI Merek tahun 2026",
-        "contact": "085655480223",
-        "link": "https://drive.google.com/drive/folders/1pS93hMbUcrjKEfD5fZDeXXNE_35QrkBw"
+        "name": "SIINAS",
+        "description": "Sistem Informasi Kekayaan Intelektual Nasional",
+        "icon": "fas fa-shield-alt"
+      },
+      {
+        "name": "Uji Nilai Gizi",
+        "description": "Pengujian kandungan gizi produk makanan",
+        "icon": "fas fa-flask"
+      },
+      {
+        "name": "Kurasi Produk",
+        "description": "Kurasi dan promosi produk unggulan IKM",
+        "icon": "fas fa-star"
       }
-    ]
+    ],
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-23T00:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "section": "contact",
+    "title": "Hubungi Kami",
+    "subtitle": "Dinas Perindustrian dan Perdagangan Kota Madiun",
+    "address": "Jl. Serayu No. 15, Kota Madiun, Jawa Timur 63122",
+    "phone": "(0351) 464418",
+    "email": "disperindag@madiunkota.go.id",
+    "website": "https://disperindag.madiunkota.go.id",
+    "socialMedia": {
+      "facebook": "https://facebook.com/disperindagmadiun",
+      "instagram": "@disperindag_madiun",
+      "youtube": "Disperindag Kota Madiun"
+    },
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-23T00:00:00.000Z"
   }
 ]

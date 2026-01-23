@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layanan IKM Juara - IKM JUARA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../shared/style.css" rel="stylesheet">
+    <style>
+        .service-tabs {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .nav-tabs {
+            border-bottom: none;
+            background: #f8f9fa;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: #666;
+            font-weight: 500;
+            padding: 15px 20px;
+            margin-right: 2px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .nav-tabs .nav-link.active:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .tab-content {
+            padding: 20px;
+        }
+        
+        .service-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .service-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-card h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .action-bar {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .badge-status {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="sidebar-header">
+                        <h4><i class="fas fa-industry"></i> IKM JUARA</h4>
+                        <p>Dashboard Admin IKM Binaan Madiun</p>
+                    </div>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-dashboard" href="index-fixed.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-ikm-binaan" href="ikm-binaan-fixed.html">
+                                <i class="fas fa-building"></i> IKM Binaan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-inputan-layanan" href="inputan-layanan-fixed.html">
+                                <i class="fas fa-plus-circle"></i> Inputan Layanan IKM
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item active" id="menu-layanan-ikm" href="layanan-ikm-fixed.html">
+                                <i class="fas fa-cogs"></i> Layanan IKM Juara
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-pelatihan" href="pelatihan-fixed.html">
+                                <i class="fas fa-graduation-cap"></i> Pelatihan Pemberdayaan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-penelusuran" href="penelusuran-fixed.html">
+                                <i class="fas fa-search"></i> Penelusuran Data
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-edit-redaksi" href="edit-redaksi.html">
+                                <i class="fas fa-edit"></i> Edit Redaksi Website
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-activity-logs" href="activity-logs.html">
+                                <i class="fas fa-history"></i> Activity Logs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-recycle" href="recycle-bin.html">
+                                <i class="fas fa-trash-restore"></i> Recycle Bin
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="sidebar-footer">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="user-name">Admin</span>
+                        </div>
+                        <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-cogs"></i> Layanan IKM Juara</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="refreshCurrentTab()">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Header -->
+                <div class="service-header">
+                    <h3><i class="fas fa-cogs"></i> Layanan Pemberdayaan IKM</h3>
+                    <p>Kelola berbagai layanan sertifikasi dan pemberdayaan untuk IKM binaan</p>
+                </div>
+
+                <!-- Service Tabs -->
+                <div class="service-tabs">
+                    <ul class="nav nav-tabs" id="service-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active tab-button" id="hki-merek-tab-btn" data-bs-toggle="tab" 
+                                    data-bs-target="#hki-merek-tab" type="button" role="tab" 
+                                    onclick="showTab('hki-merek')">
+                                <i class="fas fa-certificate"></i> HKI Merek
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab-button" id="sertifikat-halal-tab-btn" data-bs-toggle="tab" 
+                                    data-bs-target="#sertifikat-halal-tab" type="button" role="tab"
+                                    onclick="showTab('sertifikat-halal')">
+                                <i class="fas fa-check-circle"></i> Sertifikat Halal
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab-button" id="tkdn-ik-tab-btn" data-bs-toggle="tab" 
+                                    data-bs-target="#tkdn-ik-tab" type="button" role="tab"
+                                    onclick="showTab('tkdn-ik')">
+                                <i class="fas fa-flag"></i> TKDN IK
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab-button" id="siinas-tab-btn" data-bs-toggle="tab" 
+                                    data-bs-target="#siinas-tab" type="button" role="tab"
+                                    onclick="showTab('siinas')">
+                                <i class="fas fa-shield-alt"></i> SIINAS
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab-button" id="uji-nilai-gizi-tab-btn" data-bs-toggle="tab" 
+                                    data-bs-target="#uji-nilai-gizi-tab" type="button" role="tab"
+                                    onclick="showTab('uji-nilai-gizi')">
+                                <i class="fas fa-flask"></i> Uji Nilai Gizi
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tab-button" id="kurasi-produk-tab-btn" data-bs-toggle="tab" 
+                                    data-bs-target="#kurasi-produk-tab" type="button" role="tab"
+                                    onclick="showTab('kurasi-produk')">
+                                <i class="fas fa-star"></i> Kurasi Produk
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content" id="service-tab-content">
+                        <!-- HKI Merek Tab -->
+                        <div class="tab-pane fade show active" id="hki-merek-tab" role="tabpanel">
+                            <div class="service-stats">
+                                <div class="stat-card">
+                                    <h4 id="hki-merek-total">0</h4>
+                                    <p>Total HKI Merek</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="hki-merek-aktif">0</h4>
+                                    <p>Sertifikat Aktif</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="hki-merek-proses">0</h4>
+                                    <p>Dalam Proses</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-bar">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-primary btn-sm me-2">
+                                            <i class="fas fa-plus"></i> Tambah Data
+                                        </button>
+                                        <button class="btn btn-success btn-sm me-2">
+                                            <i class="fas fa-upload"></i> Import
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="exportLayanan('hki-merek', 'excel')">
+                                            <i class="fas fa-file-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h6><i class="fas fa-certificate"></i> Data HKI Merek</h6>
+                                </div>
+                                <div id="hki-merek-table">
+                                    <div class="text-center p-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data HKI Merek...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sertifikat Halal Tab -->
+                        <div class="tab-pane fade" id="sertifikat-halal-tab" role="tabpanel">
+                            <div class="service-stats">
+                                <div class="stat-card">
+                                    <h4 id="sertifikat-halal-total">0</h4>
+                                    <p>Total Sertifikat</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="sertifikat-halal-aktif">0</h4>
+                                    <p>Sertifikat Aktif</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="sertifikat-halal-expired">0</h4>
+                                    <p>Akan Expired</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-bar">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-primary btn-sm me-2">
+                                            <i class="fas fa-plus"></i> Tambah Data
+                                        </button>
+                                        <button class="btn btn-success btn-sm me-2">
+                                            <i class="fas fa-upload"></i> Import
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="exportLayanan('sertifikat-halal', 'excel')">
+                                            <i class="fas fa-file-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h6><i class="fas fa-check-circle"></i> Data Sertifikat Halal</h6>
+                                </div>
+                                <div id="sertifikat-halal-table">
+                                    <div class="text-center p-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data Sertifikat Halal...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TKDN IK Tab -->
+                        <div class="tab-pane fade" id="tkdn-ik-tab" role="tabpanel">
+                            <div class="service-stats">
+                                <div class="stat-card">
+                                    <h4 id="tkdn-ik-total">0</h4>
+                                    <p>Total TKDN IK</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="tkdn-ik-tinggi">0</h4>
+                                    <p>TKDN > 40%</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="tkdn-ik-rendah">0</h4>
+                                    <p>TKDN < 40%</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-bar">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-primary btn-sm me-2">
+                                            <i class="fas fa-plus"></i> Tambah Data
+                                        </button>
+                                        <button class="btn btn-success btn-sm me-2">
+                                            <i class="fas fa-upload"></i> Import
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="exportLayanan('tkdn-ik', 'excel')">
+                                            <i class="fas fa-file-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h6><i class="fas fa-flag"></i> Data TKDN IK</h6>
+                                </div>
+                                <div id="tkdn-ik-table">
+                                    <div class="text-center p-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data TKDN IK...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SIINAS Tab -->
+                        <div class="tab-pane fade" id="siinas-tab" role="tabpanel">
+                            <div class="service-stats">
+                                <div class="stat-card">
+                                    <h4 id="siinas-total">0</h4>
+                                    <p>Total SIINAS</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="siinas-aktif">0</h4>
+                                    <p>Sertifikat Aktif</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="siinas-proses">0</h4>
+                                    <p>Dalam Proses</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-bar">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-primary btn-sm me-2">
+                                            <i class="fas fa-plus"></i> Tambah Data
+                                        </button>
+                                        <button class="btn btn-success btn-sm me-2">
+                                            <i class="fas fa-upload"></i> Import
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="exportLayanan('siinas', 'excel')">
+                                            <i class="fas fa-file-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h6><i class="fas fa-shield-alt"></i> Data SIINAS</h6>
+                                </div>
+                                <div id="siinas-table">
+                                    <div class="text-center p-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data SIINAS...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Uji Nilai Gizi Tab -->
+                        <div class="tab-pane fade" id="uji-nilai-gizi-tab" role="tabpanel">
+                            <div class="service-stats">
+                                <div class="stat-card">
+                                    <h4 id="uji-nilai-gizi-total">0</h4>
+                                    <p>Total Uji Gizi</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="uji-nilai-gizi-selesai">0</h4>
+                                    <p>Uji Selesai</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="uji-nilai-gizi-proses">0</h4>
+                                    <p>Dalam Proses</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-bar">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-primary btn-sm me-2">
+                                            <i class="fas fa-plus"></i> Tambah Data
+                                        </button>
+                                        <button class="btn btn-success btn-sm me-2">
+                                            <i class="fas fa-upload"></i> Import
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="exportLayanan('uji-nilai-gizi', 'excel')">
+                                            <i class="fas fa-file-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h6><i class="fas fa-flask"></i> Data Uji Nilai Gizi</h6>
+                                </div>
+                                <div id="uji-nilai-gizi-table">
+                                    <div class="text-center p-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data Uji Nilai Gizi...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kurasi Produk Tab -->
+                        <div class="tab-pane fade" id="kurasi-produk-tab" role="tabpanel">
+                            <div class="service-stats">
+                                <div class="stat-card">
+                                    <h4 id="kurasi-produk-total">0</h4>
+                                    <p>Total Produk</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="kurasi-produk-approved">0</h4>
+                                    <p>Disetujui</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h4 id="kurasi-produk-pending">0</h4>
+                                    <p>Menunggu Review</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-bar">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-primary btn-sm me-2">
+                                            <i class="fas fa-plus"></i> Tambah Data
+                                        </button>
+                                        <button class="btn btn-success btn-sm me-2">
+                                            <i class="fas fa-upload"></i> Import
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="exportLayanan('kurasi-produk', 'excel')">
+                                            <i class="fas fa-file-excel"></i> Export Excel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h6><i class="fas fa-star"></i> Data Kurasi Produk</h6>
+                                </div>
+                                <div id="kurasi-produk-table">
+                                    <div class="text-center p-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2">Memuat data Kurasi Produk...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../shared/script-fixed.js"></script>
+    
+    <script>
+        let currentActiveTab = 'hki-merek';
+        
+        // Update statistics for each service
+        const updateServiceStats = (serviceType, data) => {
+            const total = data.length;
+            document.getElementById(`${serviceType}-total`).textContent = total;
+            
+            // Service-specific statistics
+            switch(serviceType) {
+                case 'hki-merek':
+                    const hkiAktif = data.filter(item => item.status === 'Aktif').length;
+                    const hkiProses = data.filter(item => item.status === 'Proses').length;
+                    document.getElementById('hki-merek-aktif').textContent = hkiAktif;
+                    document.getElementById('hki-merek-proses').textContent = hkiProses;
+                    break;
+                    
+                case 'sertifikat-halal':
+                    const halalAktif = data.filter(item => {
+                        if (!item.tanggalExpired) return true;
+                        return new Date(item.tanggalExpired) > new Date();
+                    }).length;
+                    const halalExpired = total - halalAktif;
+                    document.getElementById('sertifikat-halal-aktif').textContent = halalAktif;
+                    document.getElementById('sertifikat-halal-expired').textContent = halalExpired;
+                    break;
+                    
+                case 'tkdn-ik':
+                    const tkdnTinggi = data.filter(item => parseFloat(item.nilaiTKDN) > 40).length;
+                    const tkdnRendah = total - tkdnTinggi;
+                    document.getElementById('tkdn-ik-tinggi').textContent = tkdnTinggi;
+                    document.getElementById('tkdn-ik-rendah').textContent = tkdnRendah;
+                    break;
+                    
+                case 'siinas':
+                    const siinasAktif = data.filter(item => item.status === 'Aktif').length;
+                    const siinasProses = data.filter(item => item.status === 'Proses').length;
+                    document.getElementById('siinas-aktif').textContent = siinasAktif;
+                    document.getElementById('siinas-proses').textContent = siinasProses;
+                    break;
+                    
+                case 'uji-nilai-gizi':
+                    const ujiSelesai = data.filter(item => item.status === 'Selesai').length;
+                    const ujiProses = data.filter(item => item.status === 'Proses').length;
+                    document.getElementById('uji-nilai-gizi-selesai').textContent = ujiSelesai;
+                    document.getElementById('uji-nilai-gizi-proses').textContent = ujiProses;
+                    break;
+                    
+                case 'kurasi-produk':
+                    const kurasiApproved = data.filter(item => item.statusKurasi === 'Disetujui').length;
+                    const kurasiPending = data.filter(item => item.statusKurasi === 'Menunggu Review').length;
+                    document.getElementById('kurasi-produk-approved').textContent = kurasiApproved;
+                    document.getElementById('kurasi-produk-pending').textContent = kurasiPending;
+                    break;
+            }
+        };
+        
+        // Override loadLayananData to include statistics
+        const originalLoadLayananData = loadLayananData;
+        loadLayananData = async (layananType) => {
+            try {
+                console.log(`🔍 Loading ${layananType} data...`);
+                
+                const data = await getData(layananType);
+                
+                console.log(`📊 ${layananType} data received:`, {
+                    isArray: Array.isArray(data),
+                    length: data.length,
+                    firstItem: data[0]
+                });
+                
+                // Update statistics
+                updateServiceStats(layananType, data);
+                
+                // Define columns based on service type with CORRECT field names
+                let columns = [];
+                
+                switch(layananType) {
+                    case 'hki-merek':
+                        columns = [
+                            { field: 'nib', title: 'No. NIB' },
+                            { field: 'namaLengkap', title: 'Nama Lengkap' },
+                            { field: 'namaUsaha', title: 'Nama Usaha' },
+                            { field: 'namaMerek', title: 'Nama Merek' },
+                            { field: 'nomorSertifikat', title: 'No. Sertifikat' },
+                            { 
+                                field: 'tanggalTerbit', 
+                                title: 'Tanggal Terbit',
+                                format: (date) => formatDate(date)
+                            }
+                        ];
+                        break;
+                        
+                    case 'sertifikat-halal':
+                        columns = [
+                            { field: 'nib', title: 'No. NIB' },
+                            { field: 'namaLengkap', title: 'Nama Lengkap' },
+                            { field: 'namaUsaha', title: 'Nama Usaha' },
+                            { field: 'namaProduk', title: 'Nama Produk' },
+                            { field: 'nomorSertifikat', title: 'No. Sertifikat' },
+                            { 
+                                field: 'tanggalTerbit', 
+                                title: 'Tanggal Terbit',
+                                format: (date) => formatDate(date)
+                            }
+                        ];
+                        break;
+                        
+                    case 'tkdn-ik':
+                        columns = [
+                            { field: 'nib', title: 'No. NIB' },
+                            { field: 'namaLengkap', title: 'Nama Lengkap' },
+                            { field: 'namaUsaha', title: 'Nama Usaha' },
+                            { field: 'namaProduk', title: 'Nama Produk' },
+                            { field: 'nomorSertifikat', title: 'No. Sertifikat' },
+                            { 
+                                field: 'nilaiTKDN', 
+                                title: 'Nilai TKDN (%)',
+                                format: (value) => value ? `${value}%` : '-'
+                            }
+                        ];
+                        break;
+                        
+                    case 'siinas':
+                        columns = [
+                            { field: 'nib', title: 'No. NIB' },
+                            { field: 'namaLengkap', title: 'Nama Lengkap' },
+                            { field: 'namaUsaha', title: 'Nama Usaha' },
+                            { field: 'namaProduk', title: 'Nama Produk' },
+                            { field: 'nomorSertifikat', title: 'No. Sertifikat' },
+                            { 
+                                field: 'tanggalTerbit', 
+                                title: 'Tanggal Terbit',
+                                format: (date) => formatDate(date)
+                            }
+                        ];
+                        break;
+                        
+                    case 'uji-nilai-gizi':
+                        columns = [
+                            { field: 'nib', title: 'No. NIB' },
+                            { field: 'namaLengkap', title: 'Nama Lengkap' },
+                            { field: 'namaUsaha', title: 'Nama Usaha' },
+                            { field: 'namaProduk', title: 'Nama Produk' },
+                            { field: 'nomorSertifikat', title: 'No. Sertifikat' },
+                            { 
+                                field: 'tanggalUji', 
+                                title: 'Tanggal Uji',
+                                format: (date) => formatDate(date)
+                            }
+                        ];
+                        break;
+                        
+                    case 'kurasi-produk':
+                        columns = [
+                            { field: 'nib', title: 'No. NIB' },
+                            { field: 'namaLengkap', title: 'Nama Lengkap' },
+                            { field: 'namaUsaha', title: 'Nama Usaha' },
+                            { field: 'namaProduk', title: 'Nama Produk' },
+                            { field: 'kategoriProduk', title: 'Kategori' },
+                            { 
+                                field: 'statusKurasi', 
+                                title: 'Status',
+                                format: (status) => {
+                                    const colors = {
+                                        'Disetujui': 'success',
+                                        'Menunggu Review': 'warning',
+                                        'Ditolak': 'danger'
+                                    };
+                                    const color = colors[status] || 'secondary';
+                                    return `<span class="badge bg-${color}">${status}</span>`;
+                                }
+                            }
+                        ];
+                        break;
+                        
+                    default:
+                        columns = [
+                            { field: 'nib', title: 'No. NIB' },
+                            { field: 'namaLengkap', title: 'Nama Lengkap' },
+                            { field: 'namaUsaha', title: 'Nama Usaha' }
+                        ];
+                }
+                
+                const actions = [
+                    { text: 'Edit', class: 'warning', onclick: 'editLayanan' },
+                    { text: 'Hapus', class: 'danger', onclick: 'deleteLayanan' }
+                ];
+                
+                const tableHtml = createTable(data, columns, actions);
+                document.getElementById(`${layananType}-table`).innerHTML = tableHtml;
+                
+                console.log(`✅ ${layananType} table rendered successfully`);
+                
+            } catch (error) {
+                console.error(`❌ Failed to load ${layananType} data:`, error);
+                document.getElementById(`${layananType}-table`).innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #e74c3c;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h4>Gagal Memuat Data</h4>
+                        <p>${error.message}</p>
+                        <button class="btn btn-primary" onclick="loadLayananData('${layananType}')">
+                            <i class="fas fa-refresh"></i> Coba Lagi
+                        </button>
+                    </div>
+                `;
+                showAlert(`Gagal memuat data ${layananType}: ${error.message}`, 'error');
+            }
+        };
+        
+        // Enhanced showTab function
+        const originalShowTab = showTab;
+        showTab = (tabName) => {
+            currentActiveTab = tabName;
+            
+            // Hide all tab panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('show', 'active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.nav-link').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab pane
+            const tabPane = document.getElementById(tabName + '-tab');
+            if (tabPane) {
+                tabPane.classList.add('show', 'active');
+            }
+            
+            // Add active class to clicked button
+            const tabButton = document.getElementById(tabName + '-tab-btn');
+            if (tabButton) {
+                tabButton.classList.add('active');
+            }
+            
+            // Load data for the selected tab
+            loadLayananData(tabName);
+        };
+        
+        // Refresh current tab
+        const refreshCurrentTab = () => {
+            loadLayananData(currentActiveTab);
+        };
+        
+        // Export function
+        const exportLayanan = (serviceType, format) => {
+            const url = `${API_BASE_URL}/export/${serviceType}/${format}`;
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${serviceType}_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        
+        // Initialize first tab on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+                loadLayananData('hki-merek');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

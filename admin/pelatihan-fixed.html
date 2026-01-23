@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pelatihan Pemberdayaan - IKM JUARA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../shared/style.css" rel="stylesheet">
+    <style>
+        .training-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .training-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-card h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            margin-bottom: 20px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .badge-status {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+        }
+        
+        .participant-count {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .training-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        
+        .training-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .training-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .training-card-body {
+            padding: 20px;
+        }
+        
+        .training-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .training-dates {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .training-instructor {
+            color: #667eea;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="sidebar-header">
+                        <h4><i class="fas fa-industry"></i> IKM JUARA</h4>
+                        <p>Dashboard Admin IKM Binaan Madiun</p>
+                    </div>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-dashboard" href="index-fixed.html">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-ikm-binaan" href="ikm-binaan-fixed.html">
+                                <i class="fas fa-building"></i> IKM Binaan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-inputan-layanan" href="inputan-layanan-fixed.html">
+                                <i class="fas fa-plus-circle"></i> Inputan Layanan IKM
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-layanan-ikm" href="layanan-ikm-fixed.html">
+                                <i class="fas fa-cogs"></i> Layanan IKM Juara
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item active" id="menu-pelatihan" href="pelatihan-fixed.html">
+                                <i class="fas fa-graduation-cap"></i> Pelatihan Pemberdayaan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-penelusuran" href="penelusuran-fixed.html">
+                                <i class="fas fa-search"></i> Penelusuran Data
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-edit-redaksi" href="edit-redaksi.html">
+                                <i class="fas fa-edit"></i> Edit Redaksi Website
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-activity-logs" href="activity-logs.html">
+                                <i class="fas fa-history"></i> Activity Logs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" id="menu-recycle" href="recycle-bin.html">
+                                <i class="fas fa-trash-restore"></i> Recycle Bin
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="sidebar-footer">
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="user-name">Admin</span>
+                        </div>
+                        <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><i class="fas fa-graduation-cap"></i> Pelatihan Pemberdayaan</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="loadPelatihanData()">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Header -->
+                <div class="training-header">
+                    <h3><i class="fas fa-graduation-cap"></i> Program Pelatihan Pemberdayaan IKM</h3>
+                    <p>Kelola program pelatihan dan pemberdayaan untuk meningkatkan kapasitas IKM binaan</p>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="training-stats">
+                    <div class="stat-card">
+                        <h3 id="total-pelatihan">0</h3>
+                        <p>Total Program Pelatihan</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="pelatihan-aktif">0</h3>
+                        <p>Pelatihan Aktif</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="pelatihan-selesai">0</h3>
+                        <p>Pelatihan Selesai</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-peserta">0</h3>
+                        <p>Total Peserta</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="rata-peserta">0</h3>
+                        <p>Rata-rata Peserta</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" onclick="showAddTrainingModal()">
+                                <i class="fas fa-plus"></i> Tambah Pelatihan
+                            </button>
+                            <button class="btn btn-success" onclick="showImportModal()">
+                                <i class="fas fa-upload"></i> Import Excel
+                            </button>
+                            <button class="btn btn-info" onclick="downloadTemplate()">
+                                <i class="fas fa-download"></i> Download Template
+                            </button>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <div class="btn-group">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" onclick="exportData('excel')">
+                                        <i class="fas fa-file-excel"></i> Export Excel
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="exportData('pdf')">
+                                        <i class="fas fa-file-pdf"></i> Export PDF
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View Toggle -->
+                <div class="mb-3">
+                    <div class="btn-group" role="group">
+                        <input type="radio" class="btn-check" name="view-toggle" id="table-view" checked>
+                        <label class="btn btn-outline-primary" for="table-view">
+                            <i class="fas fa-table"></i> Tampilan Tabel
+                        </label>
+                        
+                        <input type="radio" class="btn-check" name="view-toggle" id="card-view">
+                        <label class="btn btn-outline-primary" for="card-view">
+                            <i class="fas fa-th-large"></i> Tampilan Kartu
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div id="table-view-container" class="table-container">
+                    <div class="table-header">
+                        <h5><i class="fas fa-table"></i> Daftar Program Pelatihan</h5>
+                        <small class="text-muted">Data program pelatihan pemberdayaan IKM</small>
+                    </div>
+                    
+                    <div id="pelatihan-table">
+                        <div class="text-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Memuat data pelatihan...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card View -->
+                <div id="card-view-container" class="d-none">
+                    <div id="pelatihan-cards">
+                        <div class="text-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Memuat data pelatihan...</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Training Modal -->
+    <div class="modal fade" id="add-training-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-plus"></i> Tambah Program Pelatihan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-training-form">
+                        <div class="mb-3">
+                            <label for="judulPelatihan" class="form-label">Judul Pelatihan *</label>
+                            <input type="text" class="form-control" id="judulPelatihan" name="judulPelatihan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tanggalMulai" class="form-label">Tanggal Mulai *</label>
+                                    <input type="date" class="form-control" id="tanggalMulai" name="tanggalMulai" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tanggalSelesai" class="form-label">Tanggal Selesai *</label>
+                                    <input type="date" class="form-control" id="tanggalSelesai" name="tanggalSelesai" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="instruktur" class="form-label">Instruktur *</label>
+                                    <input type="text" class="form-control" id="instruktur" name="instruktur" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="kuota" class="form-label">Kuota Peserta *</label>
+                                    <input type="number" class="form-control" id="kuota" name="kuota" min="1" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lokasi" class="form-label">Lokasi</label>
+                            <input type="text" class="form-control" id="lokasi" name="lokasi">
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status *</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="">Pilih Status</option>
+                                <option value="Aktif">Aktif</option>
+                                <option value="Selesai">Selesai</option>
+                                <option value="Dibatalkan">Dibatalkan</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="saveTraining()">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Participants Modal -->
+    <div class="modal fade" id="participants-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-users"></i> Kelola Peserta Pelatihan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="participants-content">
+                        <div class="text-center p-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Memuat data peserta...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" onclick="addParticipant()">
+                        <i class="fas fa-plus"></i> Tambah Peserta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../shared/script-fixed.js"></script>
+    
+    <script>
+        // Update statistics
+        const updateTrainingStatistics = (data) => {
+            const total = data.length;
+            const aktif = data.filter(item => item.status === 'Aktif').length;
+            const selesai = data.filter(item => item.status === 'Selesai').length;
+            
+            let totalPeserta = 0;
+            data.forEach(item => {
+                if (item.peserta && Array.isArray(item.peserta)) {
+                    totalPeserta += item.peserta.length;
+                }
+            });
+            
+            const rataPeserta = total > 0 ? Math.round(totalPeserta / total) : 0;
+            
+            document.getElementById('total-pelatihan').textContent = total;
+            document.getElementById('pelatihan-aktif').textContent = aktif;
+            document.getElementById('pelatihan-selesai').textContent = selesai;
+            document.getElementById('total-peserta').textContent = totalPeserta;
+            document.getElementById('rata-peserta').textContent = rataPeserta;
+        };
+        
+        // Create training cards view
+        const createTrainingCards = (data) => {
+            if (!Array.isArray(data) || data.length === 0) {
+                return `
+                    <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        <i class="fas fa-graduation-cap" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h4>Tidak Ada Program Pelatihan</h4>
+                        <p>Belum ada program pelatihan yang tersedia.</p>
+                    </div>
+                `;
+            }
+            
+            let html = '<div class="row">';
+            
+            data.forEach(item => {
+                const pesertaCount = item.peserta ? item.peserta.length : 0;
+                const statusColor = {
+                    'Aktif': 'success',
+                    'Selesai': 'primary',
+                    'Dibatalkan': 'danger'
+                }[item.status] || 'secondary';
+                
+                html += `
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="training-card">
+                            <div class="training-card-header">
+                                <h6 class="mb-0">${item.judulPelatihan || '-'}</h6>
+                            </div>
+                            <div class="training-card-body">
+                                <div class="training-meta">
+                                    <span class="badge bg-${statusColor}">${item.status || '-'}</span>
+                                    <span class="participant-count">${pesertaCount} peserta</span>
+                                </div>
+                                <div class="training-dates mb-2">
+                                    <i class="fas fa-calendar"></i> 
+                                    ${formatDate(item.tanggalMulai)} - ${formatDate(item.tanggalSelesai)}
+                                </div>
+                                <div class="training-instructor mb-2">
+                                    <i class="fas fa-user"></i> ${item.instruktur || '-'}
+                                </div>
+                                <div class="mb-2">
+                                    <i class="fas fa-users"></i> Kuota: ${item.kuota || '-'}
+                                </div>
+                                ${item.lokasi ? `<div class="mb-2"><i class="fas fa-map-marker-alt"></i> ${item.lokasi}</div>` : ''}
+                                <div class="mt-3">
+                                    <button class="btn btn-info btn-sm me-1" onclick="manageParticipants(${item.id})">
+                                        <i class="fas fa-users"></i> Peserta
+                                    </button>
+                                    <button class="btn btn-warning btn-sm me-1" onclick="editPelatihan(${item.id})">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deletePelatihan(${item.id})">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            return html;
+        };
+        
+        // Override loadPelatihanData to include statistics and card view
+        const originalLoadPelatihanData = loadPelatihanData;
+        loadPelatihanData = async () => {
+            try {
+                console.log('🔄 Loading Pelatihan data...');
+                
+                const data = await getData('pelatihan-pemberdayaan');
+                
+                console.log('📊 Pelatihan data received:', {
+                    isArray: Array.isArray(data),
+                    length: data.length,
+                    firstItem: data[0]
+                });
+                
+                // Update statistics
+                updateTrainingStatistics(data);
+                
+                // Define columns with CORRECT field names
+                const columns = [
+                    { field: 'judulPelatihan', title: 'Judul Pelatihan' },
+                    { 
+                        field: 'tanggalMulai', 
+                        title: 'Tanggal Mulai',
+                        format: (date) => formatDate(date)
+                    },
+                    { 
+                        field: 'tanggalSelesai', 
+                        title: 'Tanggal Selesai',
+                        format: (date) => formatDate(date)
+                    },
+                    { field: 'instruktur', title: 'Instruktur' },
+                    { field: 'kuota', title: 'Kuota' },
+                    { 
+                        field: 'peserta', 
+                        title: 'Peserta',
+                        format: (peserta) => peserta ? peserta.length : 0
+                    },
+                    { 
+                        field: 'status', 
+                        title: 'Status',
+                        format: (status) => {
+                            const colors = {
+                                'Aktif': 'success',
+                                'Selesai': 'primary',
+                                'Dibatalkan': 'danger'
+                            };
+                            const color = colors[status] || 'secondary';
+                            return `<span class="badge bg-${color}">${status}</span>`;
+                        }
+                    }
+                ];
+                
+                const actions = [
+                    { text: 'Kelola Peserta', class: 'info', onclick: 'manageParticipants' },
+                    { text: 'Edit', class: 'warning', onclick: 'editPelatihan' },
+                    { text: 'Hapus', class: 'danger', onclick: 'deletePelatihan' }
+                ];
+                
+                // Update table view
+                const tableHtml = createTable(data, columns, actions);
+                document.getElementById('pelatihan-table').innerHTML = tableHtml;
+                
+                // Update card view
+                const cardsHtml = createTrainingCards(data);
+                document.getElementById('pelatihan-cards').innerHTML = cardsHtml;
+                
+                console.log('✅ Pelatihan views rendered successfully');
+                
+            } catch (error) {
+                console.error('❌ Failed to load Pelatihan data:', error);
+                const errorHtml = `
+                    <div style="text-align: center; padding: 40px; color: #e74c3c;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h4>Gagal Memuat Data</h4>
+                        <p>${error.message}</p>
+                        <button class="btn btn-primary" onclick="loadPelatihanData()">
+                            <i class="fas fa-refresh"></i> Coba Lagi
+                        </button>
+                    </div>
+                `;
+                document.getElementById('pelatihan-table').innerHTML = errorHtml;
+                document.getElementById('pelatihan-cards').innerHTML = errorHtml;
+                showAlert('Gagal memuat data Pelatihan: ' + error.message, 'error');
+            }
+        };
+        
+        // View toggle functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableViewRadio = document.getElementById('table-view');
+            const cardViewRadio = document.getElementById('card-view');
+            const tableContainer = document.getElementById('table-view-container');
+            const cardContainer = document.getElementById('card-view-container');
+            
+            tableViewRadio.addEventListener('change', () => {
+                if (tableViewRadio.checked) {
+                    tableContainer.classList.remove('d-none');
+                    cardContainer.classList.add('d-none');
+                }
+            });
+            
+            cardViewRadio.addEventListener('change', () => {
+                if (cardViewRadio.checked) {
+                    tableContainer.classList.add('d-none');
+                    cardContainer.classList.remove('d-none');
+                }
+            });
+        });
+        
+        // Modal functions
+        const showAddTrainingModal = () => {
+            const modal = new bootstrap.Modal(document.getElementById('add-training-modal'));
+            modal.show();
+        };
+        
+        const saveTraining = async () => {
+            const form = document.getElementById('add-training-form');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+            
+            // Add empty peserta array
+            data.peserta = [];
+            
+            try {
+                const response = await apiRequest('/pelatihan-pemberdayaan', {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                
+                showAlert('Program pelatihan berhasil disimpan', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('add-training-modal')).hide();
+                form.reset();
+                loadPelatihanData();
+            } catch (error) {
+                showAlert('Gagal menyimpan data: ' + error.message, 'error');
+            }
+        };
+        
+        // Enhanced manageParticipants function
+        const originalManageParticipants = manageParticipants;
+        manageParticipants = async (id) => {
+            try {
+                const data = await getData('pelatihan-pemberdayaan');
+                const training = data.find(item => item.id === id);
+                
+                if (!training) {
+                    showAlert('Data pelatihan tidak ditemukan', 'error');
+                    return;
+                }
+                
+                const participants = training.peserta || [];
+                let html = `
+                    <div class="mb-3">
+                        <h6>Pelatihan: ${training.judulPelatihan}</h6>
+                        <p class="text-muted">Kuota: ${training.kuota} | Terdaftar: ${participants.length}</p>
+                    </div>
+                `;
+                
+                if (participants.length === 0) {
+                    html += `
+                        <div class="text-center p-4">
+                            <i class="fas fa-users" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
+                            <h6>Belum Ada Peserta</h6>
+                            <p class="text-muted">Belum ada peserta yang terdaftar untuk pelatihan ini.</p>
+                        </div>
+                    `;
+                } else {
+                    html += '<div class="table-responsive"><table class="table table-sm">';
+                    html += '<thead><tr><th>#</th><th>Nama</th><th>NIB</th><th>Usaha</th><th>HP</th></tr></thead><tbody>';
+                    
+                    participants.forEach((peserta, index) => {
+                        html += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${peserta.nama || '-'}</td>
+                                <td>${peserta.nib || '-'}</td>
+                                <td>${peserta.namaUsaha || '-'}</td>
+                                <td>${peserta.nomorHP || '-'}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    html += '</tbody></table></div>';
+                }
+                
+                document.getElementById('participants-content').innerHTML = html;
+                
+                const modal = new bootstrap.Modal(document.getElementById('participants-modal'));
+                modal.show();
+                
+            } catch (error) {
+                showAlert('Gagal memuat data peserta: ' + error.message, 'error');
+            }
+        };
+        
+        const exportData = (format) => {
+            const url = `${API_BASE_URL}/export/pelatihan-pemberdayaan/${format}`;
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Pelatihan_Pemberdayaan_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : 'pdf'}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        
+        const downloadTemplate = () => {
+            const url = `${API_BASE_URL}/template/pelatihan-pemberdayaan`;
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Template_Import_Pelatihan.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        
+        const addParticipant = () => {
+            showAlert('Fitur tambah peserta akan segera tersedia', 'info');
+        };
+    </script>
+</body>
+</html>

@@ -2,100 +2,145 @@
   {
     "id": 1,
     "judulPelatihan": "Pelatihan Digital Marketing untuk IKM",
-    "deskripsi": "Pelatihan untuk meningkatkan kemampuan pemasaran digital bagi pelaku IKM",
-    "tanggalMulai": "2024-02-01",
-    "tanggalSelesai": "2024-02-03",
-    "lokasi": "Balai Pelatihan DisnakerKUKM Kota Madiun",
-    "instruktur": "Dr. Marketing Digital",
-    "kuota": "30",
-    "status": "Selesai",
-    "createdAt": "2024-01-20T15:00:00.000Z",
-    "updatedAt": "2026-01-21T16:29:35.066Z",
+    "deskripsi": "Pelatihan komprehensif tentang strategi pemasaran digital untuk meningkatkan penjualan produk IKM melalui platform online",
+    "tanggalMulai": "2024-02-01T00:00:00.000Z",
+    "tanggalSelesai": "2024-02-03T00:00:00.000Z",
+    "instruktur": "Dr. Andi Wijaya, M.M.",
+    "kuota": 30,
+    "lokasi": "Aula Dinas Perindustrian Kota Madiun",
     "peserta": [
       {
-        "ikmBinaanId": 2,
-        "nib": "2345678901234",
-        "nik": "3518012345678902",
-        "namaLengkap": "Siti Nurhaliza Dewi",
-        "namaUsaha": "Batik Tulis Siti",
-        "nomorHP": "081234567891",
-        "tanggalDaftar": "2026-01-21T15:49:27.631Z"
-      },
-      {
-        "ikmBinaanId": 3,
-        "nib": "3456789012345",
-        "nik": "3518012345678903",
-        "namaLengkap": "Budi Santoso",
-        "namaUsaha": "Furniture Kayu Budi",
-        "nomorHP": "081234567892",
-        "tanggalDaftar": "2026-01-21T15:49:44.959Z"
-      },
-      {
-        "ikmBinaanId": 1,
+        "id": 1,
+        "nama": "Ahmad Rizki Pratama",
         "nib": "1234567890123",
-        "nik": "3518012345678901",
-        "namaLengkap": "Ahmad Rizki Pratama",
         "namaUsaha": "Keripik Singkong Rizki",
-        "nomorHP": "081234567891",
-        "tanggalDaftar": "2026-01-21T16:29:20.816Z"
+        "nomorHP": "081234567891"
+      },
+      {
+        "id": 2,
+        "nama": "Siti Nurhaliza Dewi",
+        "nib": "2345678901234",
+        "namaUsaha": "Batik Tulis Siti",
+        "nomorHP": "081234567891"
+      },
+      {
+        "id": 3,
+        "nama": "Budi Santoso",
+        "nib": "3456789012345",
+        "namaUsaha": "Furniture Kayu Budi",
+        "nomorHP": "081234567892"
       }
-    ]
+    ],
+    "status": "Selesai",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-02-03T17:00:00.000Z"
   },
   {
     "id": 2,
     "judulPelatihan": "Workshop Packaging dan Branding Produk",
-    "deskripsi": "Workshop untuk meningkatkan kemampuan packaging dan branding produk IKM",
-    "tanggalMulai": "2024-02-15",
-    "tanggalSelesai": "2024-02-17",
-    "lokasi": "Balai Pelatihan DisnakerKUKM Kota Madiun",
-    "instruktur": "Ahli Branding Produk",
+    "deskripsi": "Pelatihan tentang desain kemasan yang menarik dan strategi branding untuk meningkatkan daya saing produk IKM",
+    "tanggalMulai": "2024-03-15T00:00:00.000Z",
+    "tanggalSelesai": "2024-03-16T00:00:00.000Z",
+    "instruktur": "Dra. Sari Indrawati, M.Des.",
     "kuota": 25,
-    "status": "Aktif",
-    "createdAt": "2024-01-20T15:30:00.000Z",
-    "updatedAt": "2026-01-21T16:14:43.745Z",
+    "lokasi": "Ruang Seminar Balai Kota Madiun",
     "peserta": [
       {
-        "ikmBinaanId": 3,
-        "nib": "3456789012345",
-        "nik": "3518012345678903",
-        "namaLengkap": "Budi Santoso",
-        "namaUsaha": "Furniture Kayu Budi",
-        "nomorHP": "081234567892",
-        "tanggalDaftar": "2026-01-21T15:51:12.464Z"
+        "id": 1,
+        "nama": "Yanuar P",
+        "nib": "1234567890444",
+        "namaUsaha": "Keripik Pisang",
+        "nomorHP": "081234567444"
       },
       {
-        "ikmBinaanId": 7,
-        "nib": "1234567890444",
-        "nik": "3518012345678940",
-        "namaLengkap": "Yanuar P",
-        "namaUsaha": "Keripik Pisang",
-        "nomorHP": "081234567444",
-        "tanggalDaftar": "2026-01-21T16:14:43.745Z"
+        "id": 2,
+        "nama": "Dewi Nurlaili",
+        "nib": "2345678901221",
+        "namaUsaha": "Siti Rhayau",
+        "nomorHP": "081234567591"
       }
-    ]
+    ],
+    "status": "Selesai",
+    "createdAt": "2024-02-20T09:00:00.000Z",
+    "updatedAt": "2024-03-16T17:00:00.000Z"
   },
   {
     "id": 3,
-    "judulPelatihan": "Branding Merek",
-    "deskripsi": "Meendaftarkan merek",
-    "tanggalMulai": "2026-01-12",
-    "tanggalSelesai": "2026-01-13",
-    "lokasi": "Madiun",
-    "instruktur": "Yogya Developer",
-    "kuota": "5",
-    "status": "Selesai",
-    "createdAt": "2026-01-21T16:15:36.851Z",
+    "judulPelatihan": "Pelatihan Manajemen Keuangan UMKM",
+    "deskripsi": "Pelatihan tentang pengelolaan keuangan yang baik untuk usaha mikro, kecil, dan menengah termasuk pembukuan sederhana",
+    "tanggalMulai": "2024-04-10T00:00:00.000Z",
+    "tanggalSelesai": "2024-04-12T00:00:00.000Z",
+    "instruktur": "Ir. Bambang Sutrisno, M.Ak.",
+    "kuota": 35,
+    "lokasi": "Gedung Serbaguna Kota Madiun",
     "peserta": [
       {
-        "ikmBinaanId": 7,
-        "nib": "1234567890444",
-        "nik": "3518012345678940",
-        "namaLengkap": "Yanuar P",
-        "namaUsaha": "Keripik Pisang",
-        "nomorHP": "081234567444",
-        "tanggalDaftar": "2026-01-21T16:15:43.544Z"
+        "id": 1,
+        "nama": "Ahmad Rizki Pratama",
+        "nib": "1234567890123",
+        "namaUsaha": "Keripik Singkong Rizki",
+        "nomorHP": "081234567891"
+      },
+      {
+        "id": 2,
+        "nama": "Budi Santoso",
+        "nib": "3456789012345",
+        "namaUsaha": "Furniture Kayu Budi",
+        "nomorHP": "081234567892"
+      },
+      {
+        "id": 3,
+        "nama": "Test User Baru 2",
+        "nib": "8765432109876",
+        "namaUsaha": "Usaha Test Baru 2",
+        "nomorHP": "081999888666"
       }
     ],
-    "updatedAt": "2026-01-21T16:15:43.544Z"
+    "status": "Aktif",
+    "createdAt": "2024-03-25T09:00:00.000Z",
+    "updatedAt": "2024-04-10T08:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "judulPelatihan": "Sertifikasi Halal untuk Produk Makanan",
+    "deskripsi": "Pelatihan tentang proses dan persyaratan untuk mendapatkan sertifikasi halal bagi produk makanan dan minuman",
+    "tanggalMulai": "2024-05-20T00:00:00.000Z",
+    "tanggalSelesai": "2024-05-21T00:00:00.000Z",
+    "instruktur": "Dr. H. Muhammad Fauzi, M.Ag.",
+    "kuota": 20,
+    "lokasi": "Masjid Agung Kota Madiun",
+    "peserta": [
+      {
+        "id": 1,
+        "nama": "Yanuar P",
+        "nib": "1234567890444",
+        "namaUsaha": "Keripik Pisang",
+        "nomorHP": "081234567444"
+      },
+      {
+        "id": 2,
+        "nama": "Dewi Nurlaili",
+        "nib": "2345678901221",
+        "namaUsaha": "Siti Rhayau",
+        "nomorHP": "081234567591"
+      }
+    ],
+    "status": "Aktif",
+    "createdAt": "2024-04-30T09:00:00.000Z",
+    "updatedAt": "2024-05-15T10:00:00.000Z"
+  },
+  {
+    "id": 5,
+    "judulPelatihan": "Ekspor Produk IKM ke Pasar Internasional",
+    "deskripsi": "Pelatihan tentang prosedur ekspor, standar internasional, dan strategi memasuki pasar global untuk produk IKM",
+    "tanggalMulai": "2024-06-15T00:00:00.000Z",
+    "tanggalSelesai": "2024-06-17T00:00:00.000Z",
+    "instruktur": "Prof. Dr. Retno Sari, M.B.A.",
+    "kuota": 40,
+    "lokasi": "Hotel Merdeka Madiun",
+    "peserta": [],
+    "status": "Aktif",
+    "createdAt": "2024-05-20T09:00:00.000Z",
+    "updatedAt": "2024-05-20T09:00:00.000Z"
   }
 ]

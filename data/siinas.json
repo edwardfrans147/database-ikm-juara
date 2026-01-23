@@ -1,14 +1,36 @@
 [
   {
     "id": 1,
-    "ikmBinaanId": 2,
-    "nib": "2345678901234",
-    "nik": "3518012345678902",
-    "namaLengkap": "Siti Nurhaliza Dewi",
-    "nomorBuktiKepemilikan": "SIINAS-2024-001",
+    "ikmBinaanId": 1,
+    "nib": "1234567890123",
+    "nik": "3518012345678901",
+    "namaLengkap": "Ahmad Rizki Pratama",
+    "namaUsaha": "Keripik Singkong Rizki",
+    "namaProduk": "Keripik Singkong Original",
+    "nomorSertifikat": "SIINAS-2024-001",
+    "nomorBuktiKepemilikan": "BK-2024-001",
     "tahunRegistrasi": "2024",
-    "linkBuktiKepemilikan": "https://drive.google.com/file/d/1234567895/view",
-    "createdAt": "2024-01-20T12:00:00.000Z",
-    "updatedAt": "2024-01-20T12:00:00.000Z"
+    "linkBuktiKepemilikan": "https://drive.google.com/file/d/siinas001/view",
+    "tanggalTerbit": "2024-02-20T00:00:00.000Z",
+    "status": "Aktif",
+    "createdAt": "2024-02-20T09:00:00.000Z",
+    "updatedAt": "2024-02-20T09:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "ikmBinaanId": 3,
+    "nib": "3456789012345",
+    "nik": "3518012345678903",
+    "namaLengkap": "Budi Santoso",
+    "namaUsaha": "Furniture Kayu Budi",
+    "namaProduk": "Kursi Kayu Jati",
+    "nomorSertifikat": "SIINAS-2024-002",
+    "nomorBuktiKepemilikan": "BK-2024-002",
+    "tahunRegistrasi": "2024",
+    "linkBuktiKepemilikan": "https://drive.google.com/file/d/siinas002/view",
+    "tanggalTerbit": "2024-04-25T00:00:00.000Z",
+    "status": "Proses",
+    "createdAt": "2024-04-25T09:00:00.000Z",
+    "updatedAt": "2024-04-25T09:00:00.000Z"
   }
 ]
