@@ -354,10 +354,15 @@ app.post('/api/buku-tamu', async (req, res) => {
         const { data, error } = await supabaseAdmin
             .from('buku_tamu')
             .insert([{
+                // New columns
                 nama_lengkap,
                 no_hp_aktif,
                 alamat,
-                tanggal_kunjungan: new Date().toISOString()
+                tanggal_kunjungan: new Date().toISOString(),
+                // Old columns (for compatibility)
+                nama: nama_lengkap,
+                nik: no_hp_aktif,
+                waktu_akses: new Date().toISOString()
             }])
             .select();
         
