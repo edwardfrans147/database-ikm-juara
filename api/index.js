@@ -72,55 +72,32 @@ app.get('/api/dashboard', async (req, res) => {
         
         console.log('Fetching dashboard data from Supabase...');
         
-        // Get counts from all tables using proper count method
-        const [
-            ikmBinaan,
-            hkiMerek,
-            sertifikatHalal,
-            tkdnIk,
-            siinas,
-            ujiNilaiGizi,
-            kurasiProduk,
-            pelatihan,
-            pesertaPelatihan
-        ] = await Promise.all([
-            supabase.from('ikm_binaan').select('*', { count: 'exact', head: true }),
-            supabase.from('hki_merek').select('*', { count: 'exact', head: true }),
-            supabase.from('sertifikat_halal').select('*', { count: 'exact', head: true }),
-            supabase.from('tkdn_ik').select('*', { count: 'exact', head: true }),
-            supabase.from('siinas').select('*', { count: 'exact', head: true }),
-            supabase.from('uji_nilai_gizi').select('*', { count: 'exact', head: true }),
-            supabase.from('kurasi_produk').select('*', { count: 'exact', head: true }),
-            supabase.from('pelatihan_pemberdayaan').select('*', { count: 'exact', head: true }),
-            supabase.from('peserta_pelatihan').select('*', { count: 'exact', head: true })
-        ]);
-
-        console.log('Dashboard counts:', {
-            ikm: ikmBinaan.count,
-            hki: hkiMerek.count,
-            halal: sertifikatHalal.count,
-            tkdn: tkdnIk.count,
-            siinas: siinas.count,
-            uji: ujiNilaiGizi.count,
-            kurasi: kurasiProduk.count,
-            pelatihan: pelatihan.count,
-            peserta: pesertaPelatihan.count
-        });
+        // Use service role for dashboard to bypass RLS
+        const { count: ikmCount } = await supabaseAdmin.from('ikm_binaan').select('*', { count: 'exact', head: true });
+        const { count: hkiCount } = await supabaseAdmin.from('hki_merek').select('*', { count: 'exact', head: true });
+        const { count: halalCount } = await supabaseAdmin.from('sertifikat_halal').select('*', { count: 'exact', head: true });
+        const { count: tkdnCount } = await supabaseAdmin.from('tkdn_ik').select('*', { count: 'exact', head: true });
+        const { count: siinasCount } = await supabaseAdmin.from('siinas').select('*', { count: 'exact', head: true });
+        const { count: ujiCount } = await supabaseAdmin.from('uji_nilai_gizi').select('*', { count: 'exact', head: true });
+        const { count: kurasiCount } = await supabaseAdmin.from('kurasi_produk').select('*', { count: 'exact', head: true });
+        const { count: pelatihanCount } = await supabaseAdmin.from('pelatihan_pemberdayaan').select('*', { count: 'exact', head: true });
+        const { count: pesertaCount } = await supabaseAdmin.from('peserta_pelatihan').select('*', { count: 'exact', head: true });
 
         const dashboardData = {
-            ikmBinaan: ikmBinaan.count || 0,
-            hkiMerek: hkiMerek.count || 0,
-            sertifikatHalal: sertifikatHalal.count || 0,
-            tkdnIk: tkdnIk.count || 0,
-            siinas: siinas.count || 0,
-            ujiNilaiGizi: ujiNilaiGizi.count || 0,
-            kurasiProduk: kurasiProduk.count || 0,
-            pelatihanPemberdayaan: pelatihan.count || 0,
-            totalPesertaPelatihan: pesertaPelatihan.count || 0,
+            ikmBinaan: ikmCount || 0,
+            hkiMerek: hkiCount || 0,
+            sertifikatHalal: halalCount || 0,
+            tkdnIk: tkdnCount || 0,
+            siinas: siinasCount || 0,
+            ujiNilaiGizi: ujiCount || 0,
+            kurasiProduk: kurasiCount || 0,
+            pelatihanPemberdayaan: pelatihanCount || 0,
+            totalPesertaPelatihan: pesertaCount || 0,
             lastUpdated: new Date().toISOString(),
             cached: false
         };
         
+        console.log('Dashboard data:', dashboardData);
         setCachedData(cacheKey, { ...dashboardData, cached: true });
         res.json(dashboardData);
         
@@ -132,7 +109,7 @@ app.get('/api/dashboard', async (req, res) => {
 // Get IKM Binaan data
 app.get('/api/ikm-binaan', async (req, res) => {
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('ikm_binaan')
             .select('*')
             .order('created_at', { ascending: false });
@@ -203,7 +180,7 @@ app.get('/api/:service', async (req, res) => {
             });
         }
         
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from(tableName)
             .select('*')
             .order('created_at', { ascending: false });
