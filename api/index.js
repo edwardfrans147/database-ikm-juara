@@ -339,6 +339,84 @@ app.get('/api/website-content', async (req, res) => {
     }
 });
 
+// Buku Tamu API
+app.post('/api/buku-tamu', async (req, res) => {
+    try {
+        const { nama_lengkap, no_hp_aktif, alamat } = req.body;
+        
+        if (!nama_lengkap || !no_hp_aktif || !alamat) {
+            return res.status(400).json({
+                success: false,
+                error: 'Semua field harus diisi'
+            });
+        }
+        
+        const { data, error } = await supabaseAdmin
+            .from('buku_tamu')
+            .insert([{
+                nama_lengkap,
+                no_hp_aktif,
+                alamat,
+                tanggal_kunjungan: new Date().toISOString()
+            }])
+            .select();
+        
+        if (error) {
+            console.error('Supabase error:', error);
+            return res.status(500).json({
+                success: false,
+                error: 'Gagal menyimpan data ke database',
+                details: error.message
+            });
+        }
+        
+        res.json({
+            success: true,
+            message: 'Buku tamu berhasil disimpan',
+            data: data[0]
+        });
+        
+    } catch (error) {
+        console.error('Buku tamu error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Terjadi kesalahan saat menyimpan buku tamu',
+            details: error.message
+        });
+    }
+});
+
+app.get('/api/buku-tamu', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('buku_tamu')
+            .select('*')
+            .order('tanggal_kunjungan', { ascending: false });
+        
+        if (error) {
+            console.error('Supabase error:', error);
+            return res.status(500).json({
+                success: false,
+                error: 'Gagal mengambil data',
+                details: error.message
+            });
+        }
+        
+        res.json({
+            success: true,
+            data: data || []
+        });
+        
+    } catch (error) {
+        console.error('Get buku tamu error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Terjadi kesalahan saat mengambil data',
+            details: error.message
+        });
+    }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({
