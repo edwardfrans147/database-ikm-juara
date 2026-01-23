@@ -1,68 +1,20 @@
 {
   "name": "database-ikm-juara",
   "version": "2.0.0",
-  "description": "Sistem Database IKM JUARA - Platform terintegrasi untuk mengelola data Industri Kecil Menengah (IKM) Binaan di Kota Madiun",
-  "main": "server/app.js",
+  "description": "Database IKM JUARA - DisnakerKUKM Kota Madiun",
+  "main": "api/index.js",
   "scripts": {
     "start": "node api/index.js",
-    "dev": "node api/index.js",
-    "build": "echo 'Build completed'",
-    "test": "echo 'No tests specified'"
-  },
-  "keywords": [
-    "ikm",
-    "industri-kecil-menengah",
-    "database",
-    "nodejs",
-    "express",
-    "madiun",
-    "disnakerkukm",
-    "web-application",
-    "data-management"
-  ],
-  "author": {
-    "name": "Kiro AI Assistant",
-    "email": "support@ikmjuara.com"
-  },
-  "contributors": [
-    {
-      "name": "BidIndustri08#",
-      "role": "Project Manager"
-    },
-    {
-      "name": "Dinas Tenaga Kerja dan KUKM Kota Madiun",
-      "role": "Client"
-    }
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/database-ikm-juara.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yourusername/database-ikm-juara/issues"
-  },
-  "homepage": "https://github.com/yourusername/database-ikm-juara#readme",
-  "engines": {
-    "node": "20.x"
+    "build": "echo 'Build completed'"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "exceljs": "^4.4.0",
-    "express": "^4.18.2",
-    "multer": "^2.0.2"
+    "express": "^4.18.2"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  },
-  "bundledDependencies": [],
-  "private": false,
-  "publishConfig": {
-    "access": "public"
-  },
-  "bundleDependencies": []
+  "engines": {
+    "node": "20"
+  }
 }

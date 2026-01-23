@@ -14,3 +14,5 @@ test-*.js
 *.sql
 *.csv
 .vercel
+CHANGELOG.md
+README.md
