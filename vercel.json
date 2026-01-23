@@ -2,38 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/**/*.js",
+      "src": "api/index.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "admin/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "shared/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "login.html",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/shared/(.*)",
-      "dest": "/shared/$1"
+      "dest": "/api/index.js"
     },
     {
       "src": "/admin/(.*)",
@@ -44,8 +20,8 @@
       "dest": "/public/$1"
     },
     {
-      "src": "/login.html",
-      "dest": "/login.html"
+      "src": "/shared/(.*)",
+      "dest": "/shared/$1"
     },
     {
       "src": "/",
