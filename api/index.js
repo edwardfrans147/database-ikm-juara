@@ -30,12 +30,15 @@ module.exports = async (req, res) => {
         return;
     }
     
-    const { url, method } = req;
+    const { url, method, query } = req;
     console.log(`🌐 API: ${method} ${url}`);
     
     try {
+        // Parse URL path
+        const path = url.replace('/api', '') || '/';
+        
         // Test endpoint
-        if (url === '/api' || url === '/api/') {
+        if (path === '/' || path === '') {
             return res.json({
                 success: true,
                 message: 'API is working!',
@@ -44,12 +47,12 @@ module.exports = async (req, res) => {
         }
         
         // Dashboard endpoint
-        if (url === '/api/dashboard') {
+        if (path === '/dashboard') {
             return await handleDashboard(req, res);
         }
         
-        // Admin login endpoint
-        if (url === '/api/admin/login') {
+        // Admin login endpoint - handle both /admin/login and /login
+        if (path === '/admin/login' || path === '/login') {
             return await handleAdminLogin(req, res);
         }
         
@@ -57,6 +60,7 @@ module.exports = async (req, res) => {
         res.status(404).json({
             success: false,
             error: 'API endpoint not found',
+            path: path,
             url: url
         });
         
