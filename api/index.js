@@ -80,6 +80,37 @@ module.exports = async (req, res) => {
             return await handleDeleteIkmBinaan(req, res, id);
         }
         
+        // Generic service endpoints
+        const serviceEndpoints = [
+            'hki-merek', 'sertifikat-halal', 'tkdn-ik', 'siinas', 
+            'uji-nilai-gizi', 'kurasi-produk', 'pelatihan-pemberdayaan'
+        ];
+        
+        for (const service of serviceEndpoints) {
+            if (path === `/${service}`) {
+                if (method === 'GET') {
+                    return await handleGetService(req, res, service);
+                } else if (method === 'POST') {
+                    return await handleCreateService(req, res, service);
+                }
+            }
+            
+            if (path.startsWith(`/${service}/`) && method === 'GET') {
+                const id = path.split('/')[2];
+                return await handleGetServiceById(req, res, service, id);
+            }
+            
+            if (path.startsWith(`/${service}/`) && method === 'PUT') {
+                const id = path.split('/')[2];
+                return await handleUpdateService(req, res, service, id);
+            }
+            
+            if (path.startsWith(`/${service}/`) && method === 'DELETE') {
+                const id = path.split('/')[2];
+                return await handleDeleteService(req, res, service, id);
+            }
+        }
+        
         // 404 for unmatched routes
         res.status(404).json({
             success: false,
@@ -340,5 +371,255 @@ async function handleDeleteIkmBinaan(req, res, id) {
         
     } catch (error) {
         handleError(res, error, 'Error deleting IKM Binaan');
+    }
+}
+// Generic service handlers
+async function handleGetService(req, res, service) {
+    try {
+        const tableMap = {
+            'hki-merek': 'hki_merek',
+            'sertifikat-halal': 'sertifikat_halal',
+            'tkdn-ik': 'tkdn_ik',
+            'siinas': 'siinas',
+            'uji-nilai-gizi': 'uji_nilai_gizi',
+            'kurasi-produk': 'kurasi_produk',
+            'pelatihan-pemberdayaan': 'pelatihan_pemberdayaan'
+        };
+        
+        const tableName = tableMap[service];
+        
+        if (!tableName) {
+            return res.status(404).json({
+                success: false,
+                error: 'Service not found'
+            });
+        }
+        
+        let query = supabase.from(tableName).select('*');
+        
+        // For services that need IKM data, join with ikm_binaan
+        if (service !== 'pelatihan-pemberdayaan') {
+            query = supabase.from(tableName).select(`
+                *,
+                ikm_binaan!inner(
+                    nib,
+                    nik,
+                    nama_lengkap,
+                    nama_usaha,
+                    nomor_hp
+                )
+            `);
+        }
+        
+        const { data, error } = await query.order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        // Flatten data structure for easier frontend consumption
+        let processedData = data || [];
+        if (service !== 'pelatihan-pemberdayaan' && processedData.length > 0) {
+            processedData = processedData.map(item => ({
+                ...item,
+                nib: item.ikm_binaan?.nib || '',
+                nik: item.ikm_binaan?.nik || '',
+                nama_lengkap: item.ikm_binaan?.nama_lengkap || item.nama_lengkap,
+                nama_usaha: item.ikm_binaan?.nama_usaha || item.nama_usaha,
+                nomor_hp: item.ikm_binaan?.nomor_hp || ''
+            }));
+        }
+        
+        res.json({
+            success: true,
+            data: processedData
+        });
+        
+    } catch (error) {
+        handleError(res, error, `Error fetching ${service} data`);
+    }
+}
+
+async function handleGetServiceById(req, res, service, id) {
+    try {
+        const tableMap = {
+            'hki-merek': 'hki_merek',
+            'sertifikat-halal': 'sertifikat_halal',
+            'tkdn-ik': 'tkdn_ik',
+            'siinas': 'siinas',
+            'uji-nilai-gizi': 'uji_nilai_gizi',
+            'kurasi-produk': 'kurasi_produk',
+            'pelatihan-pemberdayaan': 'pelatihan_pemberdayaan'
+        };
+        
+        const tableName = tableMap[service];
+        
+        if (!tableName) {
+            return res.status(404).json({
+                success: false,
+                error: 'Service not found'
+            });
+        }
+        
+        const { data, error } = await supabase
+            .from(tableName)
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            data: data
+        });
+        
+    } catch (error) {
+        handleError(res, error, `Error fetching ${service} by ID`);
+    }
+}
+
+async function handleCreateService(req, res, service) {
+    try {
+        const tableMap = {
+            'hki-merek': 'hki_merek',
+            'sertifikat-halal': 'sertifikat_halal',
+            'tkdn-ik': 'tkdn_ik',
+            'siinas': 'siinas',
+            'uji-nilai-gizi': 'uji_nilai_gizi',
+            'kurasi-produk': 'kurasi_produk',
+            'pelatihan-pemberdayaan': 'pelatihan_pemberdayaan'
+        };
+        
+        const tableName = tableMap[service];
+        
+        if (!tableName) {
+            return res.status(404).json({
+                success: false,
+                error: 'Service not found'
+            });
+        }
+        
+        const data = req.body;
+        
+        const { data: insertedData, error } = await supabase
+            .from(tableName)
+            .insert(data)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            message: `Data ${service} berhasil ditambahkan`,
+            data: insertedData
+        });
+        
+    } catch (error) {
+        handleError(res, error, `Error creating ${service} data`);
+    }
+}
+
+async function handleUpdateService(req, res, service, id) {
+    try {
+        const tableMap = {
+            'hki-merek': 'hki_merek',
+            'sertifikat-halal': 'sertifikat_halal',
+            'tkdn-ik': 'tkdn_ik',
+            'siinas': 'siinas',
+            'uji-nilai-gizi': 'uji_nilai_gizi',
+            'kurasi-produk': 'kurasi_produk',
+            'pelatihan-pemberdayaan': 'pelatihan_pemberdayaan'
+        };
+        
+        const tableName = tableMap[service];
+        
+        if (!tableName) {
+            return res.status(404).json({
+                success: false,
+                error: 'Service not found'
+            });
+        }
+        
+        const data = req.body;
+        delete data.id; // Remove ID from update data
+        
+        const { data: updatedData, error } = await supabase
+            .from(tableName)
+            .update(data)
+            .eq('id', id)
+            .select()
+            .single();
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            message: `Data ${service} berhasil diupdate`,
+            data: updatedData
+        });
+        
+    } catch (error) {
+        handleError(res, error, `Error updating ${service} data`);
+    }
+}
+
+async function handleDeleteService(req, res, service, id) {
+    try {
+        const tableMap = {
+            'hki-merek': 'hki_merek',
+            'sertifikat-halal': 'sertifikat_halal',
+            'tkdn-ik': 'tkdn_ik',
+            'siinas': 'siinas',
+            'uji-nilai-gizi': 'uji_nilai_gizi',
+            'kurasi-produk': 'kurasi_produk',
+            'pelatihan-pemberdayaan': 'pelatihan_pemberdayaan'
+        };
+        
+        const tableName = tableMap[service];
+        
+        if (!tableName) {
+            return res.status(404).json({
+                success: false,
+                error: 'Service not found'
+            });
+        }
+        
+        // Get data before deletion for recycle bin
+        const { data: existingData } = await supabase
+            .from(tableName)
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        // Move to recycle bin (if table exists)
+        if (existingData) {
+            try {
+                await supabase.from('recycle_bin').insert({
+                    table_name: tableName,
+                    record_id: id,
+                    data: existingData,
+                    deleted_by: req.headers['x-user'] || 'Unknown',
+                    deleted_at: new Date().toISOString()
+                });
+            } catch (recycleError) {
+                console.log('Recycle bin not available:', recycleError.message);
+            }
+        }
+        
+        // Delete from main table
+        const { error } = await supabase
+            .from(tableName)
+            .delete()
+            .eq('id', id);
+        
+        if (error) throw error;
+        
+        res.json({
+            success: true,
+            message: `Data ${service} berhasil dihapus`
+        });
+        
+    } catch (error) {
+        handleError(res, error, `Error deleting ${service} data`);
     }
 }

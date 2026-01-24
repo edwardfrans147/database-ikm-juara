@@ -415,6 +415,72 @@
             }
         };
 
+        // Table creation function
+        const createTable = (data, columns, actions) => {
+            if (!data || data.length === 0) {
+                return '<div style="text-align: center; padding: 40px; color: #666;"><i class="fas fa-inbox fa-3x"></i><br><br>Tidak ada data untuk ditampilkan</div>';
+            }
+
+            let html = '<table class="table table-striped table-hover">';
+            
+            // Header
+            html += '<thead><tr>';
+            columns.forEach(col => {
+                html += `<th>${col.title}</th>`;
+            });
+            if (actions && actions.length > 0) {
+                html += '<th style="width: 150px;">Aksi</th>';
+            }
+            html += '</tr></thead>';
+            
+            // Body
+            html += '<tbody>';
+            data.forEach(row => {
+                html += '<tr>';
+                columns.forEach(col => {
+                    let value = row[col.field] || '-';
+                    
+                    // Format specific fields
+                    if (col.field === 'created_at' || col.field === 'updated_at') {
+                        value = new Date(value).toLocaleDateString('id-ID');
+                    }
+                    
+                    html += `<td>${value}</td>`;
+                });
+                
+                // Actions
+                if (actions && actions.length > 0) {
+                    html += '<td><div class="action-buttons">';
+                    actions.forEach(action => {
+                        const onclick = action.onclick.replace('{id}', row.id);
+                        html += `<button class="btn btn-sm ${action.class}" onclick="${onclick}" title="${action.title}">
+                                    <i class="${action.icon}"></i>
+                                </button>`;
+                    });
+                    html += '</div></td>';
+                }
+                
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            
+            return html;
+        };
+
+        // Format currency function
+        const formatCurrency = (amount) => {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR'
+            }).format(amount);
+        };
+
+        // Format date function
+        const formatDate = (dateString) => {
+            if (!dateString) return '-';
+            return new Date(dateString).toLocaleDateString('id-ID');
+        };
+
         // Check authentication
         const adminUser = localStorage.getItem('admin_user');
         if (!adminUser) {
